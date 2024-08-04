@@ -5,38 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
-      <changelist_data name="VinnyNC" email="" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_blame.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cardCollector/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cardCollector/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cardCollector/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cardCollector/wsgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/src/input.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/src/output.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.294aeb8642e8.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.ab66bca27655.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.f815782e3163.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardCollector/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +38,7 @@
       <list>
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>
@@ -84,7 +62,6 @@
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -95,12 +72,12 @@
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="05f9a2a8-4170-49e9-9800-6f365ad1e740" />
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/vinnyNC/cardCollector&quot;,
-    &quot;accountId&quot;: &quot;05f9a2a8-4170-49e9-9800-6f365ad1e740&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/vinnyNC/cardCollector",
+    "accountId": "f1547af7-c8db-4f89-8455-db7d657f387c"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -119,6 +96,7 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "DefaultHtmlFileTemplate": "HTML File",
     "Django Server.cardCollector.executor": "Run",
+    "Docker.Docker Compose.executor": "Run",
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -126,6 +104,7 @@
     "git-widget-placeholder": "master",
     "javascript.nodejs.core.library.configured.version": "21.7.2",
     "javascript.nodejs.core.library.typings.version": "22.1.0",
+    "last_opened_file_path": "C:/Users/vince/PycharmProjects/cardCollector/docker-compose.yml",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -142,7 +121,7 @@
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\cardCollector" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Docker.Docker Compose">
     <configuration name="cardCollector" type="Python.DjangoServer" factoryName="Django server">
       <module name="cardCollector" />
       <option name="ENV_FILES" value="" />
@@ -153,6 +132,7 @@
         <env name="DJANGO_SETTINGS_MODULE" value="cardCollector.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (cardCollector) (2)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -168,6 +148,25 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Docker Compose" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="envFilePath" value="" />
+          <option name="services">
+            <list>
+              <option value="db" />
+              <option value="web" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Django Server.cardCollector" />
+      <item itemvalue="Docker.Docker Compose" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -189,8 +188,17 @@
       <option name="presentableId" value="Default" />
       <updated>1722715272979</updated>
       <workItem from="1722715275854" duration="2169000" />
-      <workItem from="1722717493699" duration="427000" />
+      <workItem from="1722717493699" duration="2563000" />
     </task>
+    <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
+      <option name="closed" value="true" />
+      <created>1722717957273</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1722717957273</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
