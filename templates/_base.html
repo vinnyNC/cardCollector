@@ -4,13 +4,13 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html class ="dark" lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django + Tailwind CSS + Flowbite</title>
+    <title>{{ siteTitle }}</title>
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
@@ -18,12 +18,12 @@
 
 </head>
 
-<body class="bg-green-50">
+<body class="bg-gray-900">
 
     <!-- Add this -->
     <nav class="bg-green-50 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
-          <a href="{{ .Site.Params.homepage }}/" class="flex items-center">
+          <a href="/" class="flex items-center">
               <img src="/docs/images/logo.svg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
               <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Flowbite Django</span>
           </a>
