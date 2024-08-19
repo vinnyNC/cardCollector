@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="added docker compose run method">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.c39703b14e6a.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.e07c249c8301.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/docs/images/logo.svg" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="changes">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cardCollector/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/src/output.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/src/output.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +185,7 @@
       <workItem from="1722715275854" duration="2169000" />
       <workItem from="1722717493699" duration="2903000" />
       <workItem from="1722976762495" duration="12408000" />
-      <workItem from="1723667883329" duration="4545000" />
+      <workItem from="1723667883329" duration="4849000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -211,7 +203,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722731401269</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="changes">
+      <option name="closed" value="true" />
+      <created>1724038311685</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1724038311685</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -228,7 +228,8 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite" />
     <MESSAGE value="added docker compose run method" />
-    <option name="LAST_COMMIT_MESSAGE" value="added docker compose run method" />
+    <MESSAGE value="changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
