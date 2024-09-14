@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="gitignore changes">
-      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.1effa6867eaa.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/_base_old.html" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="added basic template from flowbite.">
+      <change afterPath="$PROJECT_DIR$/static/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/nav/header.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/nav/sidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/not-used/main-content-boxes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/src/output.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/src/output.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardCollector/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +37,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
-        <option value="HTML File" />
         <option value="Dockerfile" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -156,6 +160,8 @@
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates\not-used" />
+      <recent name="C:\Users\vince\PycharmProjects\cardCollector\static" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\cardCollector" />
     </key>
@@ -225,7 +231,7 @@
       <workItem from="1722715275854" duration="2169000" />
       <workItem from="1722717493699" duration="2903000" />
       <workItem from="1722976762495" duration="12408000" />
-      <workItem from="1723667883329" duration="11319000" />
+      <workItem from="1723667883329" duration="18746000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -259,7 +265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724038627248</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added basic template from flowbite.">
+      <option name="closed" value="true" />
+      <created>1724709377357</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1724709377357</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +330,8 @@
     <MESSAGE value="added docker compose run method" />
     <MESSAGE value="changes" />
     <MESSAGE value="gitignore changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore changes" />
+    <MESSAGE value="added basic template from flowbite." />
+    <option name="LAST_COMMIT_MESSAGE" value="added basic template from flowbite." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

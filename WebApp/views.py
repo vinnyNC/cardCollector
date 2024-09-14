@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html', {'siteTitle': 'CardCollector - Dev'})
+    return render(request, 'index.html', {'siteName': 'CardCollector', 'pageTitle': 'Home'})
