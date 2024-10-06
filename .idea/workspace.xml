@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="added basic template from flowbite.">
-      <change afterPath="$PROJECT_DIR$/static/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/nav/header.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/nav/sidebar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/not-used/main-content-boxes.html" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cardCollector/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,8 +131,8 @@
     "django.template.preview.state": "SHOW_EDITOR",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "javascript.nodejs.core.library.configured.version": "21.7.2",
-    "javascript.nodejs.core.library.typings.version": "22.1.0",
+    "javascript.nodejs.core.library.configured.version": "22.8.0",
+    "javascript.nodejs.core.library.typings.version": "22.7.4",
     "last_opened_file_path": "C:/Users/vince/PycharmProjects/cardCollector/templates",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -146,7 +140,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "settings.editor.selected.configurable": "preferences.language.and.region",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -212,8 +206,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-PY-242.20224.347" />
-        <option value="bundled-python-sdk-c2d6afa66fbe-39cff9de6eef-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.20224.347" />
+        <option value="bundled-js-predefined-d6986cc7102b-b86d7ee83eed-JavaScript-PY-243.18137.19" />
+        <option value="bundled-python-sdk-c9ea1d2668a5-10a76b3686da-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.18137.19" />
       </set>
     </attachedChunks>
   </component>
@@ -231,7 +225,10 @@
       <workItem from="1722715275854" duration="2169000" />
       <workItem from="1722717493699" duration="2903000" />
       <workItem from="1722976762495" duration="12408000" />
-      <workItem from="1723667883329" duration="18746000" />
+      <workItem from="1723667883329" duration="20017000" />
+      <workItem from="1726361655475" duration="284000" />
+      <workItem from="1726362693411" duration="4445000" />
+      <workItem from="1728223482321" duration="167000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -273,7 +270,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724709377357</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Changed site layout to flowbite.">
+      <option name="closed" value="true" />
+      <created>1726357261744</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726357261744</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -331,7 +336,8 @@
     <MESSAGE value="changes" />
     <MESSAGE value="gitignore changes" />
     <MESSAGE value="added basic template from flowbite." />
-    <option name="LAST_COMMIT_MESSAGE" value="added basic template from flowbite." />
+    <MESSAGE value="Changed site layout to flowbite." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed site layout to flowbite." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

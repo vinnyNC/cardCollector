@@ -163,4 +163,5 @@ cython_debug/
 /node_modules/
 /docker/
 /cardCollector/__pycache__
-.idea
+/.idea/
+/.venv/
