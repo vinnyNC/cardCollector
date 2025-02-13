@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from WebApp.views import index
+from WebApp.views import index, set_autocomplete, check_card
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('api/set-autocomplete/', set_autocomplete, name='set-autocomplete'),
+    path('api/check-card/', check_card, name='check-card'),
 ]
