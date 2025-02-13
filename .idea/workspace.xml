@@ -4,20 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/.run/Local Django Server.run.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Update UI dependencies and add image cropper.&#10;The changes include upgrading Tailwind CSS and Flowbite packages, adding CropperJS integration, and improving the base template layout structure with container classes.">
+      <change afterPath="$PROJECT_DIR$/static/CACHE/css/output.a32c6b08e39f.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cardCollector/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/src/output.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/src/output.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/nav/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nav/header.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,7 +233,7 @@
       <workItem from="1739143646411" duration="3833000" />
       <workItem from="1739399043083" duration="334000" />
       <workItem from="1739399400278" duration="1604000" />
-      <workItem from="1739401027820" duration="7744000" />
+      <workItem from="1739401027820" duration="8692000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -309,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728226613061</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Update UI dependencies and add image cropper.&#10;The changes include upgrading Tailwind CSS and Flowbite packages, adding CropperJS integration, and improving the base template layout structure with container classes.">
+      <option name="closed" value="true" />
+      <created>1739409097927</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1739409097927</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -321,6 +319,11 @@
         <entry key="Branch">
           <value>
             <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="main" />
+                </option>
+              </RecentGroup>
               <RecentGroup>
                 <option name="FILTER_VALUES">
                   <option value="master" />
@@ -341,7 +344,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -370,6 +373,7 @@
     <MESSAGE value="Changed site layout to flowbite." />
     <MESSAGE value="gitignore updated" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="Update UI dependencies and add image cropper.&#10;The changes include upgrading Tailwind CSS and Flowbite packages, adding CropperJS integration, and improving the base template layout structure with container classes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update UI dependencies and add image cropper.&#10;The changes include upgrading Tailwind CSS and Flowbite packages, adding CropperJS integration, and improving the base template layout structure with container classes." />
   </component>
 </project>

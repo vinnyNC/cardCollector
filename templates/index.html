@@ -42,110 +42,108 @@
                 Add Card
             </h1>
 
-
-            <!-- Form Container -->
             <form action="#" method="POST">
-                <!-- Grid wrapper forces a gap between each group -->
-                <div class="grid grid-cols-1 gap-8">
-                    <!-- GROUP 1: Card Basics -->
-                    <div class="p-6 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing">
-                        <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2">Card Basics</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Set -->
-                            <div class="space-y-2">
-                                <label for="set" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Set</label>
-                                <input type="text" id="set" name="set" placeholder="2023 Panini Donruss" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                <!-- GROUP 1: Card Basics -->
+                <div class="p-8 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing"> <!-- Changed p-6 to p-8 -->
+                    <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2 text-center">Card Basics</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4"> <!-- Added px-4 -->
+                        <!-- Set -->
+                        <div class="space-y-2 text-center">
+                            <label for="set" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Set</label>
+                            <input type="text" id="set" name="set" placeholder="2023 Panini Donruss" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Card # -->
+                        <div class="space-y-2 text-center">
+                            <label for="cardNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Card #</label>
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="53 or FPH-RJW" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GROUP 2: Player Info -->
+                <div class="p-8 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing"> <!-- Changed p-6 to p-8 -->
+                    <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2 text-center">Player Info</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4"> <!-- Added px-4 -->
+                        <!-- Player First Name -->
+                        <div class="space-y-2 text-center">
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Joe" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Player Last Name -->
+                        <div class="space-y-2 text-center">
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Burrow" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Player Team -->
+                        <div class="space-y-2 text-center">
+                            <label for="team" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player Team</label>
+                            <input type="text" id="team" name="team" placeholder="Carolina Panthers" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GROUP 3: Value/Purchase Info -->
+                <div class="p-8 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing"> <!-- Changed p-6 to p-8 -->
+                    <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2 text-center">Value/Purchase Info</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-4"> <!-- Added px-4 -->
+                        <!-- Purchase Date -->
+                        <div class="space-y-2 text-center">
+                            <label for="purchaseDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date</label>
+                            <input type="date" id="purchaseDate" name="purchaseDate" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Purchase Price -->
+                        <div class="space-y-2 text-center">
+                            <label for="purchasePrice" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Price</label>
+                            <input type="text" id="purchasePrice" name="purchasePrice" placeholder="$23.99" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Purchase Location -->
+                        <div class="space-y-2 text-center">
+                            <label for="purchaseLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Location</label>
+                            <input type="text" id="purchaseLocation" name="purchaseLocation" placeholder="eBay" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                        <!-- Market Value -->
+                        <div class="space-y-2 text-center">
+                            <label for="marketValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Market Value</label>
+                            <input type="text" id="marketValue" name="marketValue" placeholder="$44.99" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GROUP 4: Images -->
+                <div class="p-8 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing"> <!-- Changed p-6 to p-8 -->
+                    <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2 text-center">Images</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4"> <!-- Added px-4 -->
+                        <!-- Image Upload: Front -->
+                        <div class="text-center">
+                            <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex justify-center items-center">
+                                <span class="text-gray-500 dark:text-gray-400">Front Image</span>
                             </div>
-                            <!-- Card # -->
-                            <div class="space-y-2">
-                                <label for="cardNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Card #</label>
-                                <input type="text" id="cardNumber" name="cardNumber" placeholder="53 or FPH-RJW" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                            <div class="mt-2 space-x-2">
+                                <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">Blue</button>
+                                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Crop</button>
+                            </div>
+                        </div>
+                        <!-- Image Upload: Back -->
+                        <div class="text-center">
+                            <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex justify-center items-center">
+                                <span class="text-gray-500 dark:text-gray-400">Back Image</span>
+                            </div>
+                            <div class="mt-2 space-x-2">
+                                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Upload</button>
+                                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Crop</button>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- GROUP 2: Player Info -->
-                    <div class="p-6 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing">
-                        <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2">Player Info</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Player First Name -->
-                            <div class="space-y-2">
-                                <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player First Name</label>
-                                <input type="text" id="firstName" name="firstName" placeholder="Joe" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                            <!-- Player Last Name -->
-                            <div class="space-y-2">
-                                <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player Last Name</label>
-                                <input type="text" id="lastName" name="lastName" placeholder="Burrow" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                            <!-- Player Team -->
-                            <div class="space-y-2">
-                                <label for="team" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Player Team</label>
-                                <input type="text" id="team" name="team" placeholder="Carolina Panthers" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GROUP 3: Value/Purchase Info -->
-                    <div class="p-6 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing">
-                        <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2">Value/Purchase Info</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <!-- Purchase Date -->
-                            <div class="space-y-2">
-                                <label for="purchaseDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date</label>
-                                <input type="date" id="purchaseDate" name="purchaseDate" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                            <!-- Purchase Price -->
-                            <div class="space-y-2">
-                                <label for="purchasePrice" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Price</label>
-                                <input type="text" id="purchasePrice" name="purchasePrice" placeholder="$23.99" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                            <!-- Purchase Location -->
-                            <div class="space-y-2">
-                                <label for="purchaseLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Location</label>
-                                <input type="text" id="purchaseLocation" name="purchaseLocation" placeholder="eBay" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                            <!-- Market Value -->
-                            <div class="space-y-2">
-                                <label for="marketValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Market Value</label>
-                                <input type="text" id="marketValue" name="marketValue" placeholder="$44.99" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GROUP 4: Images -->
-                    <div class="p-6 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg form-group-spacing">
-                    <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white border-b pb-2">Images</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Image Upload: Front -->
-                            <div class="text-center">
-                                <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex justify-center items-center">
-                                    <span class="text-gray-500 dark:text-gray-400">Front Image</span>
-                                </div>
-                                <div class="mt-2 space-x-2">
-                                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Upload</button>
-                                    <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg">Delete</button>
-                                    <button type="button" class="px-4 py-2 bg-yellow-600 text-white rounded-lg">Crop</button>
-                                </div>
-                            </div>
-                            <!-- Image Upload: Back -->
-                            <div class="text-center">
-                                <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex justify-center items-center">
-                                    <span class="text-gray-500 dark:text-gray-400">Back Image</span>
-                                </div>
-                                <div class="mt-2 space-x-2">
-                                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Upload</button>
-                                    <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg">Delete</button>
-                                    <button type="button" class="px-4 py-2 bg-yellow-600 text-white rounded-lg">Crop</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GROUP 5: Submit -->
-                    <div class="text-center">
-                        <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-lg text-lg">Submit</button>
-                    </div>
+                <!-- GROUP 5: Submit -->
+                <div class="text-center mt-6">
+                    <!-- Changed button styling to be more distinct -->
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        Submit
+                    </button>
                 </div>
             </form>
         </div>
