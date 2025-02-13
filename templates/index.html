@@ -1,32 +1,171 @@
-<!-- templates/index.html -->
-
 {% extends "_base.html" %}
 
 {% block content %}
 
-<h1 class="mb-6 text-3xl dark:text-white">Django + Tailwind CSS + Flowbite</h1>
-<div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-    <a href="#">
-        <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology
-                acquisitions 2021</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology
-            acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-            Read more
-            <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clip-rule="evenodd"></path>
-            </svg>
-        </a>
-    </div>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 dark:text-white">Add Card to Collection</h1>
+
+        <form class="max-w-2xl mx-auto space-y-12">
+            <!-- Group 1: Set Info -->
+            <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-semibold mb-4 dark:text-white">Set Information</h2>
+                <div class="mb-6">
+                    <label for="set" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set
+                        Name</label>
+                    <input type="text" id="set" name="set" placeholder="2023 Panini Donruss"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                </div>
+            </div>
+
+            <!-- Group 2: Card Info -->
+            <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-semibold mb-4 dark:text-white">Card Information</h2>
+                <div class="grid gap-6 mb-6 sm:grid-cols-2">
+                    <div>
+                        <label for="card-number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card
+                            Number</label>
+                        <input type="text" id="card-number" name="card-number" placeholder="53 or FN-RJM"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="player-first-name"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player First
+                            Name</label>
+                        <input type="text" id="player-first-name" name="player-first-name" placeholder="Christopher"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="player-last-name"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player Last
+                            Name</label>
+                        <input type="text" id="player-last-name" name="player-last-name" placeholder="Smith"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="player-team" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player
+                            Team</label>
+                        <input type="text" id="player-team" name="player-team" placeholder="Carolina Panthers"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3: Extras -->
+            <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-semibold mb-6 dark:text-white">Card Features</h2>
+                <div class="flex space-x-6 mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="rookie" name="rookie"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="rookie" class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Rookie
+                            Card</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="parallel" name="parallel"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="parallel"
+                               class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Parallel</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="insert" name="insert"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="insert"
+                               class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Insert</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: Collection Info -->
+            <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-semibold mb-6 dark:text-white">Collection Information</h2>
+                <div class="grid gap-6 mb-6 sm:grid-cols-2">
+                    <div>
+                        <label for="market-value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Market
+                            Value</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                            <input type="text" id="market-value" name="market-value" placeholder="59.99"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="price-paid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price
+                            Paid</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                            <input type="text" id="price-paid" name="price-paid" placeholder="30.99"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="purchased-from"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchased
+                            From</label>
+                        <input type="text" id="purchased-from" name="purchased-from" placeholder="eBay"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="purchase-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchase
+                            Date</label>
+                        <input type="date" id="purchase-date" name="purchase-date"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: Images -->
+            <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-semibold mb-6 dark:text-white">Card Images</h2>
+                <div class="grid gap-6 mb-6 sm:grid-cols-2">
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Front Image</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="front-image"
+                                   class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                            class="font-semibold">Click to upload</span> or drag and drop</p>
+                                </div>
+                                <input id="front-image" type="file" class="hidden" accept="image/*"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Back Image</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="back-image"
+                                   class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                            class="font-semibold">Click to upload</span> or drag and drop</p>
+                                </div>
+                                <input id="back-image" type="file" class="hidden" accept="image/*"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Add Card to Collection
+                </button>
+            </div>
+        </form>
 </div>
 
 {% endblock content %}

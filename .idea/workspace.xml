@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="added basic template from flowbite.">
+      <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,9 +40,6 @@
   </component>
   <component name="Git.Merge.Settings">
     <option name="BRANCH" value="origin/master" />
-  </component>
-  <component name="Git.Rebase.Settings">
-    <option name="NEW_BASE" value="origin/main" />
   </component>
   <component name="Git.Settings">
     <excluded-from-favorite>
@@ -98,13 +99,10 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="f1547af7-c8db-4f89-8455-db7d657f387c" />
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/vinnyNC/cardCollector&quot;,
-    &quot;accountId&quot;: &quot;f1547af7-c8db-4f89-8455-db7d657f387c&quot;
+    &quot;url&quot;: &quot;https://github.com/vinnyNC/cardCollector.git&quot;,
+    &quot;accountId&quot;: &quot;566c2759-009f-4262-a15c-174cb06db3f0&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -119,37 +117,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.cardCollector.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Docker Compose.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.8.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.7.4&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/vince/PycharmProjects/cardCollector/templates&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.language.and.region&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.cardCollector.executor": "Run",
+    "Docker.Docker Compose.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "django.template.preview.state": "SHOW_PREVIEW",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "21.7.2",
+    "javascript.nodejs.core.library.typings.version": "22.1.0",
+    "last_opened_file_path": "C:/Users/vince/PycharmProjects/cardCollector/templates",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "/home/vincent/.config/JetBrains/PyCharm2024.3/node/versions/22.14.0/bin/node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.idesettings.emmet.xml",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates" />
@@ -161,7 +162,7 @@
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\cardCollector" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Docker Compose">
+  <component name="RunManager" selected="Django Server.cardCollector">
     <configuration name="cardCollector" type="Python.DjangoServer" factoryName="Django server">
       <module name="cardCollector" />
       <option name="ENV_FILES" value="" />
@@ -172,7 +173,6 @@
         <env name="DJANGO_SETTINGS_MODULE" value="cardCollector.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (cardCollector) (2)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -207,8 +207,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-b86d7ee83eed-JavaScript-PY-243.18137.19" />
-        <option value="bundled-python-sdk-c9ea1d2668a5-10a76b3686da-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.18137.19" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
+        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
       </set>
     </attachedChunks>
   </component>
@@ -226,10 +226,9 @@
       <workItem from="1722715275854" duration="2169000" />
       <workItem from="1722717493699" duration="2903000" />
       <workItem from="1722976762495" duration="12408000" />
-      <workItem from="1723667883329" duration="20017000" />
-      <workItem from="1726361655475" duration="284000" />
-      <workItem from="1726362693411" duration="4445000" />
-      <workItem from="1728223482321" duration="167000" />
+      <workItem from="1723667883329" duration="18746000" />
+      <workItem from="1728673210985" duration="48000" />
+      <workItem from="1739384917373" duration="3497000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -271,15 +270,7 @@
       <option name="project" value="LOCAL" />
       <updated>1724709377357</updated>
     </task>
-    <task id="LOCAL-00006" summary="Changed site layout to flowbite.">
-      <option name="closed" value="true" />
-      <created>1726357261744</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1726357261744</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,8 +328,7 @@
     <MESSAGE value="changes" />
     <MESSAGE value="gitignore changes" />
     <MESSAGE value="added basic template from flowbite." />
-    <MESSAGE value="Changed site layout to flowbite." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed site layout to flowbite." />
+    <option name="LAST_COMMIT_MESSAGE" value="added basic template from flowbite." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
