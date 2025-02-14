@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency.">
-      <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -134,8 +132,8 @@
     "django.template.preview.state": "SHOW_EDITOR",
     "git-widget-placeholder": "dev2",
     "ignore.virus.scanning.warn.message": "true",
-    "javascript.nodejs.core.library.configured.version": "21.7.2",
-    "javascript.nodejs.core.library.typings.version": "22.1.0",
+    "javascript.nodejs.core.library.configured.version": "22.14.0",
+    "javascript.nodejs.core.library.typings.version": "22.13.4",
     "last_opened_file_path": "/home/vincent/PycharmProjects/cardCollector/temp",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -144,7 +142,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "/home/vincent/.config/JetBrains/PyCharm2024.3/node/versions/22.14.0/bin/node",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.idesettings.emmet.xml",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -231,7 +229,8 @@
       <workItem from="1722976762495" duration="12408000" />
       <workItem from="1723667883329" duration="18746000" />
       <workItem from="1728673210985" duration="48000" />
-      <workItem from="1739384917373" duration="6651000" />
+      <workItem from="1739384917373" duration="7135000" />
+      <workItem from="1739547329904" duration="2227000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -281,7 +280,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739471264756</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured form for managing card collections, including set information, card details, and layout improvements. Updated the base template to refine structure and simplify styling. Adjusted project configuration for consistency and better workflow management.">
+      <option name="closed" value="true" />
+      <created>1739546847298</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739546847298</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -343,7 +350,8 @@
     <MESSAGE value="gitignore changes" />
     <MESSAGE value="added basic template from flowbite." />
     <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency." />
+    <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured form for managing card collections, including set information, card details, and layout improvements. Updated the base template to refine structure and simplify styling. Adjusted project configuration for consistency and better workflow management." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
