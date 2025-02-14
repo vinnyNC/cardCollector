@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="added basic template from flowbite.">
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency.">
       <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
@@ -62,7 +61,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -105,6 +104,9 @@
     &quot;accountId&quot;: &quot;566c2759-009f-4262-a15c-174cb06db3f0&quot;
   }
 }</component>
+  <component name="MaliciousPackageCheckinHandlerState">
+    <option name="packageCheck" value="true" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -129,12 +131,12 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "django.template.preview.state": "SHOW_PREVIEW",
-    "git-widget-placeholder": "main",
+    "django.template.preview.state": "SHOW_EDITOR",
+    "git-widget-placeholder": "dev2",
     "ignore.virus.scanning.warn.message": "true",
     "javascript.nodejs.core.library.configured.version": "21.7.2",
     "javascript.nodejs.core.library.typings.version": "22.1.0",
-    "last_opened_file_path": "C:/Users/vince/PycharmProjects/cardCollector/templates",
+    "last_opened_file_path": "/home/vincent/PycharmProjects/cardCollector/temp",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -153,6 +155,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/temp" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -228,7 +231,7 @@
       <workItem from="1722976762495" duration="12408000" />
       <workItem from="1723667883329" duration="18746000" />
       <workItem from="1728673210985" duration="48000" />
-      <workItem from="1739384917373" duration="3497000" />
+      <workItem from="1739384917373" duration="6651000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -270,11 +273,22 @@
       <option name="project" value="LOCAL" />
       <updated>1724709377357</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency.">
+      <option name="closed" value="true" />
+      <created>1739471264756</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1739471264756</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="RECENT_FILTERS">
@@ -328,7 +342,11 @@
     <MESSAGE value="changes" />
     <MESSAGE value="gitignore changes" />
     <MESSAGE value="added basic template from flowbite." />
-    <option name="LAST_COMMIT_MESSAGE" value="added basic template from flowbite." />
+    <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency." />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
