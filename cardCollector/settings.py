@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,15 +81,15 @@ WSGI_APPLICATION = 'cardCollector.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default2': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    'postgresql': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cardcollector',
-        'USER': 'cardcollector',
-        'PASSWORD': '${POSTGRES_DB_PASSWORD}',
+        'NAME': 'cardcollector_test',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('POSTGRES_DB_PASSWORD'),
         'HOST': '10.0.5.5',
         'PORT': '5432',
     }

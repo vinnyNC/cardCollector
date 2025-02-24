@@ -1,72 +1,258 @@
-<!-- templates/_base.html -->
-
-{% load compress %}
+<!-- templates/add_card.html -->
 {% load static %}
 
 <!DOCTYPE html>
 <html class="dark" lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="description">
-    <meta name="keywords" content="keywords">
-    <meta name="author" content="author">
-
+    <title>{{ siteName }} - Add Card</title>
     <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <title>{{ siteName }} - {{ pageTitle }}</title>
-
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet"/>
-
 </head>
-
 <body class="bg-gray-900">
-
-<!-- Add this -->
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
-    <!-- Navbar -->
-    {% include "nav/header.html" %}
+    <!-- Navbar -->{% include "nav/header.html" %}
 
     <!-- Main content -->
     <main class="p-4 md:ml-64 h-auto pt-20">
         <div class="container mx-auto px-4 py-8">
             <h1 class="text-3xl font-bold mb-6 dark:text-white">Add Card to Collection</h1>
-            <form>
-                <div class="mb-6">
-                    <label for="setName"
-                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label>
-                    <input type="text" id="setName"
-                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                           placeholder="2023 Panini Donruss" required/>
+            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8">
+                {% csrf_token %}
+
+                <!-- Set Information -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Set Information</h2>
+                    <div>
+                        <label for="set"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label> <input
+                            type="text" id="set" name="set"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="e.g., 2023 Panini Donruss" required>
+                    </div>
+                    <div class="grid gap-6 md:grid-cols-3">
+                        <div>
+                            <label for="cardNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card
+                                #</label> <input type="text" id="cardNum" name="cardNum"
+                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                 placeholder="Card #" required>
+                        </div>
+                        <div>
+                            <label for="playerFirstName"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player First
+                                Name</label> <input type="text" id="playerFirstName" name="playerFirstName"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                    placeholder="First Name" required>
+                        </div>
+                        <div>
+                            <label for="playerLastName"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player Last
+                                Name</label> <input type="text" id="playerLastName" name="playerLastName"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                    placeholder="Last Name" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-3">
-                    <div>
-                        <label for="cardNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card
-                            #</label>
-                        <input type="text" id="cardNum"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
-                               dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                               dark:focus:border-blue-500"
-                               placeholder="Card #" required/>
+
+                <!-- Card Attributes (Insert, Rookie, Parallel) -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Card Attributes</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="insert" name="insert"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                   onclick="toggleField('insertDetailContainer', this)"> <label for="insert"
+                                                                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Insert</label>
+                        </div>
+                        <div id="insertDetailContainer" class="hidden ml-6">
+                            <label for="insertDetail"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Insert
+                                Details</label> <input type="text" id="insertDetail" name="insertDetail"
+                                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                       placeholder="e.g., Rookie Debut">
+                        </div>
                     </div>
-                    <div>
-                        <label for="playerFirstName"
-                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player First
-                            name</label>
-                        <input type="text" id="playerFirstName"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Player First Name" required/>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="rookie" name="rookie"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                   onclick="toggleField('rookieDetailContainer', this)"> <label for="rookie"
+                                                                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Rookie</label>
+                        </div>
+                        <div id="rookieDetailContainer" class="hidden ml-6">
+                            <label for="rookieDetail"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rookie
+                                Details</label> <input type="text" id="rookieDetail" name="rookieDetail"
+                                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                       placeholder="e.g., Rookie Card">
+                        </div>
                     </div>
-                    <div>
-                        <label for="playerLastName"
-                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Player Last
-                            name</label>
-                        <input type="text" id="playerLastName"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Player Last Name" required/>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="parallel" name="parallel"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                   onclick="toggleField('parallelDetailContainer', this)"> <label for="parallel"
+                                                                                                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Parallel</label>
+                        </div>
+                        <div id="parallelDetailContainer" class="hidden ml-6">
+                            <label for="parallelDetail"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Parallel
+                                Details</label> <input type="text" id="parallelDetail" name="parallelDetail"
+                                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                       placeholder="e.g., Refractor">
+                        </div>
                     </div>
+                </div>
+
+                <!-- Grading Information -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Grading Information</h2>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="graded" name="graded"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                               onclick="toggleGradingFields(this)"> <label for="graded"
+                                                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Graded</label>
+                    </div>
+                    <div id="gradingFields" class="hidden space-y-4 ml-6">
+                        <div>
+                            <label for="gradedValue"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Graded
+                                Value</label> <input type="text" id="gradedValue" name="gradedValue"
+                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                     placeholder="e.g., 9.5">
+                        </div>
+                        <div>
+                            <label for="gradingCompany"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
+                                Company</label> <select id="gradingCompany" name="gradingCompany"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Grading Company</option>
+                            <option value="PSA">PSA</option>
+                            <option value="BGS">BGS</option>
+                            <option value="SGC">SGC</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        </div>
+                        <div>
+                            <label for="gradingCert"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
+                                Certificate #</label> <input type="text" id="gradingCert" name="gradingCert"
+                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                             placeholder="e.g., 12345678">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Storage and Images -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Storage & Images</h2>
+                    <div>
+                        <label for="storageLocation"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage Location
+                            (Box)</label> <input type="text" id="storageLocation" name="storageLocation"
+                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                 placeholder="e.g., Box 1, Row 3">
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="frontImage"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Front
+                                Image</label> <input type="file" id="frontImage" name="frontImage" accept="image/*"
+                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                     onchange="previewImage(event, 'frontImagePreview')">
+                            <div class="mt-2">
+                                <img id="frontImagePreview" class="hidden max-w-full h-auto rounded-lg"
+                                     alt="Front Image Preview">
+                                <div class="mt-2 space-x-2">
+                                    <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="deleteImage('frontImage', 'frontImagePreview')">Delete
+                                    </button>
+                                    <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="cropImage('frontImage')">Crop
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="backImage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Back
+                                Image</label> <input type="file" id="backImage" name="backImage" accept="image/*"
+                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                     onchange="previewImage(event, 'backImagePreview')">
+                            <div class="mt-2">
+                                <img id="backImagePreview" class="hidden max-w-full h-auto rounded-lg"
+                                     alt="Back Image Preview">
+                                <div class="mt-2 space-x-2">
+                                    <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="deleteImage('backImage', 'backImagePreview')">Delete
+                                    </button>
+                                    <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="cropImage('backImage')">Crop
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchase Details -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Purchase Details</h2>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="whereBought"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Where
+                                Bought</label> <input type="text" id="whereBought" name="whereBought"
+                                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                      placeholder="e.g., eBay">
+                        </div>
+                        <div>
+                            <label for="orderNumber"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order #</label>
+                            <input type="text" id="orderNumber" name="orderNumber"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                   placeholder="e.g., 12345">
+                        </div>
+                        <div>
+                            <label for="datePurchased"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchase
+                                Date</label> <input type="date" id="datePurchased" name="datePurchased"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="valuePaid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchase
+                                Price</label> <input type="number" id="valuePaid" name="valuePaid" step="0.01"
+                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                     placeholder="e.g., 50.00">
+                        </div>
+                        <div>
+                            <label for="receipt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order
+                                Receipt (PDF)</label> <input type="file" id="receipt" name="receipt" accept=".pdf"
+                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg mt-2"
+                                    onclick="deleteFile('receipt')">Delete Receipt
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Status -->
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="inCollection" name="inCollection"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                               checked> <label for="inCollection"
+                                               class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Still in
+                        My Collection</label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit"
+                            class="w-full bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                        Add Card to Collection
+                    </button>
                 </div>
             </form>
         </div>
@@ -74,6 +260,243 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-</body>
+<script>
+    // Toggle detail fields for insert, rookie, parallel
+    function toggleField(containerId, checkbox) {
+        const container = document.getElementById(containerId);
+        container.classList.toggle('hidden', !checkbox.checked);
+    }
 
+    // Toggle grading fields
+    function toggleGradingFields(checkbox) {
+        const gradingFields = document.getElementById('gradingFields');
+        gradingFields.classList.toggle('hidden', !checkbox.checked);
+    }
+
+    // Preview uploaded images
+    function previewImage(event, previewId) {
+        const input = event.target;
+        const preview = document.getElementById(previewId);
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+        }
+    }
+
+    // Delete image
+    function deleteImage(inputId, previewId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        input.value = '';
+        preview.src = '';
+        preview.classList.add('hidden');
+    }
+
+    // Crop image (placeholder function)
+    function cropImage(inputId) {
+        alert('Crop functionality to be implemented for ' + inputId);
+    }
+
+    // Delete receipt
+    function deleteFile(inputId) {
+        const input = document.getElementById(inputId);
+        input.value = '';
+    }
+
+    //  SEARCH
+    // Reusable dropdown handler
+    function setupDropdown(inputId, apiSegment, resultKey = 'set_name') {
+        const input = document.getElementById(inputId);
+        const dropdown = document.createElement('div');
+        dropdown.id = `${inputId}-dropdown`;
+        dropdown.className = 'absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full max-h-48 overflow-y-auto dark:bg-gray-700 hidden';
+        dropdown.setAttribute('role', 'listbox');
+        document.body.appendChild(dropdown);
+
+        let selectedIndex = -1;
+        let options = [];
+
+        function showDropdown(results) {
+            dropdown.innerHTML = '';
+            options = results;
+            selectedIndex = -1;
+
+            results.forEach((result, index) => {
+                const item = document.createElement('div');
+                item.className = 'px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer';
+                item.textContent = result[resultKey];
+                item.setAttribute('role', 'option');
+                item.setAttribute('data-index', index);
+
+                // Store set ID for "set" field selections
+                if (apiSegment === 'set_name' && result.id) {
+                    item.addEventListener('click', () => {
+                        selectOption(result[resultKey]);
+                        input.dataset.setId = result.id; // Store set ID
+                    });
+                } else {
+                    item.addEventListener('click', () => selectOption(result[resultKey]));
+                }
+
+                item.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (apiSegment === 'set_name' && result.id) {
+                        selectOption(result[resultKey]);
+                        input.dataset.setId = result.id;
+                    } else {
+                        selectOption(result[resultKey]);
+                    }
+                });
+                dropdown.appendChild(item);
+            });
+
+            const rect = input.getBoundingClientRect();
+            dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+            dropdown.style.left = `${rect.left + window.scrollX}px`;
+            dropdown.style.width = `${input.offsetWidth}px`;
+            dropdown.classList.remove('hidden');
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        function hideDropdown() {
+            dropdown.classList.add('hidden');
+            selectedIndex = -1;
+            document.removeEventListener('click', handleClickOutside);
+        }
+
+        function handleClickOutside(event) {
+            if (!dropdown.contains(event.target) && event.target !== input) {
+                hideDropdown();
+            }
+        }
+
+        function selectOption(value) {
+            input.value = value;
+            hideDropdown();
+            input.focus();
+        }
+
+        function updateSelection() {
+            const items = dropdown.querySelectorAll('[role="option"]');
+            items.forEach((item, index) => {
+                item.classList.toggle('bg-gray-100', index === selectedIndex);
+                item.classList.toggle('dark:bg-gray-600', index === selectedIndex);
+            });
+            if (selectedIndex >= 0 && selectedIndex < items.length) {
+                items[selectedIndex].scrollIntoView({block: 'nearest'});
+            }
+        }
+
+        function debounce(func, delay) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function makeApiCall(searchText) {
+            let url;
+            switch (apiSegment) {
+                case 'set_name':
+                    url = `/api/set_name/${searchText}`;
+                    break;
+                case 'card_num':
+                    const setId = document.getElementById('set').dataset.setId || '';
+                    url = `/api/card_num/${searchText}?set_id=${setId}`;
+                    break;
+                case 'insert_name':
+                    url = `/api/insert_name/${searchText}`;
+                    break;
+                case 'parallel_name':
+                    url = `/api/parallel_name/${searchText}`;
+                    break;
+                case 'where_bought':
+                    url = `/api/where_bought/${searchText}`;
+                    break;
+                default:
+                    console.error('Unknown API segment:', apiSegment);
+                    return;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        showDropdown(data.results);
+                    } else {
+                        hideDropdown();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideDropdown();
+                });
+        }
+
+        const debouncedApiCall = debounce(makeApiCall, 300);
+
+        input.addEventListener('input', () => {
+            const inputValue = input.value.trim();
+            if (inputValue.length >= 1) {
+                debouncedApiCall(inputValue);
+            } else {
+                hideDropdown();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (!dropdown.classList.contains('hidden')) {
+                const items = dropdown.querySelectorAll('[role="option"]');
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        selectedIndex = Math.min(selectedIndex + 1, options.length - 1);
+                        updateSelection();
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        selectedIndex = Math.max(selectedIndex - 1, -1);
+                        updateSelection();
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        if (selectedIndex >= 0 && selectedIndex < options.length) {
+                            selectOption(options[selectedIndex][resultKey]);
+                            if (apiSegment === 'set_name') {
+                                input.dataset.setId = options[selectedIndex].id;
+                            }
+                        }
+                        break;
+                    case 'Tab':
+                    case 'Escape':
+                        hideDropdown();
+                        break;
+                }
+            }
+        });
+
+        input.addEventListener('focus', () => {
+            const inputValue = input.value.trim();
+            if (inputValue.length >= 1 && !dropdown.classList.contains('hidden')) {
+                debouncedApiCall(inputValue);
+            }
+        });
+    }
+
+    // Initialize dropdowns
+    setupDropdown('set', 'set_name', 'set_name');
+    setupDropdown('cardNum', 'card_num', 'card_num');
+    setupDropdown('insertDetail', 'insert_name', 'insert_name');
+    setupDropdown('parallelDetail', 'parallel_name', 'parallel_name');
+    setupDropdown('whereBought', 'where_bought', 'where_bought');
+</script>
+</body>
 </html>

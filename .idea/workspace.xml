@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/src/input.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/src/input.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/_base_old.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_base_old.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardCollector/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cardCollector/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/nav/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nav/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/nav/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nav/sidebar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +67,12 @@
       <list>
         <option value="VinnyNC" />
       </list>
+    </option>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -129,41 +138,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.Local Django Server.executor&quot;: &quot;Run&quot;,
-    &quot;Django Server.cardCollector.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Docker Compose.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev2&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.14.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.13.4&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/vincent/PycharmProjects/cardCollector/temp&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.Local Django Server.executor": "Run",
+    "Django Server.cardCollector.executor": "Run",
+    "Docker.Docker Compose.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "django.template.preview.state": "SHOW_EDITOR",
+    "git-widget-placeholder": "dev2",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "22.14.0",
+    "javascript.nodejs.core.library.typings.version": "22.13.4",
+    "last_opened_file_path": "/home/vincent/PycharmProjects/cardCollector/temp",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "editor.preferences.webOptions",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/temp" />
@@ -187,13 +197,14 @@
         <env name="DJANGO_SETTINGS_MODULE" value="cardCollector.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (cardCollector)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
       <option name="port" value="8000" />
-      <option name="host" value="localhost" />
+      <option name="host" value="0.0.0.0" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
@@ -245,7 +256,8 @@
       <workItem from="1739384917373" duration="7135000" />
       <workItem from="1739547329904" duration="2227000" />
       <workItem from="1739674780767" duration="1949000" />
-      <workItem from="1739761781386" duration="363000" />
+      <workItem from="1739761781386" duration="1124000" />
+      <workItem from="1740328902713" duration="11856000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -303,7 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739546847298</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Remove Tailwind configuration and update dependencies&#10;&#10;Removed `tailwind.config.js` and transitioned to inline configuration in `input.css`. Upgraded multiple Node.js dependencies and made CSS adjustments for better compatibility with the latest versions. Updated Python SDK version and project setup files to reflect new configurations.">
+      <option name="closed" value="true" />
+      <created>1739762182945</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1739762182946</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,20 +386,10 @@
     <MESSAGE value="added basic template from flowbite." />
     <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured card collection form, featuring fields for set information, card details, images, and collection metadata. Updated the base template to remove unnecessary border wrapping. Adjusted project configuration files for consistency." />
     <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured form for managing card collections, including set information, card details, and layout improvements. Updated the base template to refine structure and simplify styling. Adjusted project configuration for consistency and better workflow management." />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Remove Tailwind configuration and update dependencies&#10;&#10;Removed `tailwind.config.js` and transitioned to inline configuration in `input.css`. Upgraded multiple Node.js dependencies and made CSS adjustments for better compatibility with the latest versions. Updated Python SDK version and project setup files to reflect new configurations." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove Tailwind configuration and update dependencies&#10;&#10;Removed `tailwind.config.js` and transitioned to inline configuration in `input.css`. Upgraded multiple Node.js dependencies and made CSS adjustments for better compatibility with the latest versions. Updated Python SDK version and project setup files to reflect new configurations." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cardCollector/urls.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
