@@ -9,6 +9,8 @@
     <title>{{ siteName }} - Add Card</title>
     <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
 </head>
 <body class="bg-gray-900">
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
@@ -76,16 +78,9 @@
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="rookie" name="rookie"
-                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                                   onclick="toggleField('rookieDetailContainer', this)"> <label for="rookie"
-                                                                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Rookie</label>
-                        </div>
-                        <div id="rookieDetailContainer" class="hidden ml-6">
-                            <label for="rookieDetail"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rookie
-                                Details</label> <input type="text" id="rookieDetail" name="rookieDetail"
-                                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                       placeholder="e.g., Rookie Card">
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="rookie"
+                                   class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Rookie</label>
                         </div>
                     </div>
                     <div class="space-y-4">
@@ -171,6 +166,9 @@
                                     <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
                                             onclick="cropImage('frontImage')">Crop
                                     </button>
+                                    <button type="button" class="bg-green-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="openWebcamModal('frontImage')">Capture
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -188,6 +186,9 @@
                                     </button>
                                     <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
                                             onclick="cropImage('backImage')">Crop
+                                    </button>
+                                    <button type="button" class="bg-green-600 text-white px-3 py-1 rounded-lg"
+                                            onclick="openWebcamModal('backImage')">Capture
                                     </button>
                                 </div>
                             </div>
@@ -236,17 +237,6 @@
                     </div>
                 </div>
 
-                <!-- Collection Status -->
-                <div class="space-y-4">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="inCollection" name="inCollection"
-                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                               checked> <label for="inCollection"
-                                               class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Still in
-                        My Collection</label>
-                    </div>
-                </div>
-
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"
@@ -280,13 +270,27 @@
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
+                resizeImage(e.target.result, (blob, url) => {
+                    preview.src = url;
+                    preview.classList.remove('hidden');
+                    input.dataset.originalFile = JSON.stringify({
+                        name: input.files[0].name,
+                        type: input.files[0].type,
+                        data: url
+                    });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(new File([blob], input.files[0].name, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    }));
+                    input.files = dataTransfer.files;
+                });
             };
             reader.readAsDataURL(input.files[0]);
         } else {
             preview.src = '';
             preview.classList.add('hidden');
+            delete input.dataset.originalFile;
         }
     }
 
@@ -297,11 +301,8 @@
         input.value = '';
         preview.src = '';
         preview.classList.add('hidden');
-    }
-
-    // Crop image (placeholder function)
-    function cropImage(inputId) {
-        alert('Crop functionality to be implemented for ' + inputId);
+        delete input.dataset.originalFile;
+        input.files = null;
     }
 
     // Delete receipt
@@ -331,10 +332,29 @@
             results.forEach((result, index) => {
                 const item = document.createElement('div');
                 item.className = 'px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer';
-                item.textContent = result[resultKey];
                 item.setAttribute('role', 'option');
                 item.setAttribute('data-index', index);
 
+                //Set text content of dropdown item
+                if (apiSegment === 'set_name') {
+                    console.log(result); //debug
+                    item.textContent = result[resultKey];
+                } else if (apiSegment === 'card_num') {
+                    // Player information
+                    let player_first_name = result.player.first_name;
+                    let player_last_name = result.player.last_name;
+                    let card_number = result.card_num;
+
+                    // Set content of dropdown with player information
+                    item.textContent = card_number + ' - ' + player_first_name + ' ' + player_last_name;
+
+                    // Add player info to dataset for dropdown item
+                    input.dataset.playerFirstName = result.player.first_name;
+                    input.dataset.playerLastName = result.player.last_name;
+                } else {
+                    console.log(result); //debug
+                    item.textContent = result[resultKey];
+                }
                 // Store set ID for "set" field selections
                 if (apiSegment === 'set_name' && result.id) {
                     item.addEventListener('click', () => {
@@ -377,10 +397,39 @@
             }
         }
 
+        function checkPlayerInput() {
+            let pFirstName = document.getElementById('playerFirstName');
+            let pLastName = document.getElementById('playerLastName');
+            let cardNum = document.getElementById('cardNum');
+            if (pFirstName.dataset.card_num === cardNum.value) {
+                pFirstName.disabled = true;
+                pLastName.disabled = true;
+            } else {
+                if (pFirstName.disabled === true) {
+                    pFirstName.value = '';
+                    pLastName.value = '';
+                    pFirstName.disabled = false;
+                    pLastName.disabled = false;
+                }
+            }
+        }
+
         function selectOption(value) {
-            input.value = value;
-            hideDropdown();
-            input.focus();
+            if (apiSegment === "card_num") {
+                document.getElementById('playerFirstName').value = input.dataset.playerFirstName;
+                document.getElementById('playerFirstName').dataset.card_num = value;
+                document.getElementById('playerFirstName').disabled = true;
+                document.getElementById('playerLastName').value = input.dataset.playerLastName;
+                document.getElementById('playerLastName').dataset.card_num = value;
+                document.getElementById('playerLastName').disabled = true;
+                input.value = value;
+                hideDropdown();
+                input.focus();
+            } else {
+                input.value = value;
+                hideDropdown();
+                input.focus();
+            }
         }
 
         function updateSelection() {
@@ -410,7 +459,7 @@
                     break;
                 case 'card_num':
                     const setId = document.getElementById('set').dataset.setId || '';
-                    url = `/api/card_num/${searchText}?set_id=${setId}`;
+                    url = `/api/card_num/${searchText}/${setId}`;
                     break;
                 case 'insert_name':
                     url = `/api/insert_name/${searchText}`;
@@ -444,6 +493,10 @@
         const debouncedApiCall = debounce(makeApiCall, 300);
 
         input.addEventListener('input', () => {
+            // Clears disable state if card_num input is changed
+            if (apiSegment === 'card_num') {
+                checkPlayerInput();
+            }
             const inputValue = input.value.trim();
             if (inputValue.length >= 1) {
                 debouncedApiCall(inputValue);
@@ -497,6 +550,308 @@
     setupDropdown('insertDetail', 'insert_name', 'insert_name');
     setupDropdown('parallelDetail', 'parallel_name', 'parallel_name');
     setupDropdown('whereBought', 'where_bought', 'where_bought');
+
+    // Max image size function
+    function resizeImage(imageSrc, callback) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            // Calculate new dimensions while preserving aspect ratio
+            if (width > height) {
+                if (width > 250) {
+                    height = Math.round((height * 250) / width);
+                    width = 250;
+                } else if (width < 200) {
+                    height = Math.round((height * 200) / width);
+                    width = 200;
+                }
+            } else {
+                if (height > 250) {
+                    width = Math.round((width * 250) / height);
+                    height = 250;
+                } else if (height < 200) {
+                    width = Math.round((width * 200) / height);
+                    height = 200;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(blob => {
+                callback(blob, URL.createObjectURL(blob));
+            }, 'image/jpeg', 0.95);
+        };
+        img.src = imageSrc;
+    }
+
+    // Image cropping JS
+    let cropper;
+    let currentInputId;
+
+    // Crop image
+    function cropImage(inputId) {
+        currentInputId = inputId;
+        const input = document.getElementById(inputId);
+        const imageToCrop = document.getElementById('imageToCrop');
+        const modal = document.getElementById('cropModal');
+        const cropperContainer = document.getElementById('cropperContainer');
+
+        if (!input.files[0] && !input.dataset.originalFile) {
+            alert('Please upload or capture an image first');
+            return;
+        }
+
+        const fileData = input.dataset.originalFile ?
+            JSON.parse(input.dataset.originalFile) :
+            {data: document.getElementById(inputId + 'Preview').src};
+
+        imageToCrop.src = fileData.data;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        if (cropper) {
+            cropper.destroy();
+        }
+
+        cropper = new Cropper(imageToCrop, {
+            aspectRatio: NaN,
+            viewMode: 1,
+            autoCropArea: 0.8,
+            responsive: true,
+            restore: true,
+            guides: true,
+            center: true,
+            highlight: true,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: true,
+            zoomable: true,
+            scalable: true,
+            movable: true,
+            touchDragZoom: true,
+            mouseWheelZoom: false,
+            minContainerWidth: 300,
+            minContainerHeight: 300,
+        });
+
+        imageToCrop.addEventListener('touchstart', preventZoom, {passive: false});
+    }
+
+
+    function closeCropModal() {
+        const modal = document.getElementById('cropModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        const imageToCrop = document.getElementById('imageToCrop');
+        imageToCrop.removeEventListener('touchstart', preventZoom);
+    }
+
+    function saveCroppedImage() {
+        if (!cropper) return;
+
+        const canvas = cropper.getCroppedCanvas({
+            maxWidth: 250, // Cap at 250 pixels
+            maxHeight: 250,
+            fillColor: '#fff'
+        });
+
+        const previewId = currentInputId + 'Preview';
+        const preview = document.getElementById(previewId);
+        const input = document.getElementById(currentInputId);
+
+        // Ensure cropped image is resized/maximized
+        resizeImage(canvas.toDataURL('image/jpeg', 0.95), (blob, url) => {
+            preview.src = url;
+            preview.classList.remove('hidden');
+
+            const file = new File([blob], input.files[0]?.name || 'cropped-image.jpg', {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+            });
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+
+            input.dataset.originalFile = JSON.stringify({
+                name: file.name,
+                type: file.type,
+                data: url
+            });
+
+            closeCropModal();
+        });
+    }
+
+    // Prevent default zoom on mobile
+    function preventZoom(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }
+
+    // Webcam input JS
+    let webcamStream;
+    let currentWebcamInputId;
+
+    function openWebcamModal(inputId) {
+        currentWebcamInputId = inputId;
+        const modal = document.getElementById('webcamModal');
+        const video = document.getElementById('webcamVideo');
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert('Webcam access is not supported in this browser or environment. Please use a modern browser and ensure the site is served over HTTPS or localhost.');
+            return;
+        }
+
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(stream => {
+                webcamStream = stream;
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Webcam access error:', err.message);
+                let errorMessage = 'Could not access webcam: ';
+                if (err.name === 'NotAllowedError') {
+                    errorMessage += 'Permission denied. Please allow webcam access.';
+                } else if (err.name === 'NotFoundError') {
+                    errorMessage += 'No webcam found. Please connect a camera.';
+                } else if (err.name === 'SecurityError') {
+                    errorMessage += 'This feature requires a secure context (HTTPS or localhost).';
+                } else {
+                    errorMessage += err.message;
+                }
+                alert(errorMessage);
+                closeWebcamModal();
+            });
+    }
+
+    // Close webcam modal
+    function closeWebcamModal() {
+        const modal = document.getElementById('webcamModal');
+        const video = document.getElementById('webcamVideo');
+
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+
+        if (webcamStream) {
+            webcamStream.getTracks().forEach(track => track.stop());
+            webcamStream = null;
+            video.srcObject = null;
+        }
+    }
+
+    // Capture image from webcam
+    function captureWebcamImage() {
+        const video = document.getElementById('webcamVideo');
+        const canvas = document.getElementById('webcamCanvas');
+        const input = document.getElementById(currentWebcamInputId);
+        const previewId = currentWebcamInputId + 'Preview';
+        const preview = document.getElementById(previewId);
+
+        if (!video.srcObject) {
+            alert('No webcam feed available to capture.');
+            return;
+        }
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        resizeImage(canvas.toDataURL('image/jpeg', 0.95), (blob, url) => {
+            preview.src = url;
+            preview.classList.remove('hidden');
+
+            const file = new File([blob], `${currentWebcamInputId}-webcam.jpg`, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+            });
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+
+            input.dataset.originalFile = JSON.stringify({
+                name: file.name,
+                type: file.type,
+                data: url
+            });
+
+            closeWebcamModal();
+            cropImage(currentWebcamInputId);
+        });
+    }
 </script>
+
+<!-- Cropper Modal -->
+<div id="cropModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-75">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg p-4 w-full max-w-lg sm:max-w-2xl mx-auto my-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium dark:text-white">Crop Image</h3>
+                <button onclick="closeCropModal()"
+                        class="text-2xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    &times;
+                </button>
+            </div>
+            <div class="mb-4 overflow-hidden">
+                <div id="cropperContainer" class="relative w-full" style="max-height: 60vh;">
+                    <img id="imageToCrop" class="w-full h-auto touch-pinch-zoom" alt="Image to crop">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeCropModal()"
+                        class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-700 text-sm sm:text-base">
+                    Cancel
+                </button>
+                <button onclick="saveCroppedImage()"
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm sm:text-base">Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Webcam modal -->
+<div id="webcamModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-75">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg p-4 w-full max-w-lg sm:max-w-2xl mx-auto my-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium dark:text-white">Capture from Webcam</h3>
+                <button onclick="closeWebcamModal()"
+                        class="text-2xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">×
+                </button>
+            </div>
+            <div class="mb-4 overflow-hidden">
+                <video id="webcamVideo" class="w-full h-auto" autoplay playsinline></video>
+                <canvas id="webcamCanvas" class="hidden"></canvas>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeWebcamModal()"
+                        class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-700 text-sm sm:text-base">
+                    Cancel
+                </button>
+                <button onclick="captureWebcamImage()"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm sm:text-base">
+                    Capture
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
