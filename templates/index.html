@@ -551,41 +551,48 @@
     setupDropdown('parallelDetail', 'parallel_name', 'parallel_name');
     setupDropdown('whereBought', 'where_bought', 'where_bought');
 
-    // Max image size function
+    // Update image preview while preserving original file
     function resizeImage(imageSrc, callback) {
         const img = new Image();
         img.onload = function () {
             const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
+            let displayWidth = img.width;
+            let displayHeight = img.height;
 
-            // Calculate new dimensions while preserving aspect ratio
-            if (width > height) {
-                if (width > 250) {
-                    height = Math.round((height * 250) / width);
-                    width = 250;
-                } else if (width < 200) {
-                    height = Math.round((height * 200) / width);
-                    width = 200;
+            // Calculate display dimensions while preserving aspect ratio
+            if (displayWidth > displayHeight) {
+                if (displayWidth > 250) {
+                    displayHeight = Math.round((displayHeight * 250) / displayWidth);
+                    displayWidth = 250;
+                } else if (displayWidth < 200) {
+                    displayHeight = Math.round((displayHeight * 200) / displayWidth);
+                    displayWidth = 200;
                 }
             } else {
-                if (height > 250) {
-                    width = Math.round((width * 250) / height);
-                    height = 250;
-                } else if (height < 200) {
-                    width = Math.round((width * 200) / height);
-                    height = 200;
+                if (displayHeight > 250) {
+                    displayWidth = Math.round((displayWidth * 250) / displayHeight);
+                    displayHeight = 250;
+                } else if (displayHeight < 200) {
+                    displayWidth = Math.round((displayWidth * 200) / displayHeight);
+                    displayHeight = 200;
                 }
             }
 
-            canvas.width = width;
-            canvas.height = height;
+            // Create scaled preview
+            canvas.width = displayWidth;
+            canvas.height = displayHeight;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
+            ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
 
-            canvas.toBlob(blob => {
-                callback(blob, URL.createObjectURL(blob));
-            }, 'image/jpeg', 0.95);
+            // Convert original image to blob
+            fetch(imageSrc)
+                .then(res => res.blob())
+                .then(originalBlob => {
+                    // Create preview URL for display
+                    canvas.toBlob(previewBlob => {
+                        callback(originalBlob, URL.createObjectURL(previewBlob));
+                    }, 'image/jpeg', 0.95);
+                });
         };
         img.src = imageSrc;
     }
@@ -600,18 +607,28 @@
         const input = document.getElementById(inputId);
         const imageToCrop = document.getElementById('imageToCrop');
         const modal = document.getElementById('cropModal');
-        const cropperContainer = document.getElementById('cropperContainer');
 
         if (!input.files[0] && !input.dataset.originalFile) {
             alert('Please upload or capture an image first');
             return;
         }
 
-        const fileData = input.dataset.originalFile ?
-            JSON.parse(input.dataset.originalFile) :
-            {data: document.getElementById(inputId + 'Preview').src};
+        // Use the original file data instead of the preview
+        if (input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imageToCrop.src = e.target.result;
+                initializeCropper(modal);
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else if (input.dataset.originalFile) {
+            const fileData = JSON.parse(input.dataset.originalFile);
+            imageToCrop.src = fileData.data;
+            initializeCropper(modal);
+        }
+    }
 
-        imageToCrop.src = fileData.data;
+    function initializeCropper(modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
@@ -619,7 +636,7 @@
             cropper.destroy();
         }
 
-        cropper = new Cropper(imageToCrop, {
+        cropper = new Cropper(document.getElementById('imageToCrop'), {
             aspectRatio: NaN,
             viewMode: 1,
             autoCropArea: 0.8,
@@ -637,10 +654,10 @@
             touchDragZoom: true,
             mouseWheelZoom: false,
             minContainerWidth: 300,
-            minContainerHeight: 300,
+            minContainerHeight: 300
         });
 
-        imageToCrop.addEventListener('touchstart', preventZoom, {passive: false});
+        document.getElementById('imageToCrop').addEventListener('touchstart', preventZoom, {passive: false});
     }
 
 
@@ -659,9 +676,10 @@
     function saveCroppedImage() {
         if (!cropper) return;
 
-        const canvas = cropper.getCroppedCanvas({
-            maxWidth: 250, // Cap at 250 pixels
-            maxHeight: 250,
+        // Get the cropped canvas at original size
+        const croppedCanvas = cropper.getCroppedCanvas({
+            maxWidth: 4000, // Higher limit for original
+            maxHeight: 4000,
             fillColor: '#fff'
         });
 
@@ -669,28 +687,62 @@
         const preview = document.getElementById(previewId);
         const input = document.getElementById(currentInputId);
 
-        // Ensure cropped image is resized/maximized
-        resizeImage(canvas.toDataURL('image/jpeg', 0.95), (blob, url) => {
-            preview.src = url;
-            preview.classList.remove('hidden');
+        // First, store the original cropped image
+        croppedCanvas.toBlob(originalBlob => {
+            // Then create a preview version with size limits
+            const previewCanvas = document.createElement('canvas');
+            const img = new Image();
+            img.onload = function () {
+                let displayWidth = img.width;
+                let displayHeight = img.height;
 
-            const file = new File([blob], input.files[0]?.name || 'cropped-image.jpg', {
-                type: 'image/jpeg',
-                lastModified: Date.now()
-            });
+                // Calculate display dimensions while preserving aspect ratio
+                if (displayWidth > displayHeight) {
+                    if (displayWidth > 250) {
+                        displayHeight = Math.round((displayHeight * 250) / displayWidth);
+                        displayWidth = 250;
+                    }
+                } else {
+                    if (displayHeight > 250) {
+                        displayWidth = Math.round((displayWidth * 250) / displayHeight);
+                        displayHeight = 250;
+                    }
+                }
 
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            input.files = dataTransfer.files;
+                // Create preview
+                previewCanvas.width = displayWidth;
+                previewCanvas.height = displayHeight;
+                const ctx = previewCanvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
 
-            input.dataset.originalFile = JSON.stringify({
-                name: file.name,
-                type: file.type,
-                data: url
-            });
+                // Set preview image
+                previewCanvas.toBlob(previewBlob => {
+                    const previewUrl = URL.createObjectURL(previewBlob);
+                    preview.src = previewUrl;
+                    preview.classList.remove('hidden');
 
-            closeCropModal();
-        });
+                    // Store original file for upload
+                    const file = new File([originalBlob], input.files[0]?.name || 'cropped-image.jpg', {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+
+                    // Store original data and preview URL
+                    input.dataset.originalFile = JSON.stringify({
+                        name: file.name,
+                        type: file.type,
+                        data: URL.createObjectURL(originalBlob)
+                    });
+
+                    closeCropModal();
+                }, 'image/jpeg', 0.95);
+            };
+            img.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+        }, 'image/jpeg', 1.0);
     }
 
     // Prevent default zoom on mobile
