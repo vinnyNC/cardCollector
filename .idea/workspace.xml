@@ -8,8 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Update dependencies and simplify header navigation&#10;&#10;Updated Python dependencies in `requirements.txt` to use minimum compatible versions. Simplified and streamlined the header navigation HTML structure for better maintainability and performance. Adjusted `.idea` settings for consistent package versioning requirements.">
+      <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cardCollector/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
@@ -156,7 +157,7 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
+    "nodejs_interpreter_path": "C:/Users/vince/AppData/Roaming/JetBrains/PyCharm2024.3/node/versions/22.14.0/node",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "editor.preferences.webOptions",
@@ -192,7 +193,7 @@
         <env name="DJANGO_SETTINGS_MODULE" value="cardCollector.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.13 (cardCollector)" />
+      <option name="SDK_NAME" value="Python 3.11 (cardCollector)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -395,5 +396,16 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/venv/Lib/site-packages/django/db/backends/postgresql/base.py</url>
+          <line>6</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

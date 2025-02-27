@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="cardcollector_test@10.0.5.5" uuid="339d277d-1c58-45b9-8bf6-4a66e2dd904d">
+    <data-source source="LOCAL" name="cardcollector@10.0.5.5" uuid="339d277d-1c58-45b9-8bf6-4a66e2dd904d">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://10.0.5.5:5432/cardcollector_test</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="Django default2" uuid="10e80abd-63eb-4fac-9f3e-8ef62adb507c">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/cardCollector/settings.py</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://10.0.5.5:5432/cardcollector_test</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>

@@ -452,28 +452,30 @@
         }
 
         function makeApiCall(searchText) {
+            const encodedSearchText = encodeURIComponent(searchText);
             let url;
             switch (apiSegment) {
                 case 'set_name':
-                    url = `/api/set_name/${searchText}`;
+                    url = `/api/set_name/${encodedSearchText}`;
                     break;
                 case 'card_num':
                     const setId = document.getElementById('set').dataset.setId || '';
-                    url = `/api/card_num/${searchText}/${setId}`;
+                    url = `/api/card_num/${encodedSearchText}/${encodeURIComponent(setId)}`;
                     break;
                 case 'insert_name':
-                    url = `/api/insert_name/${searchText}`;
+                    url = `/api/insert_name/${encodedSearchText}`;
                     break;
                 case 'parallel_name':
-                    url = `/api/parallel_name/${searchText}`;
+                    url = `/api/parallel_name/${encodedSearchText}`;
                     break;
                 case 'where_bought':
-                    url = `/api/where_bought/${searchText}`;
+                    url = `/api/where_bought/${encodedSearchText}`;
                     break;
                 default:
                     console.error('Unknown API segment:', apiSegment);
                     return;
             }
+        }
 
             fetch(url)
                 .then(response => response.json())

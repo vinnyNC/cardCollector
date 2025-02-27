@@ -55,3 +55,35 @@ def card_num_search(request, card_num, set_id):
 
     # Return the results as a JSON response
     return JsonResponse({'results': results})
+
+
+def insert_name_search(request, set_id, insert_name):
+    # Validate the search term. Adjust minimum length requirements as needed.
+    if len(insert_name) < 1:
+        return JsonResponse({'error': 'Search term must be at least 1 character long.'}, status=400)
+
+    # Execute a database query to find inserts whose name contains the search text
+    # for the chosen set. The ILIKE operator provides case-insensitive matching.
+    with connection.cursor() as cursor:
+        query = """
+            SELECT insert_id, insert_name 
+            FROM card_set_inserts
+            WHERE set_id = %s
+              AND insert_name ILIKE %s
+            ORDER BY insert_name
+            FETCH FIRST 10 ROWS ONLY
+        """
+        cursor.execute(query, [set_id, f'%{insert_name}%'])
+        rows = cursor.fetchall()
+
+    # Format the results into a list of dictionaries
+    results = [
+        {
+            'insert_id': row[0],
+            'insert_name': row[1],
+        }
+        for row in rows
+    ]
+
+    # Return JSON response with matching inserts
+    return JsonResponse({'results': results})

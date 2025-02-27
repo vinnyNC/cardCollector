@@ -1,27 +1,12 @@
-"""
-URL configuration for cardCollector project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 
-from WebApp.views import *
+from WebApp.views import index, set_search_name, card_num_search, insert_name_search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('api/set_name/<str:set_search_text>', set_search_name, name='set_name_search'),
     path('api/card_num/<str:card_num>/<int:set_id>', card_num_search, name='card_num_search'),
+    path('api/insert_name/<str:insert_name>', insert_name_search, name='insert_name_search'),
 ]
