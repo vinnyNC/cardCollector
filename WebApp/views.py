@@ -9,7 +9,7 @@ def index(request):
 
 
 def set_search_name(request, set_search_text):
-    # Validate the search term (e.g., enforce a minimum length of 1 characters)
+    # Validate the search term (e.g., enforce a minimum length of 1 character)
     if len(set_search_text) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 characters long.'}, status=400)
 
@@ -30,7 +30,7 @@ def set_search_name(request, set_search_text):
 
 
 def card_num_search(request, card_num, set_id):
-    # Validate the search term (e.g., enforce a minimum length of 1 characters)
+    # Validate the search term (e.g., enforce a minimum length of 1 character)
     if len(card_num) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 characters long.'}, status=400)
 
@@ -86,4 +86,29 @@ def insert_name_search(request, set_id, insert_name):
     ]
 
     # Return JSON response with matching inserts
+    return JsonResponse({'results': results})
+
+
+def set_all_inserts(request, set_id):
+    # Execute a database query to retrieve all inserts for a given set
+    with connection.cursor() as cursor:
+        query = """
+            SELECT insert_id, insert_name 
+            FROM card_set_inserts
+            WHERE set_id = %s
+            ORDER BY insert_name
+        """
+        cursor.execute(query, [set_id])
+        rows = cursor.fetchall()
+
+    # Format the results into a list of dictionaries
+    results = [
+        {
+            'insert_id': row[0],
+            'insert_name': row[1],
+        }
+        for row in rows
+    ]
+
+    # Return JSON response with all inserts for the set
     return JsonResponse({'results': results})

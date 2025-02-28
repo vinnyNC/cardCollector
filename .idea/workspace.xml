@@ -7,11 +7,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Update dependencies and simplify header navigation&#10;&#10;Updated Python dependencies in `requirements.txt` to use minimum compatible versions. Simplified and streamlined the header navigation HTML structure for better maintainability and performance. Adjusted `.idea` settings for consistent package versioning requirements.">
-      <change beforePath="$PROJECT_DIR$/.idea/cardCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cardCollector.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7b89da01-4cef-4215-bc28-bf78c0525cfc" name="Changes" comment="Add insert name search functionality and update dependencies&#10;&#10;Implemented the `insert_name_search` view and integrated the corresponding API endpoint. Adjusted the URL patterns and encoded search text in API calls for better handling. Updated Python SDK to version 3.11, refined `.idea` settings, and added new JavaScript libraries (`cropperjs`).">
+      <change afterPath="$PROJECT_DIR$/static/css/SearchModalStyles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/SearchModal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/components/search_modal.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cardCollector/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cardCollector/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +41,7 @@
         <option value="CSS File" />
         <option value="Dockerfile" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -112,12 +116,12 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/vinnyNC/cardCollector&quot;,
-    &quot;accountId&quot;: &quot;f1547af7-c8db-4f89-8455-db7d657f387c&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/vinnyNC/cardCollector.git",
+    "accountId": "f1547af7-c8db-4f89-8455-db7d657f387c"
   }
-}</component>
+}]]></component>
   <component name="MaliciousPackageCheckinHandlerState">
     <option name="packageCheck" value="true" />
   </component>
@@ -150,7 +154,7 @@
     "git-widget-placeholder": "dev2",
     "ignore.virus.scanning.warn.message": "true",
     "javascript.nodejs.core.library.configured.version": "22.14.0",
-    "javascript.nodejs.core.library.typings.version": "22.13.4",
+    "javascript.nodejs.core.library.typings.version": "22.13.5",
     "last_opened_file_path": "/home/vincent/PycharmProjects/cardCollector/temp",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -160,7 +164,7 @@
     "nodejs_interpreter_path": "C:/Users/vince/AppData/Roaming/JetBrains/PyCharm2024.3/node/versions/22.14.0/node",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "editor.preferences.webOptions",
+    "settings.editor.selected.configurable": "preferences.editor.code.editing",
     "ts.external.directory.path": "C:\\Users\\vince\\AppData\\Local\\Programs\\PyCharm Professional 2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   },
@@ -176,10 +180,11 @@
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vince\PycharmProjects\cardCollector\static\js" />
+      <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates\components" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\templates\not-used" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector\static" />
       <recent name="C:\Users\vince\PycharmProjects\cardCollector" />
-      <recent name="C:\Users\vince\PycharmProjects\cardCollector\cardCollector" />
     </key>
   </component>
   <component name="RunManager" selected="Django Server.cardCollector">
@@ -228,8 +233,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-PY-243.24978.54" />
-        <option value="bundled-python-sdk-91e3b7efe1d4-466328ff949b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.24978.54" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
+        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
       </set>
     </attachedChunks>
   </component>
@@ -254,6 +259,7 @@
       <workItem from="1739674780767" duration="1949000" />
       <workItem from="1739761781386" duration="1124000" />
       <workItem from="1740328902713" duration="19866000" />
+      <workItem from="1740706499098" duration="8621000" />
     </task>
     <task id="LOCAL-00001" summary="First upload.&#10;&#10;Django&#10;NPM&#10;Tailwind CSS&#10;Flowbite">
       <option name="closed" value="true" />
@@ -327,7 +333,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740436080015</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add insert name search functionality and update dependencies&#10;&#10;Implemented the `insert_name_search` view and integrated the corresponding API endpoint. Adjusted the URL patterns and encoded search text in API calls for better handling. Updated Python SDK to version 3.11, refined `.idea` settings, and added new JavaScript libraries (`cropperjs`).">
+      <option name="closed" value="true" />
+      <created>1740631759913</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1740631759913</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -392,7 +406,8 @@
     <MESSAGE value="Redesign index template for card collection form&#10;&#10;Replaced placeholder content with a structured form for managing card collections, including set information, card details, and layout improvements. Updated the base template to refine structure and simplify styling. Adjusted project configuration for consistency and better workflow management." />
     <MESSAGE value="Remove Tailwind configuration and update dependencies&#10;&#10;Removed `tailwind.config.js` and transitioned to inline configuration in `input.css`. Upgraded multiple Node.js dependencies and made CSS adjustments for better compatibility with the latest versions. Updated Python SDK version and project setup files to reflect new configurations." />
     <MESSAGE value="Update dependencies and simplify header navigation&#10;&#10;Updated Python dependencies in `requirements.txt` to use minimum compatible versions. Simplified and streamlined the header navigation HTML structure for better maintainability and performance. Adjusted `.idea` settings for consistent package versioning requirements." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update dependencies and simplify header navigation&#10;&#10;Updated Python dependencies in `requirements.txt` to use minimum compatible versions. Simplified and streamlined the header navigation HTML structure for better maintainability and performance. Adjusted `.idea` settings for consistent package versioning requirements." />
+    <MESSAGE value="Add insert name search functionality and update dependencies&#10;&#10;Implemented the `insert_name_search` view and integrated the corresponding API endpoint. Adjusted the URL patterns and encoded search text in API calls for better handling. Updated Python SDK to version 3.11, refined `.idea` settings, and added new JavaScript libraries (`cropperjs`)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add insert name search functionality and update dependencies&#10;&#10;Implemented the `insert_name_search` view and integrated the corresponding API endpoint. Adjusted the URL patterns and encoded search text in API calls for better handling. Updated Python SDK to version 3.11, refined `.idea` settings, and added new JavaScript libraries (`cropperjs`)." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

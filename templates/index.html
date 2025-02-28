@@ -11,6 +11,36 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
+
+    <style>
+        /* Custom scrollbar styles */
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+
+        .scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
+            background-color: #9ca3af; /* gray-400 */
+            border-radius: 6px;
+        }
+
+        .scrollbar-thumb-gray-500::-webkit-scrollbar-thumb {
+            background-color: #6b7280; /* gray-500 for dark mode */
+            border-radius: 6px;
+        }
+
+        .scrollbar-track-gray-100::-webkit-scrollbar-track {
+            background-color: #f3f4f6; /* gray-100 */
+        }
+
+        .scrollbar-track-gray-900::-webkit-scrollbar-track {
+            background-color: #111827; /* gray-900 for dark mode */
+        }
+
+        /* Ensure smooth transitions */
+        .transition-colors {
+            transition-property: background-color, color;
+        }
+    </style>
 </head>
 <body class="bg-gray-900">
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
@@ -20,7 +50,7 @@
     <main class="p-4 md:ml-64 h-auto pt-20">
         <div class="container mx-auto px-4 py-8">
             <h1 class="text-3xl font-bold mb-6 dark:text-white">Add Card to Collection</h1>
-            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8">
+            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
                 {% csrf_token %}
 
                 <!-- Set Information -->
@@ -33,12 +63,18 @@
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             placeholder="e.g., 2023 Panini Donruss" required>
                     </div>
-                    <div class="grid gap-6 md:grid-cols-3">
+                    <div class="grid gap-6 md:grid-cols-2">
                         <div>
                             <label for="cardNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card
                                 #</label> <input type="text" id="cardNum" name="cardNum"
                                                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                  placeholder="Card #" required>
+                        </div>
+                        <div>
+                            <label for="teamName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Team
+                            </label> <input type="text" id="teamName" name="teamName"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                            placeholder="Team Name" required>
                         </div>
                         <div>
                             <label for="playerFirstName"
@@ -96,6 +132,31 @@
                                 Details</label> <input type="text" id="parallelDetail" name="parallelDetail"
                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                        placeholder="e.g., Refractor">
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="cardSerialNum" name="cardSerialNum"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                   onclick="toggleField('cardSerialNumDetailContainer', this)"> <label
+                                for="cardSerialNum"
+                                class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Serial</label>
+                        </div>
+                        <div id="cardSerialNumDetailContainer" class="hidden ml-6 grid gap-6 md:grid-cols-2">
+                            <div>
+                                <label for="cardSerial"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial
+                                </label> <input type="text" id="cardSerial" name="cardSerial"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder="e.g., 32">
+                            </div>
+                            <div>
+                                <label for="cardSerialMax"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial Max
+                                </label> <input type="text" id="cardSerialMax" name="cardSerialMax"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder="e.g., 50">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -313,70 +374,77 @@
 
     //  SEARCH
     // Reusable dropdown handler
-    function setupDropdown(inputId, apiSegment, resultKey = 'set_name') {
+    // Reusable dropdown handler with improved styling and scrolling
+    function setupDropdown(inputId, apiSegment, resultKey = 'name') {
         const input = document.getElementById(inputId);
         const dropdown = document.createElement('div');
         dropdown.id = `${inputId}-dropdown`;
-        dropdown.className = 'absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full max-h-48 overflow-y-auto dark:bg-gray-700 hidden';
+        dropdown.className = `
+        absolute z-20 mt-1 w-full max-h-72 overflow-y-auto rounded-lg shadow-lg
+        bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+        divide-y divide-gray-100 dark:divide-gray-600
+        scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-500
+        scrollbar-track-gray-100 dark:scrollbar-track-gray-900
+        hidden
+    `;
         dropdown.setAttribute('role', 'listbox');
-        document.body.appendChild(dropdown);
+        input.parentElement.appendChild(dropdown); // Append to parent for better positioning
 
         let selectedIndex = -1;
         let options = [];
 
+        // Show dropdown with results
         function showDropdown(results) {
             dropdown.innerHTML = '';
             options = results;
             selectedIndex = -1;
 
+            if (results.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'px-4 py-2 text-sm text-gray-500 dark:text-gray-400 italic';
+                noResults.textContent = 'No results found';
+                dropdown.appendChild(noResults);
+            } else {
             results.forEach((result, index) => {
                 const item = document.createElement('div');
-                item.className = 'px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer';
+                item.className = `
+                    px-4 py-2 text-sm text-gray-700 dark:text-gray-200
+                    hover:bg-gray-100 dark:hover:bg-gray-700
+                    cursor-pointer transition-colors duration-150 ease-in-out
+                `;
                 item.setAttribute('role', 'option');
                 item.setAttribute('data-index', index);
+                item.setAttribute('aria-selected', 'false');
 
-                //Set text content of dropdown item
+                // Set text content based on API segment
+                let displayText = '';
                 if (apiSegment === 'set_name') {
-                    console.log(result); //debug
-                    item.textContent = result[resultKey];
+                    displayText = result[resultKey] || result.name;
                 } else if (apiSegment === 'card_num') {
-                    // Player information
-                    let player_first_name = result.player.first_name;
-                    let player_last_name = result.player.last_name;
-                    let card_number = result.card_num;
-
-                    // Set content of dropdown with player information
-                    item.textContent = card_number + ' - ' + player_first_name + ' ' + player_last_name;
-
-                    // Add player info to dataset for dropdown item
-                    input.dataset.playerFirstName = result.player.first_name;
-                    input.dataset.playerLastName = result.player.last_name;
+                    displayText = `${result.card_num} - ${result.player.first_name} ${result.player.last_name}`;
+                    item.dataset.playerFirstName = result.player.first_name;
+                    item.dataset.playerLastName = result.player.last_name;
                 } else {
-                    console.log(result); //debug
-                    item.textContent = result[resultKey];
+                    displayText = result[resultKey] || result.name;
                 }
-                // Store set ID for "set" field selections
-                if (apiSegment === 'set_name' && result.id) {
-                    item.addEventListener('click', () => {
-                        selectOption(result[resultKey]);
-                        input.dataset.setId = result.id; // Store set ID
-                    });
-                } else {
-                    item.addEventListener('click', () => selectOption(result[resultKey]));
-                }
+                item.textContent = displayText;
 
+                // Handle click/touch events
+                item.addEventListener('click', () => {
+                    selectOption(result, displayText);
+                    hideDropdown(); // Close dropdown immediately after selection
+                });
                 item.addEventListener('touchstart', (e) => {
                     e.preventDefault();
-                    if (apiSegment === 'set_name' && result.id) {
-                        selectOption(result[resultKey]);
-                        input.dataset.setId = result.id;
-                    } else {
-                        selectOption(result[resultKey]);
-                    }
+                    selectOption(result, displayText);
+                    hideDropdown(); // Close dropdown immediately after selection
                 });
+
                 dropdown.appendChild(item);
             });
+            }
 
+            // Position dropdown below input
             const rect = input.getBoundingClientRect();
             dropdown.style.top = `${rect.bottom + window.scrollY}px`;
             dropdown.style.left = `${rect.left + window.scrollX}px`;
@@ -385,64 +453,54 @@
             document.addEventListener('click', handleClickOutside);
         }
 
+        // Hide dropdown
         function hideDropdown() {
             dropdown.classList.add('hidden');
             selectedIndex = -1;
             document.removeEventListener('click', handleClickOutside);
         }
 
+        // Handle click outside to close
         function handleClickOutside(event) {
             if (!dropdown.contains(event.target) && event.target !== input) {
                 hideDropdown();
             }
         }
 
-        function checkPlayerInput() {
-            let pFirstName = document.getElementById('playerFirstName');
-            let pLastName = document.getElementById('playerLastName');
-            let cardNum = document.getElementById('cardNum');
-            if (pFirstName.dataset.card_num === cardNum.value) {
-                pFirstName.disabled = true;
-                pLastName.disabled = true;
+        // Select an option
+        function selectOption(result, displayText) {
+            if (apiSegment === 'card_num') {
+                const firstNameInput = document.getElementById('playerFirstName');
+                const lastNameInput = document.getElementById('playerLastName');
+                firstNameInput.value = result.player.first_name;
+                firstNameInput.disabled = true;
+                lastNameInput.value = result.player.last_name;
+                lastNameInput.disabled = true;
+                input.value = result.card_num;
+            } else if (apiSegment === 'set_name') {
+                input.value = displayText;
+                input.dataset.setId = result.id; // Store set ID for card_num lookup
             } else {
-                if (pFirstName.disabled === true) {
-                    pFirstName.value = '';
-                    pLastName.value = '';
-                    pFirstName.disabled = false;
-                    pLastName.disabled = false;
-                }
+                input.value = displayText;
             }
+            input.focus(); // Return focus to input
         }
 
-        function selectOption(value) {
-            if (apiSegment === "card_num") {
-                document.getElementById('playerFirstName').value = input.dataset.playerFirstName;
-                document.getElementById('playerFirstName').dataset.card_num = value;
-                document.getElementById('playerFirstName').disabled = true;
-                document.getElementById('playerLastName').value = input.dataset.playerLastName;
-                document.getElementById('playerLastName').dataset.card_num = value;
-                document.getElementById('playerLastName').disabled = true;
-                input.value = value;
-                hideDropdown();
-                input.focus();
-            } else {
-                input.value = value;
-                hideDropdown();
-                input.focus();
-            }
-        }
-
+        // Update visual selection for keyboard navigation
         function updateSelection() {
             const items = dropdown.querySelectorAll('[role="option"]');
             items.forEach((item, index) => {
-                item.classList.toggle('bg-gray-100', index === selectedIndex);
-                item.classList.toggle('dark:bg-gray-600', index === selectedIndex);
-            });
-            if (selectedIndex >= 0 && selectedIndex < items.length) {
-                items[selectedIndex].scrollIntoView({block: 'nearest'});
+                const isSelected = index === selectedIndex;
+                item.classList.toggle('bg-gray-100', isSelected);
+                item.classList.toggle('dark:bg-gray-700', isSelected);
+                item.setAttribute('aria-selected', isSelected);
+                if (isSelected) {
+                    item.scrollIntoView({block: 'nearest', behavior: 'smooth'});
             }
+            });
         }
 
+        // Debounce API calls
         function debounce(func, delay) {
             let timeout;
             return function (...args) {
@@ -451,16 +509,17 @@
             };
         }
 
+        // Fetch data from API
         function makeApiCall(searchText) {
             const encodedSearchText = encodeURIComponent(searchText);
             let url;
             switch (apiSegment) {
                 case 'set_name':
-                    url = `/api/set_name/${encodedSearchText}`;
+                    url = `/api/set/search/${encodedSearchText}`;
                     break;
                 case 'card_num':
                     const setId = document.getElementById('set').dataset.setId || '';
-                    url = `/api/card_num/${encodedSearchText}/${encodeURIComponent(setId)}`;
+                    url = `/api/card_num/search/${encodedSearchText}/${encodeURIComponent(setId)}`;
                     break;
                 case 'insert_name':
                     url = `/api/insert_name/${encodedSearchText}`;
@@ -474,7 +533,6 @@
                 default:
                     console.error('Unknown API segment:', apiSegment);
                     return;
-            }
         }
 
             fetch(url)
@@ -483,23 +541,30 @@
                     if (data.results && data.results.length > 0) {
                         showDropdown(data.results);
                     } else {
-                        hideDropdown();
+                        showDropdown([]); // Show "No results" message
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error fetching data:', error);
                     hideDropdown();
                 });
         }
 
         const debouncedApiCall = debounce(makeApiCall, 300);
 
+        // Input event listeners
         input.addEventListener('input', () => {
-            // Clears disable state if card_num input is changed
-            if (apiSegment === 'card_num') {
-                checkPlayerInput();
-            }
             const inputValue = input.value.trim();
+            if (apiSegment === 'card_num') {
+                const firstNameInput = document.getElementById('playerFirstName');
+                const lastNameInput = document.getElementById('playerLastName');
+                if (firstNameInput.disabled) {
+                    firstNameInput.value = '';
+                    lastNameInput.value = '';
+                    firstNameInput.disabled = false;
+                    lastNameInput.disabled = false;
+                }
+            }
             if (inputValue.length >= 1) {
                 debouncedApiCall(inputValue);
             } else {
@@ -524,10 +589,8 @@
                     case 'Enter':
                         e.preventDefault();
                         if (selectedIndex >= 0 && selectedIndex < options.length) {
-                            selectOption(options[selectedIndex][resultKey]);
-                            if (apiSegment === 'set_name') {
-                                input.dataset.setId = options[selectedIndex].id;
-                            }
+                            selectOption(options[selectedIndex], items[selectedIndex].textContent);
+                            hideDropdown(); // Close dropdown on Enter
                         }
                         break;
                     case 'Tab':
@@ -538,15 +601,23 @@
             }
         });
 
+        // Close dropdown when input loses focus (e.g., clicking another field)
+        input.addEventListener('blur', () => {
+            // Delay to allow click event to register first
+            setTimeout(() => {
+                hideDropdown();
+            }, 150);
+        });
+
         input.addEventListener('focus', () => {
             const inputValue = input.value.trim();
-            if (inputValue.length >= 1 && !dropdown.classList.contains('hidden')) {
+            if (inputValue.length >= 1 && dropdown.classList.contains('hidden')) {
                 debouncedApiCall(inputValue);
             }
         });
     }
 
-    // Initialize dropdowns
+    // Initialize dropdowns with appropriate API segments and result keys
     setupDropdown('set', 'set_name', 'set_name');
     setupDropdown('cardNum', 'card_num', 'card_num');
     setupDropdown('insertDetail', 'insert_name', 'insert_name');
