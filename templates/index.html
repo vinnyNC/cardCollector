@@ -172,13 +172,6 @@
                     </div>
                     <div id="gradingFields" class="hidden space-y-4 ml-6">
                         <div>
-                            <label for="gradedValue"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Graded
-                                Value</label> <input type="text" id="gradedValue" name="gradedValue"
-                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                     placeholder="e.g., 9.5">
-                        </div>
-                        <div>
                             <label for="gradingCompany"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
                                 Company</label> <select id="gradingCompany" name="gradingCompany"
@@ -189,6 +182,71 @@
                             <option value="SGC">SGC</option>
                             <option value="Other">Other</option>
                         </select>
+                        </div>
+                        <div>
+                            <label for="gradedValue"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Graded
+                                Value</label>
+                            <select id="gradedValue" name="gradedValue"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Grade</option>
+
+                                <!-- PSA Style -->
+                                <optgroup label="PSA Style">
+                                    <option value="10">PSA 10 - Gem Mint</option>
+                                    <option value="9">PSA 9 - Mint</option>
+                                    <option value="8.5">PSA 8.5 - NM-MT+</option>
+                                    <option value="8">PSA 8 - NM-MT</option>
+                                    <option value="7">PSA 7 - Near Mint</option>
+                                    <option value="6">PSA 6 - Excellent-Near Mint</option>
+                                    <option value="5">PSA 5 - Excellent</option>
+                                    <option value="4">PSA 4 - Very Good-Excellent</option>
+                                    <option value="3">PSA 3 - Very Good</option>
+                                    <option value="2">PSA 2 - Good</option>
+                                    <option value="1">PSA 1 - Poor</option>
+                                </optgroup>
+
+                                <!-- BGS/SGC Style -->
+                                <optgroup label="BGS/SGC Style">
+                                    <option value="10_pristine">10 Pristine</option>
+                                    <option value="9.5">9.5 Gem Mint</option>
+                                    <option value="9">9 Mint</option>
+                                    <option value="8.5">8.5 Near Mint-Mint+</option>
+                                    <option value="8">8 Near Mint-Mint</option>
+                                    <option value="7.5">7.5 Near Mint+</option>
+                                    <option value="7">7 Near Mint</option>
+                                    <option value="6">6 Excellent-Near Mint</option>
+                                    <option value="5">5 Excellent</option>
+                                    <option value="4">4 Very Good-Excellent</option>
+                                    <option value="3">3 Very Good</option>
+                                    <option value="2">2 Good</option>
+                                    <option value="1">1 Poor</option>
+                                </optgroup>
+
+                                <!-- Raw Card -->
+                                <optgroup label="Other">
+                                    <option value="raw">Raw/Ungraded</option>
+                                    <option value="authentic">Authentic/Altered</option>
+                                </optgroup>
+                            </select>
+
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="cardSubGrades" name="cardSubGrades"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                       onclick="toggleField('cardSubGradesDetailContainer', this)"> <label
+                                    for="cardSubGrades"
+                                    class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Sub Grades</label>
+                            </div>
+                            <div id="cardSubGradesDetailContainer" class="hidden ml-6">
+                                <label for="cardSubGrades"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+
+                                </label> <input type="text" id="cardSubGrades" name="cardSubGrades"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder="e.g., 9.5">
+                            </div>
                         </div>
                         <div>
                             <label for="gradingCert"
@@ -405,43 +463,43 @@
                 noResults.textContent = 'No results found';
                 dropdown.appendChild(noResults);
             } else {
-            results.forEach((result, index) => {
-                const item = document.createElement('div');
-                item.className = `
+                results.forEach((result, index) => {
+                    const item = document.createElement('div');
+                    item.className = `
                     px-4 py-2 text-sm text-gray-700 dark:text-gray-200
                     hover:bg-gray-100 dark:hover:bg-gray-700
                     cursor-pointer transition-colors duration-150 ease-in-out
                 `;
-                item.setAttribute('role', 'option');
-                item.setAttribute('data-index', index);
-                item.setAttribute('aria-selected', 'false');
+                    item.setAttribute('role', 'option');
+                    item.setAttribute('data-index', index);
+                    item.setAttribute('aria-selected', 'false');
 
-                // Set text content based on API segment
-                let displayText = '';
-                if (apiSegment === 'set_name') {
-                    displayText = result[resultKey] || result.name;
-                } else if (apiSegment === 'card_num') {
-                    displayText = `${result.card_num} - ${result.player.first_name} ${result.player.last_name}`;
-                    item.dataset.playerFirstName = result.player.first_name;
-                    item.dataset.playerLastName = result.player.last_name;
-                } else {
-                    displayText = result[resultKey] || result.name;
-                }
-                item.textContent = displayText;
+                    // Set text content based on API segment
+                    let displayText = '';
+                    if (apiSegment === 'set_name') {
+                        displayText = result[resultKey] || result.name;
+                    } else if (apiSegment === 'card_num') {
+                        displayText = `${result.card_num} - ${result.player.first_name} ${result.player.last_name}`;
+                        item.dataset.playerFirstName = result.player.first_name;
+                        item.dataset.playerLastName = result.player.last_name;
+                    } else {
+                        displayText = result[resultKey] || result.name;
+                    }
+                    item.textContent = displayText;
 
-                // Handle click/touch events
-                item.addEventListener('click', () => {
-                    selectOption(result, displayText);
-                    hideDropdown(); // Close dropdown immediately after selection
+                    // Handle click/touch events
+                    item.addEventListener('click', () => {
+                        selectOption(result, displayText);
+                        hideDropdown(); // Close dropdown immediately after selection
+                    });
+                    item.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        selectOption(result, displayText);
+                        hideDropdown(); // Close dropdown immediately after selection
+                    });
+
+                    dropdown.appendChild(item);
                 });
-                item.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    selectOption(result, displayText);
-                    hideDropdown(); // Close dropdown immediately after selection
-                });
-
-                dropdown.appendChild(item);
-            });
             }
 
             // Position dropdown below input
@@ -496,7 +554,7 @@
                 item.setAttribute('aria-selected', isSelected);
                 if (isSelected) {
                     item.scrollIntoView({block: 'nearest', behavior: 'smooth'});
-            }
+                }
             });
         }
 
@@ -533,7 +591,7 @@
                 default:
                     console.error('Unknown API segment:', apiSegment);
                     return;
-        }
+            }
 
             fetch(url)
                 .then(response => response.json())
