@@ -40,6 +40,19 @@
         .transition-colors {
             transition-property: background-color, color;
         }
+
+        /* Flowbite fixes */
+        @layer base {
+            button,
+            [role='button'] {
+                cursor: pointer;
+            }
+
+            button:disabled,
+            [role='button']:disabled {
+                cursor: default;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900">
@@ -225,8 +238,8 @@
 
                                 <!-- Raw Card -->
                                 <optgroup label="Other">
-                                    <option value="raw">Raw/Ungraded</option>
-                                    <option value="authentic">Authentic/Altered</option>
+                                    <option value="altered">Altered</option>
+                                    <option value="authentic">Authentic</option>
                                 </optgroup>
                             </select>
 
@@ -239,28 +252,118 @@
                                     for="cardSubGrades"
                                     class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Sub Grades</label>
                             </div>
+                            <!-- Centering Sub Grade -->
                             <div id="cardSubGradesDetailContainer" class="hidden ml-6">
-                                <label for="cardSubGrades"
-                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-
-                                </label> <input type="text" id="cardSubGrades" name="cardSubGrades"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                placeholder="e.g., 9.5">
+                                <div>
+                                    <label for="cardSubGradesCentering"
+                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Centering
+                                    </label>
+                                    <select id="cardSubGradesCentering" name="gradedValue"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Select Grade</option>
+                                        <option value="10_pristine">10 Pristine</option>
+                                        <option value="9.5">9.5 Gem Mint</option>
+                                        <option value="9">9 Mint</option>
+                                        <option value="8.5">8.5 Near Mint-Mint+</option>
+                                        <option value="8">8 Near Mint-Mint</option>
+                                        <option value="7.5">7.5 Near Mint+</option>
+                                        <option value="7">7 Near Mint</option>
+                                        <option value="6">6 Excellent-Near Mint</option>
+                                        <option value="5">5 Excellent</option>
+                                        <option value="4">4 Very Good-Excellent</option>
+                                        <option value="3">3 Very Good</option>
+                                        <option value="2">2 Good</option>
+                                        <option value="1">1 Poor</option>
+                                    </select>
+                                </div>
+                                <!-- Corners Sub Grade -->
+                                <div>
+                                    <label for="cardSubGradesCorners"
+                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Corners
+                                    </label>
+                                    <select id="cardSubGradesCorners" name="gradedValue"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Select Grade</option>
+                                        <option value="10_pristine">10 Pristine</option>
+                                        <option value="9.5">9.5 Gem Mint</option>
+                                        <option value="9">9 Mint</option>
+                                        <option value="8.5">8.5 Near Mint-Mint+</option>
+                                        <option value="8">8 Near Mint-Mint</option>
+                                        <option value="7.5">7.5 Near Mint+</option>
+                                        <option value="7">7 Near Mint</option>
+                                        <option value="6">6 Excellent-Near Mint</option>
+                                        <option value="5">5 Excellent</option>
+                                        <option value="4">4 Very Good-Excellent</option>
+                                        <option value="3">3 Very Good</option>
+                                        <option value="2">2 Good</option>
+                                        <option value="1">1 Poor</option>
+                                    </select>
+                                </div>
+                                <!-- Edges Sub Grade -->
+                                <div>
+                                    <label for="cardSubGradesEdges"
+                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Edges
+                                    </label>
+                                    <select id="cardSubGradesEdges" name="gradedValue"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Select Grade</option>
+                                        <option value="10_pristine">10 Pristine</option>
+                                        <option value="9.5">9.5 Gem Mint</option>
+                                        <option value="9">9 Mint</option>
+                                        <option value="8.5">8.5 Near Mint-Mint+</option>
+                                        <option value="8">8 Near Mint-Mint</option>
+                                        <option value="7.5">7.5 Near Mint+</option>
+                                        <option value="7">7 Near Mint</option>
+                                        <option value="6">6 Excellent-Near Mint</option>
+                                        <option value="5">5 Excellent</option>
+                                        <option value="4">4 Very Good-Excellent</option>
+                                        <option value="3">3 Very Good</option>
+                                        <option value="2">2 Good</option>
+                                        <option value="1">1 Poor</option>
+                                    </select>
+                                </div>
+                                <!-- Surface Sub Grade -->
+                                <div>
+                                    <label for="cardSubGradesSurface"
+                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Surface
+                                    </label>
+                                    <select id="cardSubGradesSurface" name="gradedValue"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Select Grade</option>
+                                        <option value="10_pristine">10 Pristine</option>
+                                        <option value="9.5">9.5 Gem Mint</option>
+                                        <option value="9">9 Mint</option>
+                                        <option value="8.5">8.5 Near Mint-Mint+</option>
+                                        <option value="8">8 Near Mint-Mint</option>
+                                        <option value="7.5">7.5 Near Mint+</option>
+                                        <option value="7">7 Near Mint</option>
+                                        <option value="6">6 Excellent-Near Mint</option>
+                                        <option value="5">5 Excellent</option>
+                                        <option value="4">4 Very Good-Excellent</option>
+                                        <option value="3">3 Very Good</option>
+                                        <option value="2">2 Good</option>
+                                        <option value="1">1 Poor</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <label for="gradingCert"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
-                                Certificate #</label> <input type="text" id="gradingCert" name="gradingCert"
-                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                             placeholder="e.g., 12345678">
+                            <div>
+                                <label for="gradingCert"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
+                                    Certificate #</label> <input type="text" id="gradingCert" name="gradingCert"
+                                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                                 placeholder="e.g., 12345678">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Storage and Images -->
+                <!-- Storage  -->
                 <div class="space-y-4">
-                    <h2 class="text-2xl font-bold dark:text-white">Storage & Images</h2>
+                    <h2 class="text-2xl font-bold dark:text-white">Storage</h2>
                     <div>
                         <label for="storageLocation"
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage Location
@@ -269,6 +372,7 @@
                                                  placeholder="e.g., Box 1, Row 3">
                     </div>
                     <div class="space-y-4">
+                        <h2 class="text-2xl font-bold dark:text-white">Images</h2>
                         <div>
                             <label for="frontImage"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Front
@@ -279,13 +383,16 @@
                                 <img id="frontImagePreview" class="hidden max-w-full h-auto rounded-lg"
                                      alt="Front Image Preview">
                                 <div class="mt-2 space-x-2">
-                                    <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg"
+                                    <button type="button"
+                                            class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
                                             onclick="deleteImage('frontImage', 'frontImagePreview')">Delete
                                     </button>
-                                    <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
+                                    <button type="button"
+                                            class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
                                             onclick="cropImage('frontImage')">Crop
                                     </button>
-                                    <button type="button" class="bg-green-600 text-white px-3 py-1 rounded-lg"
+                                    <button type="button"
+                                            class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
                                             onclick="openWebcamModal('frontImage')">Capture
                                     </button>
                                 </div>
@@ -300,13 +407,16 @@
                                 <img id="backImagePreview" class="hidden max-w-full h-auto rounded-lg"
                                      alt="Back Image Preview">
                                 <div class="mt-2 space-x-2">
-                                    <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg"
-                                            onclick="deleteImage('backImage', 'backImagePreview')">Delete
+                                    <button type="button"
+                                            class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
+                                            onclick="deleteImage('backImage', 'frontImagePreview')">Delete
                                     </button>
-                                    <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded-lg"
+                                    <button type="button"
+                                            class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
                                             onclick="cropImage('backImage')">Crop
                                     </button>
-                                    <button type="button" class="bg-green-600 text-white px-3 py-1 rounded-lg"
+                                    <button type="button"
+                                            class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
                                             onclick="openWebcamModal('backImage')">Capture
                                     </button>
                                 </div>
@@ -349,7 +459,8 @@
                             <label for="receipt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order
                                 Receipt (PDF)</label> <input type="file" id="receipt" name="receipt" accept=".pdf"
                                                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                            <button type="button" class="bg-red-600 text-white px-3 py-1 rounded-lg mt-2"
+                            <button type="button"
+                                    class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
                                     onclick="deleteFile('receipt')">Delete Receipt
                             </button>
                         </div>
