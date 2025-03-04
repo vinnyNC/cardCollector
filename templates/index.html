@@ -183,8 +183,10 @@
                                onclick="toggleGradingFields(this)"> <label for="graded"
                                                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Graded</label>
                     </div>
+                    <!-- Grading Input Fields -->
                     <div id="gradingFields" class="hidden space-y-4 ml-6">
                         <div>
+                            <!-- Grading Company -->
                             <label for="gradingCompany"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
                                 Company</label> <select id="gradingCompany" name="gradingCompany"
@@ -197,6 +199,7 @@
                         </select>
                         </div>
                         <div>
+                            <!-- Graded Value -->
                             <label for="gradedValue"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Graded
                                 Value</label>
@@ -236,7 +239,7 @@
                                     <option value="1">1 Poor</option>
                                 </optgroup>
 
-                                <!-- Raw Card -->
+                                <!-- Others -->
                                 <optgroup label="Other">
                                     <option value="altered">Altered</option>
                                     <option value="authentic">Authentic</option>
@@ -246,6 +249,7 @@
                         </div>
                         <div class="space-y-4">
                             <div class="flex items-center">
+                                <!-- Sub Grades -->
                                 <input type="checkbox" id="cardSubGrades" name="cardSubGrades"
                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                                        onclick="toggleField('cardSubGradesDetailContainer', this)"> <label
@@ -254,13 +258,13 @@
                             </div>
                             <!-- Centering Sub Grade -->
                             <div id="cardSubGradesDetailContainer" class="hidden ml-6">
-                                <div>
+                                <div class="space-y-4">
                                     <label for="cardSubGradesCentering"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Centering
                                     </label>
                                     <select id="cardSubGradesCentering" name="gradedValue"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                                         <option value="">Select Grade</option>
                                         <option value="10_pristine">10 Pristine</option>
                                         <option value="9.5">9.5 Gem Mint</option>
@@ -278,13 +282,13 @@
                                     </select>
                                 </div>
                                 <!-- Corners Sub Grade -->
-                                <div>
+                                <div class="space-y-4">
                                     <label for="cardSubGradesCorners"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Corners
                                     </label>
                                     <select id="cardSubGradesCorners" name="gradedValue"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                                         <option value="">Select Grade</option>
                                         <option value="10_pristine">10 Pristine</option>
                                         <option value="9.5">9.5 Gem Mint</option>
@@ -302,13 +306,13 @@
                                     </select>
                                 </div>
                                 <!-- Edges Sub Grade -->
-                                <div>
+                                <div class="space-y-4">
                                     <label for="cardSubGradesEdges"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Edges
                                     </label>
                                     <select id="cardSubGradesEdges" name="gradedValue"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                                         <option value="">Select Grade</option>
                                         <option value="10_pristine">10 Pristine</option>
                                         <option value="9.5">9.5 Gem Mint</option>
@@ -326,13 +330,13 @@
                                     </select>
                                 </div>
                                 <!-- Surface Sub Grade -->
-                                <div>
+                                <div class="space-y-4">
                                     <label for="cardSubGradesSurface"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Surface
                                     </label>
                                     <select id="cardSubGradesSurface" name="gradedValue"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                                         <option value="">Select Grade</option>
                                         <option value="10_pristine">10 Pristine</option>
                                         <option value="9.5">9.5 Gem Mint</option>
@@ -371,55 +375,96 @@
                                                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                  placeholder="e.g., Box 1, Row 3">
                     </div>
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold dark:text-white">Images</h2>
+                    <div class="md:grid-cols-5">
                         <div>
-                            <label for="frontImage"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Front
-                                Image</label> <input type="file" id="frontImage" name="frontImage" accept="image/*"
-                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                     onchange="previewImage(event, 'frontImagePreview')">
-                            <div class="mt-2">
-                                <img id="frontImagePreview" class="hidden max-w-full h-auto rounded-lg"
-                                     alt="Front Image Preview">
-                                <div class="mt-2 space-x-2">
-                                    <button type="button"
-                                            class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
-                                            onclick="deleteImage('frontImage', 'frontImagePreview')">Delete
-                                    </button>
-                                    <button type="button"
-                                            class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
-                                            onclick="cropImage('frontImage')">Crop
-                                    </button>
-                                    <button type="button"
-                                            class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
-                                            onclick="openWebcamModal('frontImage')">Capture
-                                    </button>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Holder
+                                Type</label>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center">
+                                    <input id="holderTypeRaw" type="checkbox" name="holderType" value="Raw"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="holderTypeRaw"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Raw</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="holderTypePennySleeve" type="checkbox" name="holderType"
+                                           value="Penny Sleeve"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="holderTypePennySleeve"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Penny
+                                        Sleeve</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="holderTypeTopLoader" type="checkbox" name="holderType" value="Top Loader"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="holderTypeTopLoader"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Top
+                                        Loader</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="holderTypeMagnetic" type="checkbox" name="holderType" value="Magnetic"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="holderTypeMagnetic"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Magnetic</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="holderTypeOther" type="checkbox" name="holderType" value="Other"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="holderTypeOther"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Other</label>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <label for="backImage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Back
-                                Image</label> <input type="file" id="backImage" name="backImage" accept="image/*"
-                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                     onchange="previewImage(event, 'backImagePreview')">
-                            <div class="mt-2">
-                                <img id="backImagePreview" class="hidden max-w-full h-auto rounded-lg"
-                                     alt="Back Image Preview">
-                                <div class="mt-2 space-x-2">
-                                    <button type="button"
-                                            class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
-                                            onclick="deleteImage('backImage', 'frontImagePreview')">Delete
-                                    </button>
-                                    <button type="button"
-                                            class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
-                                            onclick="cropImage('backImage')">Crop
-                                    </button>
-                                    <button type="button"
-                                            class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
-                                            onclick="openWebcamModal('backImage')">Capture
-                                    </button>
-                                </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Images</h2>
+                    <div>
+                        <label for="frontImage"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Front
+                            Image</label> <input type="file" id="frontImage" name="frontImage" accept="image/*"
+                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                 onchange="previewImage(event, 'frontImagePreview')">
+                        <div class="mt-2">
+                            <img id="frontImagePreview" class="hidden max-w-full h-auto rounded-lg"
+                                 alt="Front Image Preview">
+                            <div class="mt-2 space-x-2">
+                                <button type="button"
+                                        class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
+                                        onclick="deleteImage('frontImage', 'frontImagePreview')">Delete
+                                </button>
+                                <button type="button"
+                                        class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                                        onclick="cropImage('frontImage')">Crop
+                                </button>
+                                <button type="button"
+                                        class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
+                                        onclick="openWebcamModal('frontImage')">Capture
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="backImage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Back
+                            Image</label> <input type="file" id="backImage" name="backImage" accept="image/*"
+                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                 onchange="previewImage(event, 'backImagePreview')">
+                        <div class="mt-2">
+                            <img id="backImagePreview" class="hidden max-w-full h-auto rounded-lg"
+                                 alt="Back Image Preview">
+                            <div class="mt-2 space-x-2">
+                                <button type="button"
+                                        class="bg-red-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
+                                        onclick="deleteImage('backImage', 'frontImagePreview')">Delete
+                                </button>
+                                <button type="button"
+                                        class="bg-blue-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                                        onclick="cropImage('backImage')">Crop
+                                </button>
+                                <button type="button"
+                                        class="bg-green-600 text-white px-3 py-2 rounded-lg mt-2 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
+                                        onclick="openWebcamModal('backImage')">Capture
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -438,7 +483,8 @@
                         </div>
                         <div>
                             <label for="orderNumber"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order #</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order
+                                #</label>
                             <input type="text" id="orderNumber" name="orderNumber"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                    placeholder="e.g., 12345">
@@ -450,13 +496,15 @@
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                         </div>
                         <div>
-                            <label for="valuePaid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchase
+                            <label for="valuePaid"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Purchase
                                 Price</label> <input type="number" id="valuePaid" name="valuePaid" step="0.01"
                                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                      placeholder="e.g., 50.00">
                         </div>
                         <div>
-                            <label for="receipt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order
+                            <label for="receipt"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order
                                 Receipt (PDF)</label> <input type="file" id="receipt" name="receipt" accept=".pdf"
                                                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                             <button type="button"
