@@ -209,16 +209,16 @@
         function makeApiCall(searchText) {
             const encodedSearchText = encodeURIComponent(searchText);
             let url;
+            const setId = document.getElementById('set')?.dataset.setId || '';
             switch (apiSegment) {
                 case 'set_name':
-                    url = `/api/set/search/${encodedSearchText}`;
+                    url = `/api/sets?setName=${encodedSearchText}`;
                     break;
                 case 'card_num':
-                    const setId = document.getElementById('set').dataset.setId || '';
-                    url = `/api/card_num/search/${encodedSearchText}/${encodeURIComponent(setId)}`;
+                    url = `/api/cards?cardNum=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
                     break;
                 case 'insert_name':
-                    url = `/api/insert_name/${encodedSearchText}`;
+                    url = `/api/inserts?insertName=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
                     break;
                 case 'parallel_name':
                     url = `/api/parallel_name/${encodedSearchText}`;

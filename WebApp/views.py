@@ -8,7 +8,10 @@ def index(request):
     return render(request, 'index.html', {'siteName': 'CardCollector', 'pageTitle': 'Home'})
 
 
-def set_search_name(request, set_search_text):
+def set_search_name(request):
+    # Get variables from query
+    set_search_text = request.GET.get('setName')
+
     # Validate the search term (e.g., enforce a minimum length of 1 character)
     if len(set_search_text) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 characters long.'}, status=400)
@@ -30,7 +33,11 @@ def set_search_name(request, set_search_text):
     return JsonResponse({'results': results})
 
 
-def card_num_search(request, card_num, set_id):
+def card_num_search(request):
+    # Get variables from query
+    card_num = request.GET.get('cardNum')
+    set_id = request.GET.get('setID')
+
     # Validate the search term (e.g., enforce a minimum length of 1 character)
     if len(card_num) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 characters long.'}, status=400)
@@ -59,7 +66,11 @@ def card_num_search(request, card_num, set_id):
     return JsonResponse({'results': results})
 
 
-def insert_name_search(request, set_id, insert_name):
+def insert_name_search(request):
+    # Get variables from query
+    insert_name = request.GET.get('insertName')
+    set_id = request.GET.get('setID')
+
     # Validate the search term. Adjust minimum length requirements as needed.
     if len(insert_name) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 character long.'}, status=400)
@@ -91,7 +102,10 @@ def insert_name_search(request, set_id, insert_name):
     return JsonResponse({'results': results})
 
 
-def set_all_inserts(request, set_id):
+def set_all_inserts(request):
+    # Get variables from query
+    set_id = request.GET.get('setID')
+
     # Execute a database query to retrieve all inserts for a given set
     with connection.cursor() as cursor:
         query = """
