@@ -593,7 +593,7 @@
         const context = canvas.getContext('2d');
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        resizeImage(canvas.toDataURL('image/jpeg', 0.95), (blob, url) => {
+        resizeImage(canvas.toDataURL('image/jpeg', 1.00), (blob, url) => {
             preview.src = url;
             preview.classList.remove('hidden');
 
