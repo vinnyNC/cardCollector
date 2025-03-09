@@ -18,8 +18,6 @@ def set_search_name(request):
 
     # Use a database cursor to execute the custom SQL query
     with connection.cursor() as cursor:
-        # Custom SQL query to search for set names (case-insensitive, partial matching)
-        # Removed FIRST 10 ROWS ONLY from query 3/2/2025
         query = "SELECT set_id, set_name FROM card_sets WHERE set_name ILIKE %s ORDER BY set_name"
         # Add wildcards for partial matching
         cursor.execute(query, [f'%{set_search_text}%'])
@@ -44,9 +42,15 @@ def card_num_search(request):
 
     # Use a database cursor to execute the custom SQL query
     with connection.cursor() as cursor:
-        # Custom SQL query to search for card numbers (case-insensitive, partial matching)
-        # Removed FIRST 10 ROWS ONLY from query 3/2/2025
-        query = "SELECT c.card_id, c.card_number, p.first_name, p.last_name FROM cards c LEFT JOIN players p ON c.player_id = p.player_id WHERE c.set_id = %s AND c.card_number ILIKE %s ORDER BY c.card_number"
+        query = """
+            SELECT c.card_id, c.card_number, p.first_name, p.last_name, t.team_name, c.is_serial_numbered, c.serial_limit, c.insert_id, c.parallel_id, c.primary_back_image, c.primary_front_image
+            FROM cards c 
+            LEFT JOIN card_players cp ON c.card_id = cp.card_id
+            LEFT JOIN players p ON cp.player_id = p.player_id 
+            LEFT JOIN teams t ON cp.team_id = t.team_id
+            WHERE c.set_id = %s AND c.card_number ILIKE %s 
+            ORDER BY c.card_number
+        """
         # Add wildcards for partial matching
         cursor.execute(query, [set_id, f'%{card_num}%'])
         # Fetch all matching rows
@@ -55,11 +59,22 @@ def card_num_search(request):
     # Format the results as a list of dictionaries
     results = [{
         'id': row[0],
-        'card_num': row[1],
-        'player': {
+        'card': {
+            'card_num': row[1],
+            'serial_numbered': row[5],
+            'serial_limit': row[6],
+            'insert_id': row[7],
+            'parallel_id': row[8],
+            'images': {
+                'front': row[10],
+                'back': row[9]
+            }
+        },
+        'players': [{
             'first_name': row[2],
-            'last_name': row[3]
-        } if row[2] and row[3] else None
+            'last_name': row[3],
+            'team': row[4]
+        }] if row[2] and row[3] else None
     } for row in rows]
 
     # Return the results as a JSON response

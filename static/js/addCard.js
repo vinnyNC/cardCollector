@@ -102,6 +102,9 @@
                 dropdown.appendChild(noResults);
             } else {
                 results.forEach((result, index) => {
+                    // Debug log output
+                    console.log(result);
+
                     const item = document.createElement('div');
                     item.className = `
                     px-4 py-2 text-sm text-gray-700 dark:text-gray-200
@@ -117,9 +120,14 @@
                     if (apiSegment === 'set_name') {
                         displayText = result[resultKey] || result.name;
                     } else if (apiSegment === 'card_num') {
-                        displayText = `${result.card_num} - ${result.player.first_name} ${result.player.last_name}`;
-                        item.dataset.playerFirstName = result.player.first_name;
-                        item.dataset.playerLastName = result.player.last_name;
+
+                        result.players.forEach((player, index) => {
+                            if (index === 0) {
+                                displayText = `${player.first_name} ${player.last_name}`;
+                            } else {
+                                displayText += `, ${player.first_name} ${player.last_name}`;
+                            }
+                        });
                     } else {
                         displayText = result[resultKey] || result.name;
                     }
@@ -168,11 +176,14 @@
             if (apiSegment === 'card_num') {
                 const firstNameInput = document.getElementById('playerFirstName');
                 const lastNameInput = document.getElementById('playerLastName');
-                firstNameInput.value = result.player.first_name;
+                const teamNameInput = document.getElementById('teamName');
+                firstNameInput.value = result.players[0].first_name;
                 firstNameInput.disabled = true;
-                lastNameInput.value = result.player.last_name;
+                lastNameInput.value = result.players[0].last_name;
                 lastNameInput.disabled = true;
-                input.value = result.card_num;
+                teamNameInput.value = result.players[0].team;
+                teamNameInput.disabled = true;
+                input.value = result.card.card_num;
             } else if (apiSegment === 'set_name') {
                 input.value = displayText;
                 input.dataset.setId = result.id; // Store set ID for card_num lookup
@@ -254,11 +265,14 @@
             if (apiSegment === 'card_num') {
                 const firstNameInput = document.getElementById('playerFirstName');
                 const lastNameInput = document.getElementById('playerLastName');
+                const teamNameInput = document.getElementById('teamName');
                 if (firstNameInput.disabled) {
                     firstNameInput.value = '';
                     lastNameInput.value = '';
+                    teamNameInput.value = '';
                     firstNameInput.disabled = false;
                     lastNameInput.disabled = false;
+                    teamNameInput.disabled = false;
                 }
             }
             if (inputValue.length >= 1) {

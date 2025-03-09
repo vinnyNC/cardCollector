@@ -1,0 +1,26 @@
+<div id="webcamModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-75">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg p-4 w-full h-full mx-auto my-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium dark:text-white">Capture from Webcam</h3>
+                <button onclick="closeWebcamModal()"
+                        class="text-2xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">×
+                </button>
+            </div>
+            <div class="mb-4 overflow-hidden">
+                <video id="webcamVideo" class="w-full h-auto" autoplay playsinline></video>
+                <canvas id="webcamCanvas" class="hidden"></canvas>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeWebcamModal()"
+                        class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-700 text-sm sm:text-base">
+                    Cancel
+                </button>
+                <button onclick="captureWebcamImage()"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm sm:text-base">
+                    Capture
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
