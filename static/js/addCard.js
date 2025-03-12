@@ -184,6 +184,19 @@
                 teamNameInput.value = result.players[0].team;
                 teamNameInput.disabled = true;
                 input.value = result.card.card_num;
+
+                // Check if card has a parallel
+                if (result.card.parallel_id !== null) {
+                    const parallelCheckbox = document.getElementById('parallel');
+                    const parallelTextbox = document.getElementById('parallelDetail');
+                    parallelCheckbox.checked = true;
+                    parallelCheckbox.disabled = true;
+                    toggleField('parallelDetailContainer', parallel);
+                    parallelTextbox.value = result.card.parallel_id;
+                    parallelTextbox.disabled = true;
+                } else {
+                    parallelCheckbox.disabled = true;
+                }
             } else if (apiSegment === 'set_name') {
                 input.value = displayText;
                 input.dataset.setId = result.id; // Store set ID for card_num lookup
