@@ -1,0 +1,71 @@
+{% load compress %}
+<!-- templates/add_card.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ siteName }} - Add Card</title>
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <script src="https://unpkg.com/@tailwindcss/browser@4.0.12/dist/index.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
+
+    <style>
+        /* Flowbite fixes */
+        @layer base {
+            button,
+            [role='button'] {
+                cursor: pointer;
+            }
+
+            button:disabled,
+            [role='button']:disabled {
+                cursor: default;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+<div class="antialiased bg-gray-50 dark:bg-gray-900">
+    <!-- Navbar -->{% include "nav/header.html" %}
+
+    <!-- Main content -->
+    <main class="p-4 md:ml-64 h-auto pt-20">
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-6 dark:text-white">Add Card to Collection</h1>
+            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
+                {% csrf_token %}
+
+                <!-- Set Information -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold dark:text-white">Set Information</h2>
+                    <div>
+                        <label for="set"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label> <input
+                            type="text" id="set" name="set"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="e.g., 2023 Panini Donruss" required>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit"
+                            class="w-full bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                        Add Card to Collection
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script src="{% static 'js/addCard.js' %}"></script>
+
+</body>
+</html>

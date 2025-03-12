@@ -8,6 +8,10 @@ def index(request):
     return render(request, 'index.html', {'siteName': 'CardCollector', 'pageTitle': 'Home'})
 
 
+def add_card_1(request):
+    return render(request, 'beta_add_card/step1.html', {'siteName': 'CardCollector', 'pageTitle': 'Add Card'})
+
+
 def set_search_name(request):
     # Get variables from query
     set_search_text = request.GET.get('setName')
