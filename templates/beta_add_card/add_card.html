@@ -31,35 +31,28 @@
 </head>
 <body class="bg-gray-900">
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
-    <!-- Navbar -->{% include "nav/header.html" %}
+    <!-- Navbar -->
+    {% include "nav/header.html" %}
 
     <!-- Main content -->
     <main class="p-4 md:ml-64 h-auto pt-20">
         <div class="container mx-auto px-4 py-8">
-            <h1 class="text-3xl font-bold mb-6 dark:text-white">Add Card to Collection</h1>
+            <h1 class="text-4xl font-bold mb-6 dark:text-white w-full leading-none tracking-tight text-center">Add Card to Collection</h1>
             <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
                 {% csrf_token %}
 
-                <!-- Set Information -->
-                <div class="space-y-4">
-                    <h2 class="text-2xl font-bold dark:text-white">Set Information</h2>
-                    <div>
-                        <label for="set"
-                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label> <input
-                            type="text" id="set" name="set"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            placeholder="e.g., 2023 Panini Donruss" required>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit"
+            </form>
+            <!-- Form Navigation Button -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <button type="button" id="btnPrev"
                             class="w-full bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
-                        Add Card to Collection
+                        Previous
+                    </button>
+                    <button type="button" id="btnNext"
+                            class="w-full bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                        Next
                     </button>
                 </div>
-            </form>
         </div>
     </main>
 </div>

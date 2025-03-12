@@ -9,7 +9,7 @@ def index(request):
 
 
 def add_card_1(request):
-    return render(request, 'beta_add_card/step1.html', {'siteName': 'CardCollector', 'pageTitle': 'Add Card'})
+    return render(request, 'beta_add_card/add_card.html', {'siteName': 'CardCollector', 'pageTitle': 'Add Card'})
 
 
 def set_search_name(request):
