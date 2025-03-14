@@ -44,7 +44,12 @@
 
             <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
                 {% csrf_token %}
-
+                <div id="addCardStep1">
+                    {% include 'beta_add_card/add_card/step1.html' %}
+                </div>
+                <div id="addCardStep2" class="hidden">
+                    {% include 'beta_add_card/add_card/step2.html' %}
+                </div>
             </form>
             <!-- Form Navigation Button -->
             <div class="grid gap-6 md:grid-cols-2">
