@@ -42,17 +42,8 @@
             <!-- Stepper -->
             {% include "beta_add_card/add_card/stepper.html" %}
 
-            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
-                {% csrf_token %}
-                <div id="addCardStep1">
-                    {% include 'beta_add_card/add_card/step1.html' %}
-                </div>
-                <div id="addCardStep2" class="hidden">
-                    {% include 'beta_add_card/add_card/step2.html' %}
-                </div>
-            </form>
             <!-- Form Navigation Button -->
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="grid gap-6 md:grid-cols-2 mb-4">
                 <button type="button" id="btnPrev"
                         class="w-full bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
                     Previous
@@ -62,6 +53,17 @@
                     Next
                 </button>
             </div>
+
+            <!-- Form -->
+            <form id="sportsCardForm" enctype="multipart/form-data" method="post" class="space-y-8" autocomplete="off">
+                {% csrf_token %}
+                <div id="addCardStep1">
+                    {% include 'beta_add_card/add_card/step1.html' %}
+                </div>
+                <div id="addCardStep2" class="hidden">
+                    {% include 'beta_add_card/add_card/step2.html' %}
+                </div>
+            </form>
         </div>
     </main>
 </div>

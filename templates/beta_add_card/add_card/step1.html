@@ -1,8 +1,70 @@
 <!-- Set Information -->
+
+<!-- Search Box -->
 <div>
     <label for="set"
            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label>
     <input type="text" id="set" name="set"
            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
            placeholder="e.g., 2023 Panini Donruss" required>
+</div>
+
+<!-- Results table -->
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Set Name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Year
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Sport
+            </th>
+            <th scope="col" class="px-6 py-3">
+                <span class="sr-only">Select</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="setResultsTable">
+        <!-- Results will be populated dynamically -->
+        <!-- Example row for reference (can be removed) -->
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                Topps Chrome
+            </td>
+            <td class="px-3 py-2">
+                2023
+            </td>
+            <td class="px-3 py-2">
+                Baseball
+            </td>
+            <td class="px-3 py-2 text-right">
+                <button type="button" id="btnPrev"
+                        class="px-3 py-2 w-auto bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                    Select
+                </button>
+            </td>
+        </tr>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                Topps Series 1
+            </td>
+            <td class="px-3 py-2">
+                2025
+            </td>
+            <td class="px-3 py-2">
+                Baseball
+            </td>
+            <td class="px-3 py-2 text-right">
+                <button type="button" id="btnPrev"
+                        class="px-3 py-2 w-auto bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                    Select
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
