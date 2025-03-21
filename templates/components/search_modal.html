@@ -1,0 +1,119 @@
+<!-- components/search_modal.html -->
+<div id="searchModal" tabindex="-1" aria-hidden="true"
+     class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-[90%] max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white" id="modalTitle">
+                    Search
+                </h3>
+                <div class="flex items-center space-x-2">
+                    <!-- Saved Searches Dropdown -->
+                    <button id="savedSearchesBtn" data-dropdown-toggle="savedSearchesDropdown"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            type="button">
+                        Saved Searches
+                        <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- Close button -->
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="searchModal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                <!-- Layout controls -->
+                <div class="flex justify-end space-x-2 mb-4">
+                    <button id="toggleFiltersLayout" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                    <button id="toggleFullscreen" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5m-7 11h4m-4 0v4m0 0l5-5m11 5v-4m0 4h-4m0 0l-5-5" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Main content container -->
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Filters section -->
+                    <div id="filtersSection" class="w-full md:w-64 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-lg font-medium text-gray-900 dark:text-white">Filters</h4>
+                            <button id="clearFilters" class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400">
+                                Clear All
+                            </button>
+                        </div>
+                        <div id="filtersList" class="space-y-4">
+                            <!-- Filters will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Results section -->
+                    <div class="flex-1">
+                        <!-- Results count and pagination size -->
+                        <div class="flex justify-between items-center mb-4">
+                            <span id="resultsCount" class="text-sm text-gray-500 dark:text-gray-400">
+                                Showing 0 results
+                            </span>
+                            <select id="pageSize" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="20">20 per page</option>
+                                <option value="50">50 per page</option>
+                                <option value="100">100 per page</option>
+                            </select>
+                        </div>
+
+                        <!-- Results table -->
+                        <div class="overflow-x-auto">
+                            <table id="resultsTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <!-- Table headers will be injected here -->
+                                </thead>
+                                <tbody>
+                                <!-- Table content will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div id="pagination" class="flex items-center justify-between mt-4">
+                            <!-- Pagination will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="searchName" placeholder="Search name..."
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <button id="saveSearch" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Save Search
+                    </button>
+                </div>
+                <button id="setDefaultSearch" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Set as Default
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Saved Searches Dropdown -->
+<div id="savedSearchesDropdown" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+    <ul id="savedSearchesList" class="py-2 text-sm text-gray-700 dark:text-gray-200">
+        <!-- Saved searches will be injected here -->
+    </ul>
+</div>
