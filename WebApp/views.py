@@ -22,14 +22,20 @@ def set_search_name(request):
 
     # Use a database cursor to execute the custom SQL query
     with connection.cursor() as cursor:
-        query = "SELECT set_id, set_name FROM card_sets WHERE set_name ILIKE %s ORDER BY set_name"
+        query = """
+            SELECT cs.set_id, cs.set_name, s.sport_name, cs.release_year 
+            FROM card_sets cs
+            JOIN sports s ON cs.sport_id = s.sport_id
+            WHERE cs.set_name ILIKE %s 
+            ORDER BY cs.set_name
+        """
         # Add wildcards for partial matching
         cursor.execute(query, [f'%{set_search_text}%'])
         # Fetch all matching rows
         rows = cursor.fetchall()
 
     # Format the results as a list of dictionaries
-    results = [{'id': row[0], 'set_name': row[1]} for row in rows]
+    results = [{'setName': row[1], 'setYear': row[3], 'setSport': row[2], 'setID': row[0]} for row in rows]
 
     # Return the results as a JSON response
     return JsonResponse({'results': results})
