@@ -1,11 +1,62 @@
-<!-- Set Information -->
+<!-- Card/Player Search -->
 <div class="space-y-4">
     <h2 class="text-2xl font-bold dark:text-white">Set Information</h2>
-    <div>
-        <label for="set"
-               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set</label> <input
-            type="text" id="set" name="set"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            placeholder="e.g., 2023 Panini Donruss" required>
+
+    <!-- Search Box -->
+    <div class="py-3">
+        <label for="cardPlayerSearch"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search by Card # or Player
+            Name</label>
+        <input type="text" id="cardPlayerSearch" name="cardPlayerSearch"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+               placeholder="Enter card number, player name (e.g. Smith, John or John Smith)" required>
+    </div>
+
+    <!-- Filter & Sort Options -->
+    <div class="flex flex-wrap gap-3 mb-4">
+        <!-- Filter Dropdown -->
+        <div>
+            <label for="cardFilterSelect" class="sr-only">Filter results</label>
+            <select id="cardFilterSelect"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <option value="">All Types</option>
+                <option value="base">Base Cards</option>
+                <option value="parallel">Parallels</option>
+                <option value="insert">Inserts</option>
+            </select>
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div>
+            <label for="cardSortSelect" class="sr-only">Sort results</label>
+            <select id="cardSortSelect"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <option value="number_asc">Card # (Ascending)</option>
+                <option value="number_desc">Card # (Descending)</option>
+                <option value="name_asc">Player Name (A-Z)</option>
+                <option value="name_desc">Player Name (Z-A)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Results table -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table id="cardSearchResultTable"
+               class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Card #</th>
+                <th scope="col" class="px-6 py-3">Player Name</th>
+                <th scope="col" class="px-6 py-3">Type</th>
+                <th scope="col" class="px-6 py-3">Parallel/Insert</th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Select</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="cardResultsTable">
+            <!-- Results will be populated dynamically -->
+            </tbody>
+        </table>
     </div>
 </div>
