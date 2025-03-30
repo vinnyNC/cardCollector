@@ -1,13 +1,36 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.db import connection
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
-# Create your views here.
+# Default Views
 def index(request):
     return render(request, 'index.html', {'siteName': 'CardCollector', 'pageTitle': 'Home'})
 
 
+# Authentication Views
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}! You can now log in.')
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'auth/register.html', {'form': form, 'siteName': 'CardCollector', 'pageTitle': 'Register'})
+
+
+@login_required
+def profile(request):
+    return render(request, 'auth/profile.html', {'siteName': 'CardCollector', 'pageTitle': 'Profile'})
+
+
+# API Views
 def add_card_1(request):
     return render(request, 'beta_add_card/add_card.html', {'siteName': 'CardCollector', 'pageTitle': 'Add Card'})
 

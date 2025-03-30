@@ -154,3 +154,7 @@ COMPRESS_ENABLED = True
 # COMPRESS_REBUILD_TIMEOUT = 60
 
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
+# Authentication Settings
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'

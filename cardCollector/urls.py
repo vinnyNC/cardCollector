@@ -10,6 +10,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
 
+                  # Authentication
+                  path('login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name='login'),
+                  path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+                  path('register/', register, name='register'),
+                  path('profile/', profile, name='profile'),
+
     # API
     path('api/sets', set_search_name, name='set_name_search'),
     path('api/cards', card_num_search, name='card_num_search'),
