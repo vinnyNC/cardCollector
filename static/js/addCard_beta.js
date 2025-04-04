@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let searchTimeout;
         setSearchInput.addEventListener('input', function () {
             clearTimeout(searchTimeout);
+
+            // Show loading state immediately
+            isLoading = true;
+            showLoadingState();
+
             searchTimeout = setTimeout(async () => {
                 const searchTerm = this.value.trim().toLowerCase();
                 try {
@@ -43,14 +48,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     allSearchResults = [...results];
 
                     // Apply any active filters and sorting
+                    isLoading = false;
                     applyFiltersAndSort();
                 } catch (error) {
                     console.error('Search failed:', error);
                     allSearchResults = [];
+                    isLoading = false;
                     updateSetResultsTable([]);
                 }
             }, 300);
         });
+    }
+
+    // Add this function to create loading state indicators
+    function showLoadingState() {
+        const tableBody = document.getElementById('setResultsTable');
+        tableBody.innerHTML = '';
+
+        // Create loading rows
+        for (let i = 0; i < 3; i++) {
+            const row = tableBody.insertRow();
+            row.className = "animate-pulse bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+
+            // Set name with loading placeholder
+            const nameCell = row.insertCell(0);
+            nameCell.className = "px-3 py-4";
+            const namePlaceholder = document.createElement('div');
+            namePlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4";
+            nameCell.appendChild(namePlaceholder);
+
+            // Year with loading placeholder
+            const yearCell = row.insertCell(1);
+            yearCell.className = "px-3 py-4";
+            const yearPlaceholder = document.createElement('div');
+            yearPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16";
+            yearCell.appendChild(yearPlaceholder);
+
+            // Sport with loading placeholder
+            const sportCell = row.insertCell(2);
+            sportCell.className = "px-3 py-4";
+            const sportPlaceholder = document.createElement('div');
+            sportPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-24";
+            sportCell.appendChild(sportPlaceholder);
+
+            // Button placeholder
+            const buttonCell = row.insertCell(3);
+            buttonCell.className = "px-3 py-4";
+            const buttonPlaceholder = document.createElement('div');
+            buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
+            buttonCell.appendChild(buttonPlaceholder);
+        }
     }
 
 });
@@ -63,6 +110,8 @@ let stepperCurrentStep = 1;
 // Store original search results for filtering
 let allSearchResults = [];
 let currentSortDirection = 'asc'; // Track current sort direction
+// Misc Variables
+let isLoading = false;
 
 
 /**
@@ -115,48 +164,69 @@ function stepperChangeStep(step, maxSteps = 8) {
  * @param {string} setYear - Year of the set
  * @param {string} setSport - Sport category
  * @param {string} setID - Unique identifier for the set
+ * @param {number} index - Index used for alternating row styles
  */
-function addSetTableItem(setName, setYear, setSport, setID) {
+
+function addSetTableItem(setName, setYear, setSport, setID, index) {
     // Get the table body
     const tableBody = document.getElementById('setResultsTable');
 
-    // Create a new row
+    // Create a new row with alternating background colors
     const row = tableBody.insertRow();
-    row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600";
+    const isEven = index % 2 === 0;
+    row.className = isEven
+        ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150"
+        : "bg-gray-50 border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150";
     row.dataset.setID = setID;
 
     // Create cells with proper styling
     const nameCell = row.insertCell(0);
-    nameCell.className = "px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white";
+    nameCell.className = "px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
     nameCell.textContent = setName;
 
     const yearCell = row.insertCell(1);
-    yearCell.className = "px-3 py-2";
+    yearCell.className = "px-4 py-3";
     yearCell.textContent = setYear;
 
     const sportCell = row.insertCell(2);
-    sportCell.className = "px-3 py-2";
-    sportCell.textContent = setSport;
+    sportCell.className = "px-4 py-3";
+    // Create badge for sport category
+    const sportBadge = document.createElement('span');
+    sportBadge.className = "bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300";
+    sportBadge.textContent = setSport;
+    sportCell.appendChild(sportBadge);
 
     // Add the Select button cell
     const selectCell = row.insertCell(3);
-    selectCell.className = "px-3 py-2 text-right";
+    selectCell.className = "px-4 py-3 text-right";
 
-    // Create the Select button
+    // Create the Select button with improved styling
     const selectButton = document.createElement('button');
     selectButton.type = "button";
-    selectButton.className = "px-3 py-2 w-auto bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800";
-    selectButton.textContent = "Select";
+    selectButton.className = "px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-200 flex items-center gap-1";
+
+    // Add icon and text to button
+    selectButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Select</span>
+    `;
 
     // Add click event to select button
     selectButton.addEventListener('click', function () {
+        // Add visual feedback when selected
+        row.classList.add('bg-blue-100', 'dark:bg-blue-900');
+
         // Fill the set input with the selected set name
         document.querySelectorAll('input[name="set"]').forEach(input => {
             input.value = setName;
         });
 
         // Advance to step 2
-        stepperChangeStep(2);
+        setTimeout(() => {
+            stepperChangeStep(2);
+        }, 200); // Small delay for visual feedback
     });
 
     selectCell.appendChild(selectButton);
@@ -172,18 +242,33 @@ function updateSetResultsTable(sets) {
     const tableBody = document.getElementById('setResultsTable');
     tableBody.innerHTML = '';
 
-    // If no results, show a message
+    // If still loading, show loading state
+    if (isLoading) {
+        showLoadingState();
+        return;
+    }
+
+    // If no results, show a styled empty message
     if (sets.length === 0) {
         const row = tableBody.insertRow();
         row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700";
         const cell = row.insertCell(0);
         cell.colSpan = 4;
-        cell.className = "px-3 py-4 text-center text-gray-500 dark:text-gray-400";
-        cell.textContent = "No matching sets found. Try a different search term or filter.";
+        cell.className = "px-6 py-8 text-center";
+
+        cell.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                <svg class="w-12 h-12 mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <p class="text-lg font-medium">No matching sets found</p>
+                <p class="text-sm">Try a different search term or adjust your filters</p>
+            </div>
+        `;
     } else {
-        // Add the filtered sets to the table
-        sets.forEach(set => {
-            addSetTableItem(set.setName, set.setYear, set.setSport, set.setID);
+        // Add the filtered sets to the table with alternating row colors
+        sets.forEach((set, index) => {
+            addSetTableItem(set.setName, set.setYear, set.setSport, set.setID, index);
         });
     }
 }
