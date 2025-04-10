@@ -23,6 +23,7 @@ urlpatterns = [
                   path('api/inserts?insertName=<str:insert_name>&setID=<int:set_id>', insert_name_search,
                        name='insert_name_search'),
                   path('api/inserts/all/<int:set_id>', set_all_inserts, name='set_all_inserts'),
+                  path('api/sports', get_sports, name='get_sports'),
 
                   # Test Links
                   path('add_card', add_card_1, name='add_card_1'),

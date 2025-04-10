@@ -100,6 +100,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // STEP 1 - Add Set Modal
+
+    // Getting elements
+    const addSetNewModal = document.getElementById('addNewSetModal');
+    const addNewSetButton = document.getElementById('btnAddNewSet');
+    const cancelAddSetButton = document.getElementById('cancelAddSet');
+    const addNewSetForm = document.getElementById('addNewSetForm');
+    const yearSelect = document.getElementById('newSetYear');
+
+    // Variables
+    const currentYear = new Date().getFullYear();
+
+    // Generate years for the year select dropdown
+    for (let year = currentYear; year >= 1900; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+    }
+
+    // Close modal
+    cancelAddSetButton.addEventListener('click', () => {
+        addSetNewModal.classList.add('hidden');
+    });
+
+    // Handle form submission
+    addNewSetForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const newSetData = {
+            setName: document.getElementById('newSetName').value,
+            setYear: document.getElementById('newSetYear').value,
+            setSport: document.getElementById('newSetSport').value,
+        };
+
+        try {
+            const response = await fetch('/api/sets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newSetData),
+            });
+
+            if (response.ok) {
+                alert('Set added successfully!');
+                modal.classList.add('hidden');
+                addNewSetForm.reset();
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message || 'Failed to add set'}`);
+            }
+        } catch (error) {
+            console.error('Error adding set:', error);
+            alert('An error occurred while adding the set.');
+        }
+    });
 });
 
 
@@ -268,10 +325,8 @@ function setTableNewItem(tableBody) {
 
     // Add event listener for the add button
     document.getElementById('btnAddNewSet').addEventListener('click', function () {
-        // Here you would show a modal or navigate to a form to add a new set
-        alert('Add new set functionality will be implemented here.');
-        // Future implementation could be:
-        // showAddSetModal() or window.location.href = '/add-set';
+        // Open Modal
+        document.getElementById('addNewSetModal').classList.remove('hidden');
     });
 }
 

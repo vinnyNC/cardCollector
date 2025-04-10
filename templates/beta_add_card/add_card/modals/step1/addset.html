@@ -1,0 +1,39 @@
+<!-- Add New Set Modal -->
+<div id="addNewSetModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-96 p-6">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Add New Set</h2>
+        <form id="addNewSetForm">
+            <div class="mb-4">
+                <label for="newSetName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Set
+                    Name</label>
+                <input type="text" id="newSetName" name="newSetName"
+                       class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                       required>
+            </div>
+            <div class="mb-4">
+                <label for="newSetYear" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year</label>
+                <select id="newSetYear" name="newSetYear"
+                        class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        required>
+                    <option value="" disabled selected>Select Year</option>
+                    <!-- Generate year options dynamically with JavaScript -->
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="newSetSport"
+                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sport</label>
+                <input type="text" id="newSetSport" name="newSetSport"
+                       class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                       required>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" id="cancelAddSet"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Set
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
