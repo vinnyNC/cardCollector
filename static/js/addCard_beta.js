@@ -171,6 +171,13 @@ function addSetTableItem(setName, setYear, setSport, setID, index) {
     // Get the table body
     const tableBody = document.getElementById('setResultsTable');
 
+    // Insert new item row
+    if (index === 0) {
+        setTableNewItem(tableBody);
+        index++;
+    } else {
+        index++;
+    }
     // Create a new row with alternating background colors
     const row = tableBody.insertRow();
     const isEven = index % 2 === 0;
@@ -230,6 +237,42 @@ function addSetTableItem(setName, setYear, setSport, setID, index) {
     });
 
     selectCell.appendChild(selectButton);
+}
+
+function setTableNewItem(tableBody) {
+    // Create the "Add New" row with distinct styling
+    const row = tableBody.insertRow(0);
+    row.className = "bg-green-50 border-b border-green-200 dark:bg-gray-700 dark:border-gray-600 hover:bg-green-100 dark:hover:bg-gray-600 transition-colors duration-150";
+
+    // Create the content cell that spans all columns
+    const cell = row.insertCell(0);
+    cell.colSpan = 4;
+    cell.className = "px-4 py-3";
+
+    // Add the content with add button
+    cell.innerHTML = `
+        <div class="flex justify-between items-center">
+            <div>
+                <span class="font-medium text-gray-900 dark:text-white">Can't find your set?</span>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Add it to our database</p>
+            </div>
+            <button type="button" id="btnAddNewSet" 
+                    class="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 transition-all duration-200 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add New Set</span>
+            </button>
+        </div>
+    `;
+
+    // Add event listener for the add button
+    document.getElementById('btnAddNewSet').addEventListener('click', function () {
+        // Here you would show a modal or navigate to a form to add a new set
+        alert('Add new set functionality will be implemented here.');
+        // Future implementation could be:
+        // showAddSetModal() or window.location.href = '/add-set';
+    });
 }
 
 
