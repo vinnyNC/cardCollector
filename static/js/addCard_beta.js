@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelAddSetButton = document.getElementById('cancelAddSet');
     const addNewSetForm = document.getElementById('addNewSetForm');
     const yearSelect = document.getElementById('newSetYear');
+    const sportSelect = document.getElementById('newSetSport');
 
     // Variables
     const currentYear = new Date().getFullYear();
@@ -119,6 +120,29 @@ document.addEventListener('DOMContentLoaded', () => {
         option.textContent = year;
         yearSelect.appendChild(option);
     }
+
+    // Fetch sports from the API
+    makeApiCall('', 'get_sports')
+        .then(results => {
+            if (results && results.length > 0) {
+                // Sort sports alphabetically by name
+                results.sort((a, b) => a.sport_name.localeCompare(b.sport_name));
+
+                // Add each sport to the dropdown
+                results.forEach(sport => {
+                    const option = document.createElement('option');
+                    option.value = sport.sport_id;  // Use sport_id as the value
+                    option.textContent = sport.sport_name;
+                    sportSelect.appendChild(option);
+                });
+            } else {
+                console.error('No sports found in API response');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching sports:', error);
+        });
+
 
     // Close modal
     cancelAddSetButton.addEventListener('click', () => {
@@ -524,6 +548,9 @@ async function makeApiCall(searchText, apiSegment) {
             break;
         case 'where_bought':
             url = `/api/where_bought/${encodedSearchText}`;
+            break;
+        case 'get_sports':
+            url = '/api/sports';
             break;
         default:
             throw new Error(`Unknown API segment: ${apiSegment}`);

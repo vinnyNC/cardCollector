@@ -176,3 +176,27 @@ def set_all_inserts(request):
 
     # Return JSON response with all inserts for the set
     return JsonResponse({'results': results})
+
+
+def get_sports(request):
+    # Execute a database query to retrieve all sports
+    with connection.cursor() as cursor:
+        query = """
+            SELECT sport_id, sport_name 
+            FROM sports
+            ORDER BY sport_name
+        """
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+    # Format the results into a list of dictionaries
+    results = [
+        {
+            'sport_id': row[0],
+            'sport_name': row[1],
+        }
+        for row in rows
+    ]
+
+    # Return JSON response with all sports
+    return JsonResponse({'results': results})

@@ -23,10 +23,14 @@
             <div class="mb-4">
                 <label for="newSetSport"
                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sport</label>
-                <input type="text" id="newSetSport" name="newSetSport"
-                       class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                       required>
+                <select id="newSetSport" name="newSetSport"
+                        class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        required>
+                    <option value="" disabled selected>Select Sport</option>
+                    <!-- Sports will be populated from API -->
+                </select>
             </div>
+
             <div class="flex justify-end gap-2">
                 <button type="button" id="cancelAddSet"
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel
