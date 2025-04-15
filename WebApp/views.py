@@ -2,8 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db import connection
+from django.db.models import Q, Prefetch
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+
+from WebApp.models import *
 
 
 # Default Views
@@ -39,26 +42,26 @@ def set_search_name(request):
     # Get variables from query
     set_search_text = request.GET.get('setName')
 
-    # Validate the search term (e.g., enforce a minimum length of 1 character)
+    # Validate the search term
     if len(set_search_text) < 1:
-        return JsonResponse({'error': 'Search term must be at least 1 characters long.'}, status=400)
+        return JsonResponse({'error': 'Search term must be at least 1 character long.'}, status=400)
 
-    # Use a database cursor to execute the custom SQL query
-    with connection.cursor() as cursor:
-        query = """
-            SELECT cs.set_id, cs.set_name, s.sport_name, cs.release_year 
-            FROM card_sets cs
-            JOIN sports s ON cs.sport_id = s.sport_id
-            WHERE cs.set_name ILIKE %s 
-            ORDER BY cs.set_name
-        """
-        # Add wildcards for partial matching
-        cursor.execute(query, [f'%{set_search_text}%'])
-        # Fetch all matching rows
-        rows = cursor.fetchall()
+    # Use Django ORM instead of raw SQL
+    matching_sets = CardSet.objects.filter(
+        name__icontains=set_search_text,
+        is_deleted=False
+    ).select_related('sport').order_by('name')
 
     # Format the results as a list of dictionaries
-    results = [{'setName': row[1], 'setYear': row[3], 'setSport': row[2], 'setID': row[0]} for row in rows]
+    results = [
+        {
+            'setName': card_set.name,
+            'setYear': card_set.release_year,
+            'setSport': card_set.sport.name,
+            'setID': card_set.id
+        }
+        for card_set in matching_sets
+    ]
 
     # Return the results as a JSON response
     return JsonResponse({'results': results})
@@ -111,6 +114,69 @@ def card_num_search(request):
     } for row in rows]
 
     # Return the results as a JSON response
+    return JsonResponse({'results': results})
+
+
+def search_cards_in_set(request):
+    # Get search parameters
+    search_text = request.GET.get('q', '')
+    set_id = request.GET.get('setID')
+
+    # Validate inputs
+    if not set_id:
+        return JsonResponse({'error': 'Set ID is required'}, status=400)
+
+    if not search_text or len(search_text) < 1:
+        return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
+
+    # Build the base query to get cards in the specified set
+    cards_query = Card.objects.filter(
+        set_id=set_id,
+        is_deleted=False
+    )
+
+    # Add search filters (card number OR player name)
+    cards_query = cards_query.filter(
+        Q(card_number__icontains=search_text) |
+        Q(players__first_name__icontains=search_text) |
+        Q(players__last_name__icontains=search_text)
+    ).distinct()
+
+    # Optimize query with select_related and prefetch_related
+    cards_query = cards_query.select_related(
+        'parallel',
+        'insert'
+    ).prefetch_related(
+        Prefetch('players', queryset=Player.objects.filter(is_deleted=False))
+    )
+
+    # Format the results
+    results = []
+    for card in cards_query:
+        # Get player names for this card
+        player_names = ", ".join([f"{player.first_name} {player.last_name}"
+                                  for player in card.players.all()])
+
+        # Determine card type (could be customized further)
+        card_type = "Base"
+        if card.is_serial_numbered:
+            card_type = f"Numbered /{card.serial_limit}" if card.serial_limit else "Numbered"
+
+        # Get parallel or insert name
+        parallel_insert = ""
+        if card.parallel:
+            parallel_insert = card.parallel.name
+        elif card.insert:
+            parallel_insert = card.insert.name
+
+        results.append({
+            'card_number': card.card_number,
+            'player_name': player_names,
+            'type': card_type,
+            'parallel_insert': parallel_insert,
+            'card_id': card.id
+        })
+
     return JsonResponse({'results': results})
 
 
@@ -179,23 +245,16 @@ def set_all_inserts(request):
 
 
 def get_sports(request):
-    # Execute a database query to retrieve all sports
-    with connection.cursor() as cursor:
-        query = """
-            SELECT sport_id, sport_name 
-            FROM sports
-            ORDER BY sport_name
-        """
-        cursor.execute(query)
-        rows = cursor.fetchall()
+    # Use Django ORM to retrieve all active sports
+    sports = Sport.objects.filter(is_deleted=False).order_by('name')
 
     # Format the results into a list of dictionaries
     results = [
         {
-            'sport_id': row[0],
-            'sport_name': row[1],
+            'sport_id': sport.id,
+            'sport_name': sport.name,
         }
-        for row in rows
+        for sport in sports
     ]
 
     # Return JSON response with all sports

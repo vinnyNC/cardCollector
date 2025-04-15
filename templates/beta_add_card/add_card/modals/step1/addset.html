@@ -3,12 +3,13 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-96 p-6">
         <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Add New Set</h2>
         <form id="addNewSetForm">
+            {% csrf_token %}
             <div class="mb-4">
                 <label for="newSetName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Set
                     Name</label>
                 <input type="text" id="newSetName" name="newSetName"
                        class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                       required>
+                       placeholder="2025 Topps Series 1 Baseball" required>
             </div>
             <div class="mb-4">
                 <label for="newSetYear" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year</label>
@@ -35,7 +36,8 @@
                 <button type="button" id="cancelAddSet"
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Set
+                <button type="button" id="submitAddSet"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Set
                 </button>
             </div>
         </form>

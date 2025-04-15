@@ -80,13 +80,24 @@ WSGI_APPLICATION = 'cardCollector.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'cardcollector_test',
+#         'USER': 'postgres',
+#         'PASSWORD': os.getenv('POSTGRES_DB_PASSWORD'),
+#         'HOST': '10.0.5.5',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cardcollector_test',
+        'NAME': 'cardcollector_test1',
         'USER': 'postgres',
         'PASSWORD': os.getenv('POSTGRES_DB_PASSWORD'),
-        'HOST': '10.0.5.5',
+        'HOST': '10.0.5.15',
         'PORT': '5432',
     }
 }

@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewSetButton = document.getElementById('btnAddNewSet');
     const cancelAddSetButton = document.getElementById('cancelAddSet');
     const addNewSetForm = document.getElementById('addNewSetForm');
+    const submitAddSet = document.getElementById('submitAddSet');
     const yearSelect = document.getElementById('newSetYear');
     const sportSelect = document.getElementById('newSetSport');
 
@@ -150,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle form submission
-    addNewSetForm.addEventListener('submit', async (event) => {
+    submitAddSet.addEventListener('click', async (event) => {
         event.preventDefault();
 
         const newSetData = {
