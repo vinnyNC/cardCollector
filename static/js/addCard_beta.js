@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add filter and sort controls to the UI
     addFilterSortControls();
 
+    // Load default set list
+    step1LoadDefaultSetList();
+
     // Set up search functionality
     const setSearchInput = document.getElementById('setName');
     if (setSearchInput) {
@@ -58,46 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 300);
         });
-    }
-
-    // Add this function to create loading state indicators
-    function showLoadingState() {
-        const tableBody = document.getElementById('setResultsTable');
-        tableBody.innerHTML = '';
-
-        // Create loading rows
-        for (let i = 0; i < 3; i++) {
-            const row = tableBody.insertRow();
-            row.className = "animate-pulse bg-white border-b dark:bg-gray-800 dark:border-gray-700";
-
-            // Set name with loading placeholder
-            const nameCell = row.insertCell(0);
-            nameCell.className = "px-3 py-4";
-            const namePlaceholder = document.createElement('div');
-            namePlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4";
-            nameCell.appendChild(namePlaceholder);
-
-            // Year with loading placeholder
-            const yearCell = row.insertCell(1);
-            yearCell.className = "px-3 py-4";
-            const yearPlaceholder = document.createElement('div');
-            yearPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16";
-            yearCell.appendChild(yearPlaceholder);
-
-            // Sport with loading placeholder
-            const sportCell = row.insertCell(2);
-            sportCell.className = "px-3 py-4";
-            const sportPlaceholder = document.createElement('div');
-            sportPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-24";
-            sportCell.appendChild(sportPlaceholder);
-
-            // Button placeholder
-            const buttonCell = row.insertCell(3);
-            buttonCell.className = "px-3 py-4";
-            const buttonPlaceholder = document.createElement('div');
-            buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
-            buttonCell.appendChild(buttonPlaceholder);
-        }
     }
 
     // STEP 1 - Add Set Modal
@@ -195,6 +158,25 @@ let currentSortDirection = 'asc'; // Track current sort direction
 // Misc Variables
 let isLoading = false;
 
+
+function step1LoadDefaultSetList() {
+    // Load default set list (user most recent, most used, and random up to 50)
+    console.log('Loading default set list...');
+    isLoading = true;
+    showLoadingState();
+    makeApiCall('', 'set_name')
+        .then(results => {
+            allSearchResults = [...results];
+            isLoading = false;
+            applyFiltersAndSort();
+        })
+        .catch(error => {
+            console.error('Error fetching default sets:', error);
+            allSearchResults = [];
+            isLoading = false;
+            updateSetResultsTable([]);
+        });
+}
 
 /**
  * Updates the stepper to reflect the current step by toggling classes and visibility
@@ -519,6 +501,47 @@ function updateFilterOptions() {
         sportFilter.appendChild(option);
     });
     sportFilter.value = selectedSport;
+}
+
+
+// Add this function to create loading state indicators
+function showLoadingState() {
+    const tableBody = document.getElementById('setResultsTable');
+    tableBody.innerHTML = '';
+
+    // Create loading rows
+    for (let i = 0; i < 3; i++) {
+        const row = tableBody.insertRow();
+        row.className = "animate-pulse bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+
+        // Set name with loading placeholder
+        const nameCell = row.insertCell(0);
+        nameCell.className = "px-3 py-4";
+        const namePlaceholder = document.createElement('div');
+        namePlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4";
+        nameCell.appendChild(namePlaceholder);
+
+        // Year with loading placeholder
+        const yearCell = row.insertCell(1);
+        yearCell.className = "px-3 py-4";
+        const yearPlaceholder = document.createElement('div');
+        yearPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16";
+        yearCell.appendChild(yearPlaceholder);
+
+        // Sport with loading placeholder
+        const sportCell = row.insertCell(2);
+        sportCell.className = "px-3 py-4";
+        const sportPlaceholder = document.createElement('div');
+        sportPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-24";
+        sportCell.appendChild(sportPlaceholder);
+
+        // Button placeholder
+        const buttonCell = row.insertCell(3);
+        buttonCell.className = "px-3 py-4";
+        const buttonPlaceholder = document.createElement('div');
+        buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
+        buttonCell.appendChild(buttonPlaceholder);
+    }
 }
 
 

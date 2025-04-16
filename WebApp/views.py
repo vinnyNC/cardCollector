@@ -39,31 +39,108 @@ def add_card_1(request):
 
 def set_search_name(request):
     # Get variables from query
-    set_search_text = request.GET.get('setName')
+    set_search_text = request.GET.get('setName', '')
+    user_id = request.user.id if request.user.is_authenticated else None
 
-    # Validate the search term
-    if len(set_search_text) < 1:
-        return JsonResponse({'error': 'Search term must be at least 1 character long.'}, status=400)
+    # Initialize the results list
+    results = []
 
-    # Use Django ORM instead of raw SQL
-    matching_sets = CardSet.objects.filter(
-        name__icontains=set_search_text,
-        is_deleted=False
-    ).select_related('sport').order_by('name')
+    if user_id:
+        # Get the most recent sets the user has added cards to
+        recent_sets_subquery = UserCollectionItem.objects.filter(
+            user_id=user_id,
+            is_deleted=False
+        ).values('card__set').annotate(
+            last_added=models.Max('created_at')
+        ).order_by('-last_added').values_list('card__set', flat=True)[:50]
 
-    # Format the results as a list of dictionaries
-    results = [
-        {
-            'setName': card_set.name,
-            'setYear': card_set.release_year,
-            'setSport': card_set.sport.name,
-            'setID': card_set.id
-        }
-        for card_set in matching_sets
-    ]
+        # Query these recent sets
+        recent_sets = CardSet.objects.filter(
+            id__in=recent_sets_subquery,
+            is_deleted=False
+        ).select_related('sport')
+
+        # Add these to our results
+        for card_set in recent_sets:
+            results.append({
+                'setName': card_set.name,
+                'setYear': card_set.release_year,
+                'setSport': card_set.sport.name,
+                'setID': card_set.id
+            })
+
+    # If we have less than 50 sets, add the most used sets
+    if len(results) < 50 and user_id:
+        # Get most used sets by count of cards
+        most_used_sets_subquery = UserCollectionItem.objects.filter(
+            user_id=user_id,
+            is_deleted=False
+        ).exclude(
+            card__set__in=[r['setID'] for r in results]
+        ).values('card__set').annotate(
+            count=models.Count('id')
+        ).order_by('-count').values_list('card__set', flat=True)[:50 - len(results)]
+
+        # Query these most used sets
+        most_used_sets = CardSet.objects.filter(
+            id__in=most_used_sets_subquery,
+            is_deleted=False
+        ).select_related('sport')
+
+        # Add these to our results
+        for card_set in most_used_sets:
+            results.append({
+                'setName': card_set.name,
+                'setYear': card_set.release_year,
+                'setSport': card_set.sport.name,
+                'setID': card_set.id
+            })
+
+    # If we still have less than 50 sets or if the search text is provided, perform the search
+    if set_search_text:
+        # Validate the search term
+        if len(set_search_text) < 1:
+            return JsonResponse({'error': 'Search term must be at least 1 character long.'}, status=400)
+
+        # Filter sets by search text
+        existing_ids = [r['setID'] for r in results]
+        matching_sets = CardSet.objects.filter(
+            name__icontains=set_search_text,
+            is_deleted=False
+        ).exclude(
+            id__in=existing_ids
+        ).select_related('sport').order_by('name')
+
+        # Add these to our results
+        for card_set in matching_sets:
+            results.append({
+                'setName': card_set.name,
+                'setYear': card_set.release_year,
+                'setSport': card_set.sport.name,
+                'setID': card_set.id
+            })
+    # If we still have less than 50 sets and no search text, add random sets to reach 50
+    elif len(results) < 50:
+        # Get any additional sets to reach 50 total
+        existing_ids = [r['setID'] for r in results]
+        additional_sets = CardSet.objects.filter(
+            is_deleted=False
+        ).exclude(
+            id__in=existing_ids
+        ).select_related('sport').order_by('-release_year')[:50 - len(results)]
+
+        # Add these to our results
+        for card_set in additional_sets:
+            results.append({
+                'setName': card_set.name,
+                'setYear': card_set.release_year,
+                'setSport': card_set.sport.name,
+                'setID': card_set.id
+            })
 
     # Return the results as a JSON response
     return JsonResponse({'results': results})
+
 
 
 def search_cards_in_set(request):
@@ -154,3 +231,9 @@ def get_sports(request):
 
     # Return JSON response with all sports
     return JsonResponse({'results': results})
+
+
+def get_manufacturers(request):
+    manufacturers = Manufacturer.objects.all().order_by('name')
+    manufacturers_data = [{'id': m.id, 'name': m.name} for m in manufacturers]
+    return JsonResponse({'results': manufacturers_data})

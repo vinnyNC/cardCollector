@@ -21,6 +21,7 @@ urlpatterns = [
                   path('api/sets', set_search_name, name='set_name_search'),
                   path('api/cards', search_cards_in_set, name='search_cards_in_set'),
                   path('api/sports', get_sports, name='get_sports'),
+                  path('api/manufacturers', get_manufacturers, name='get_manufacturers'),
 
                   # Test Links
                   path('add_card', add_card_1, name='add_card_1'),
