@@ -42,6 +42,8 @@ def set_search_name(request):
     set_search_text = request.GET.get('setName', '')
     user_id = request.user.id if request.user.is_authenticated else None
 
+    # Search result limit
+    result_limit = 200
     # Initialize the results list
     results = []
 
@@ -70,7 +72,7 @@ def set_search_name(request):
             })
 
     # If we have less than 50 sets, add the most used sets
-    if len(results) < 50 and user_id:
+    if len(results) < result_limit and user_id:
         # Get most used sets by count of cards
         most_used_sets_subquery = UserCollectionItem.objects.filter(
             user_id=user_id,
@@ -79,7 +81,7 @@ def set_search_name(request):
             card__set__in=[r['setID'] for r in results]
         ).values('card__set').annotate(
             count=models.Count('id')
-        ).order_by('-count').values_list('card__set', flat=True)[:50 - len(results)]
+        ).order_by('-count').values_list('card__set', flat=True)[:result_limit - len(results)]
 
         # Query these most used sets
         most_used_sets = CardSet.objects.filter(
@@ -120,14 +122,14 @@ def set_search_name(request):
                 'setID': card_set.id
             })
     # If we still have less than 50 sets and no search text, add random sets to reach 50
-    elif len(results) < 50:
-        # Get any additional sets to reach 50 total
+    elif len(results) < result_limit:
+        # Get any additional sets to reach result_limit total
         existing_ids = [r['setID'] for r in results]
         additional_sets = CardSet.objects.filter(
             is_deleted=False
         ).exclude(
             id__in=existing_ids
-        ).select_related('sport').order_by('-release_year')[:50 - len(results)]
+        ).select_related('sport').order_by('-release_year')[:result_limit - len(results)]
 
         # Add these to our results
         for card_set in additional_sets:
