@@ -201,3 +201,5 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 *.pyc
 media
+WebApp/migrations/*
+static/*
