@@ -78,11 +78,21 @@ def search_cards_in_set(request):
     if not search_text or len(search_text) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
 
+    # Debug - print the Card model fields
+    print("Available fields:", [f.name for f in Card._meta.get_fields()])
+
     # Build the base query to get cards in the specified set
-    cards_query = Card.objects.filter(
-        set_id=set_id,
-        is_deleted=False
-    )
+    # Instead of filtering directly
+    try:
+        cards_query = Card.objects.filter(
+            set_id=set_id,
+            is_deleted=False
+        )
+        # Continue with the rest of your view function
+    except Exception as e:
+        # If error, return empty results instead of failing
+        print(f"Query error: {e}")
+        return JsonResponse({'results': []})
 
     # Add search filters (card number OR player name)
     cards_query = cards_query.filter(

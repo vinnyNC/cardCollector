@@ -232,8 +232,6 @@ class Card(BaseModel):
         Team, through='CardTeam', related_name='cards'
     )
 
-    is_deleted = models.BooleanField(default=False)
-
     class Meta:
         unique_together = ('set', 'card_number', 'parallel')
         indexes = [
