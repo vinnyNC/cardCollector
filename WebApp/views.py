@@ -157,9 +157,6 @@ def search_cards_in_set(request):
     if not search_text or len(search_text) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
 
-    # Debug - print the Card model fields
-    print("Available fields:", [f.name for f in Card._meta.get_fields()])
-
     # Build the base query to get cards in the specified set
     # Instead of filtering directly
     try:
