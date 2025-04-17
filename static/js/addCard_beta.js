@@ -9,18 +9,20 @@ class AddCard {
     constructor() {
         // Log initialization of the AddCard class
         logger.info('Initializing AddCard component');
+        // Shared CardUtils init
+        this.utils = new CardUtils();
 
         this.stepperCurrentStep = 1;
 
         // Initialize each step
-        this.step1 = new Step1();
-        this.step2 = new Step2();
-        this.step3 = new Step3();
-        this.step4 = new Step4();
-        this.step5 = new Step5();
-        this.step6 = new Step6();
-        this.step7 = new Step7();
-        this.step8 = new Step8();
+        this.step1 = new Step1(this.utils);
+        this.step2 = new Step2(this.utils);
+        this.step3 = new Step3(this.utils);
+        this.step4 = new Step4(this.utils);
+        this.step5 = new Step5(this.utils);
+        this.step6 = new Step6(this.utils);
+        this.step7 = new Step7(this.utils);
+        this.step8 = new Step8(this.utils);
 
         // Initialize shared utilities
         this.utils = new CardUtils();
@@ -82,7 +84,7 @@ class AddCard {
  */
 class CardUtils {
     constructor() {
-        // Shared state
+        // Shared states
     }
 
     /**
@@ -141,12 +143,12 @@ class CardUtils {
  * Step 1: Set Selection
  */
 class Step1 {
-    constructor() {
+    constructor(utils) {
         this.allSearchResults = [];
         this.isLoading = false;
         this.currentSortDirection = 'asc'; // Track current sort direction
-        this.allSearchResults = [];
         this.isLoading = false;
+        this.utils = utils;
     }
 
     init() {
@@ -172,17 +174,18 @@ class Step1 {
         console.log('Loading default set list...');
         this.isLoading = true;
         this.showLoadingState();
-        this.makeApiCall('', 'set_name')
+
+        this.utils.makeApiCall('', 'set_name')
             .then(results => {
                 this.allSearchResults = [...results];
                 this.isLoading = false;
-                applyFiltersAndSort();
+                this.applyFiltersAndSort();
             })
             .catch(error => {
                 console.error('Error fetching default sets:', error);
                 this.allSearchResults = [];
                 this.isLoading = false;
-                updateSetResultsTable([]);
+                this.updateSetResultsTable([]);
             });
     }
 
@@ -273,8 +276,8 @@ class Step1 {
         table.parentNode.insertBefore(filterContainer, table);
 
         // Set up event listeners for filters and sorting
-        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort);
-        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort);
+        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort.bind(this));
+        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort.bind(this));
         nameHeader.addEventListener('click', this.toggleSortDirection);
     }
 
@@ -293,6 +296,7 @@ class Step1 {
         this.applyFiltersAndSort();
     }
 
+
     /**
      * Applies current filters and sorting to the results
      */
@@ -302,7 +306,7 @@ class Step1 {
         const sportFilter = document.getElementById('sportFilter').value;
 
         // Filter results - with type coercion fix for the year comparison
-        let filteredResults = allSearchResults.filter(set => {
+        let filteredResults = this.allSearchResults.filter(set => {
             // Convert setYear to string to ensure consistent comparison
             const yearMatch = !yearFilter || String(set.setYear) === String(yearFilter);
             const sportMatch = !sportFilter || set.setSport === sportFilter;
@@ -323,9 +327,6 @@ class Step1 {
 
         // Update table with filtered and sorted results
         this.updateSetResultsTable(filteredResults);
-
-        // Update filter options if this is new data
-        this.updateFilterOptions();
     }
 
 
@@ -430,27 +431,105 @@ class Step2 {
 
 // Similar classes for Steps 3-8
 class Step3 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 class Step4 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 class Step5 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 class Step6 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 class Step7 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 class Step8 { /* ... */
+    constructor() {
+        // Step-specific state
+    }
 
+    init() {
+        // Initialize any listeners or default state for this step
+    }
+
+    activate() {
+        // Code to run when this step becomes active
+    }
+
+    // Step-specific methods
+    // ...
 }
 
 // Initialize the application when the DOM is loaded
