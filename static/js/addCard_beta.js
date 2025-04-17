@@ -11,8 +11,6 @@ class AddCard {
         logger.info('Initializing AddCard component');
 
         this.stepperCurrentStep = 1;
-        this.allSearchResults = [];
-        this.isLoading = false;
 
         // Initialize each step
         this.step1 = new Step1();
@@ -87,18 +85,56 @@ class CardUtils {
         // Shared state
     }
 
-    async makeApiCall(searchTerm, endpoint) {
-        // Implementation of API calls
-        // ...
-    }
+    /**
+     * Makes an API call based on the provided search text and API segment.
+     *
+     * @param {string} searchText - The text to search for and include in the API request.
+     * @param {string} apiSegment - The specific API segment to target for the request.
+     *                              Valid values are 'set_name', 'card_num', 'insert_name',
+     *                              'parallel_name', or 'where_bought'.
+     * @return {Promise<Array|null>} A promise that resolves to an array of results or null if none found
+     */
+    async makeApiCall(searchText, apiSegment) {
+        const encodedSearchText = encodeURIComponent(searchText);
+        let url;
+        switch (apiSegment) {
+            case 'set_name':
+                url = `/api/sets?setName=${encodedSearchText}`;
+                break;
+            case 'card_num':
+                url = `/api/cards?cardNum=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
+                break;
+            case 'insert_name':
+                url = `/api/inserts?insertName=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
+                break;
+            case 'parallel_name':
+                url = `/api/parallel_name/${encodedSearchText}`;
+                break;
+            case 'where_bought':
+                url = `/api/where_bought/${encodedSearchText}`;
+                break;
+            case 'get_sports':
+                url = '/api/sports';
+                break;
+            default:
+                throw new Error(`Unknown API segment: ${apiSegment}`);
+        }
 
-    showLoadingState() {
-        // Show loading indicators
-        // ...
-    }
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-    // Other shared utilities
-    // ...
+            if (data.results && data.results.length > 0) {
+                return data.results;
+            } else {
+                console.log('No results found for:', searchText);
+                return [];
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        }
+    }
 }
 
 /**
@@ -106,6 +142,9 @@ class CardUtils {
  */
 class Step1 {
     constructor() {
+        this.allSearchResults = [];
+        this.isLoading = false;
+        this.currentSortDirection = 'asc'; // Track current sort direction
         this.allSearchResults = [];
         this.isLoading = false;
     }
@@ -129,8 +168,22 @@ class Step1 {
     }
 
     loadDefaultSetList() {
-        // Implementation of step1LoadDefaultSetList
-        // ...
+        // Load default set list (user most recent, most used, and random up to 50)
+        console.log('Loading default set list...');
+        this.isLoading = true;
+        this.showLoadingState();
+        this.makeApiCall('', 'set_name')
+            .then(results => {
+                this.allSearchResults = [...results];
+                this.isLoading = false;
+                applyFiltersAndSort();
+            })
+            .catch(error => {
+                console.error('Error fetching default sets:', error);
+                this.allSearchResults = [];
+                this.isLoading = false;
+                updateSetResultsTable([]);
+            });
     }
 
     setupSearchInput() {
@@ -188,18 +241,164 @@ class Step1 {
     }
 
     addFilterSortControls() {
-        // Implementation...
-        // ...
-    }
+        // Get the table header
+        const tableHeader = document.querySelector('#setSearchResultTable thead tr');
 
-    applyFiltersAndSort() {
-        // Implementation...
-        // ...
+        // Add sort functionality to the name column
+        const nameHeader = tableHeader.querySelector('th:nth-child(1)');
+        nameHeader.classList.add('cursor-pointer', 'select-none');
+        nameHeader.innerHTML = `
+        Set Name
+        <span id="sortIndicator" class="ml-1 text-xs">↑</span>`;
+
+        // Add filter dropdowns above the table
+        const filterContainer = document.createElement('div');
+        filterContainer.className = 'flex gap-4 mb-4';
+        filterContainer.innerHTML = `
+        <div class="w-1/3">
+            <label for="yearFilter" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Filter by Year</label>
+            <select id="yearFilter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option value="">All Years</option>
+            </select>
+        </div>
+        <div class="w-1/3">
+            <label for="sportFilter" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Filter by Sport</label>
+            <select id="sportFilter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option value="">All Sports</option>
+            </select>
+        </div>`;
+
+        // Insert filter controls before the table
+        const table = document.getElementById('setSearchResultTable');
+        table.parentNode.insertBefore(filterContainer, table);
+
+        // Set up event listeners for filters and sorting
+        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort);
+        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort);
+        nameHeader.addEventListener('click', this.toggleSortDirection);
     }
 
     updateSetResultsTable(results) {
         // Implementation...
         // ...
+    }
+
+    /**
+     * Toggles the sort direction for the set name column
+     */
+    toggleSortDirection() {
+        this.currentSortDirection = this.currentSortDirection === 'asc' ? 'desc' : 'asc';
+        const sortIndicator = document.getElementById('sortIndicator');
+        sortIndicator.textContent = this.currentSortDirection === 'asc' ? '↑' : '↓';
+        this.applyFiltersAndSort();
+    }
+
+    /**
+     * Applies current filters and sorting to the results
+     */
+    applyFiltersAndSort() {
+        // Get filter values
+        const yearFilter = document.getElementById('yearFilter').value;
+        const sportFilter = document.getElementById('sportFilter').value;
+
+        // Filter results - with type coercion fix for the year comparison
+        let filteredResults = allSearchResults.filter(set => {
+            // Convert setYear to string to ensure consistent comparison
+            const yearMatch = !yearFilter || String(set.setYear) === String(yearFilter);
+            const sportMatch = !sportFilter || set.setSport === sportFilter;
+            return yearMatch && sportMatch;
+        });
+
+        // Sort results
+        filteredResults.sort((a, b) => {
+            const setNameA = a.setName.toLowerCase();
+            const setNameB = b.setName.toLowerCase();
+
+            if (this.currentSortDirection === 'asc') {
+                return setNameA.localeCompare(setNameB);
+            } else {
+                return setNameB.localeCompare(setNameA);
+            }
+        });
+
+        // Update table with filtered and sorted results
+        this.updateSetResultsTable(filteredResults);
+
+        // Update filter options if this is new data
+        this.updateFilterOptions();
+    }
+
+    /**
+     * Updates the filter dropdown options based on available data
+     */
+    updateFilterOptions() {
+        // Get unique years and sports - convert years to strings
+        const years = [...new Set(this.allSearchResults.map(set => String(set.setYear)))].sort();
+        const sports = [...new Set(this.allSearchResults.map(set => set.setSport))].sort();
+
+        // Update year filter options
+        const yearFilter = document.getElementById('yearFilter');
+        const selectedYear = yearFilter.value;
+        yearFilter.innerHTML = '<option value="">All Years</option>';
+        years.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearFilter.appendChild(option);
+        });
+        yearFilter.value = selectedYear;
+
+        // Update sport filter options
+        const sportFilter = document.getElementById('sportFilter');
+        const selectedSport = sportFilter.value;
+        sportFilter.innerHTML = '<option value="">All Sports</option>';
+        sports.forEach(sport => {
+            const option = document.createElement('option');
+            option.value = sport;
+            option.textContent = sport;
+            sportFilter.appendChild(option);
+        });
+        sportFilter.value = selectedSport;
+    }
+
+    // Add this function to create loading state indicators
+    showLoadingState() {
+        const tableBody = document.getElementById('setResultsTable');
+        tableBody.innerHTML = '';
+
+        // Create loading rows
+        for (let i = 0; i < 3; i++) {
+            const row = tableBody.insertRow();
+            row.className = "animate-pulse bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+
+            // Set name with loading placeholder
+            const nameCell = row.insertCell(0);
+            nameCell.className = "px-3 py-4";
+            const namePlaceholder = document.createElement('div');
+            namePlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4";
+            nameCell.appendChild(namePlaceholder);
+
+            // Year with loading placeholder
+            const yearCell = row.insertCell(1);
+            yearCell.className = "px-3 py-4";
+            const yearPlaceholder = document.createElement('div');
+            yearPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16";
+            yearCell.appendChild(yearPlaceholder);
+
+            // Sport with loading placeholder
+            const sportCell = row.insertCell(2);
+            sportCell.className = "px-3 py-4";
+            const sportPlaceholder = document.createElement('div');
+            sportPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-24";
+            sportCell.appendChild(sportPlaceholder);
+
+            // Button placeholder
+            const buttonCell = row.insertCell(3);
+            buttonCell.className = "px-3 py-4";
+            const buttonPlaceholder = document.createElement('div');
+            buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
+            buttonCell.appendChild(buttonPlaceholder);
+        }
     }
 }
 

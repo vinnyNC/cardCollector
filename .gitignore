@@ -203,3 +203,4 @@ fabric.properties
 media
 WebApp/migrations/*
 static/CACHE/*
+.junie/*
