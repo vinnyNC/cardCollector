@@ -328,8 +328,14 @@ class Step1 {
         this.updateFilterOptions();
     }
 
+
     /**
-     * Updates the filter dropdown options based on available data
+     * Updates the filter options for year and sport based on the list of search results.
+     * This method dynamically generates the dropdown options for filtering by year and sport,
+     * ensuring they only include the unique values present in the search results. The existing
+     * selected values for the filters are preserved if they still exist in the updated options.
+     *
+     * @return {void} This method does not return any value.
      */
     updateFilterOptions() {
         // Get unique years and sports - convert years to strings
