@@ -28,7 +28,7 @@ class DebugManager {
     constructor(options = {}) {
         this.options = {
             enabled: options.enabled !== undefined ? options.enabled : true,
-            level: options.level || 'info',
+            level: options.level || 'debug',
             persistLogs: options.persistLogs || false,
             sentryEnabled: options.sentryEnabled || false,
             sentryDSN: options.sentryDSN || '',
@@ -541,10 +541,10 @@ class DebugManager {
      */
     _saveLogs() {
         try {
-            localStorage.setItem('debug_logs', JSON.stringify(this.logs.slice(-100)));
+            // localStorage.setItem('debug_logs', JSON.stringify(this.logs.slice(-100)));
         } catch (e) {
             // Handle localStorage errors (e.g., quota exceeded)
-            console.warn('Failed to save logs to localStorage', e);
+            // console.warn('Failed to save logs to localStorage', e);
         }
     }
 

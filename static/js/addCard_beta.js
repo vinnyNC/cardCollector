@@ -10,6 +10,9 @@ class AddCard {
         // Log initialization of the AddCard class
         logger.info('Initializing AddCard component');
 
+        // Set logger to debug mode
+        logger.setLevel('debug');
+
         // Configuration
         this.config = {
             // Add any configuration options here
@@ -33,6 +36,7 @@ class AddCard {
         this.stepperCurrentStep = 1;
 
         // Initialize each step
+        logger.info('AddCard constructor: State before creating Step1:', this.state);
         this.step1 = new Step1(this, this.utils, this.config, this.state);
         this.step2 = new Step2(this.utils);
         this.step3 = new Step3(this.utils);
@@ -202,6 +206,8 @@ class Step1 {
         this.utils = utils;
         this.config = config;
         this.state = state;
+
+        logger.info("Step1 initialized with state:", this.state);
     }
 
     init() {
@@ -593,7 +599,12 @@ class Step1 {
     `;
 
         // Add click event to select button
-        selectButton.addEventListener('click', function () {
+        selectButton.addEventListener('click', () => { // Arrow function
+            logger.group('--- Select Button Clicked ---');
+            logger.debug('Inside click handler, this:', this); // Log the 'this' context
+            logger.debug('Inside click handler, this.state:', this.state); // Log this.state specifically
+            logger.debug('Select button click handler: this.state:', this.state); // Log with your logger too
+
             // Add visual feedback when selected
             row.classList.add('bg-blue-100', 'dark:bg-blue-900');
 
@@ -602,13 +613,29 @@ class Step1 {
                 input.value = setName;
             });
 
-            // Set selected set in state
-            this.state.selectedSet = setID;
+            // --- The line causing the error (around 608) ---
+            try {
+                if (this.state) { // Add a check before accessing
+                    this.state.selectedSet = {id: setID, name: setName, year: setYear, sport: setSport};
+                    logger.info('Selected Set updated in state:', this.state.selectedSet);
+                } else {
+                    logger.error("CRITICAL: this.state is undefined just before assignment!");
+                }
+            } catch (error) {
+                logger.error("Error assigning to this.state.selectedSet:", error, this); // Log error and 'this' context
+            }
+            // --- End error line ---
 
-            // Advance to step 2
+
+            // Advance to step 2 using the stored AddCard instance reference
             setTimeout(() => {
-                this.addCardInstance.stepperChangeStep(2);
-            }, 200); // Small delay for visual feedback
+                if (this.addCardInstance && typeof this.addCardInstance.stepperChangeStep === 'function') {
+                    this.addCardInstance.stepperChangeStep(2);
+                } else {
+                    logger.error("Cannot call stepperChangeStep. addCardInstance:", this.addCardInstance);
+                }
+            }, 200);
+            logger.groupEnd();
         });
 
         selectCell.appendChild(selectButton);
