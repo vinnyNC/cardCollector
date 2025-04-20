@@ -13,29 +13,47 @@
     </div>
 
     <!-- Filter & Sort Options -->
-    <div class="flex flex-wrap gap-3 mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <!-- Filter Dropdown -->
-        <div>
-            <label for="cardFilterSelect" class="sr-only">Filter results</label>
-            <select id="cardFilterSelect"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                <option value="">All Types</option>
-                <option value="base">Base Cards</option>
-                <option value="parallel">Parallels</option>
-                <option value="insert">Inserts</option>
-            </select>
+        <div class="w-full">
+            <label for="cardFilterSelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter By
+                Type</label>
+            <div class="relative">
+                <select id="cardFilterSelect"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pl-4 pr-10 appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <option value="">All Types</option>
+                    <option value="base">Base Cards</option>
+                    <option value="parallel">Parallels</option>
+                    <option value="insert">Inserts</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
         </div>
 
         <!-- Sort Dropdown -->
-        <div>
-            <label for="cardSortSelect" class="sr-only">Sort results</label>
-            <select id="cardSortSelect"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                <option value="number_asc">Card # (Ascending)</option>
-                <option value="number_desc">Card # (Descending)</option>
-                <option value="name_asc">Player Name (A-Z)</option>
-                <option value="name_desc">Player Name (Z-A)</option>
-            </select>
+        <div class="w-full">
+            <label for="cardSortSelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sort
+                By</label>
+            <div class="relative">
+                <select id="cardSortSelect"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pl-4 pr-10 appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <option value="number_asc">Card # (Ascending)</option>
+                    <option value="number_desc">Card # (Descending)</option>
+                    <option value="name_asc">Player Name (A-Z)</option>
+                    <option value="name_desc">Player Name (Z-A)</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
