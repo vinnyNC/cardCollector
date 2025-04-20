@@ -20,7 +20,7 @@ class AddCard {
                 start: 1900, end: new Date().getFullYear()
             }, ELEMENT_IDS: {
                 PREV_BUTTON: 'btnPrev', NEXT_BUTTON: 'btnNext', STEP_PREFIX: 'addCardStep', STEP_1: {
-                    SPORT_SELECT: 'newSetSport', YEAR_SELECT: 'newSetYear'
+                    SPORT_SELECT: 'newSetSport', YEAR_SELECT: 'newSetYear', MANUFACTURER_SELECT: 'newSetManufacturer',
                 }
             }
         }
@@ -38,13 +38,13 @@ class AddCard {
         // Initialize each step
         logger.info('AddCard constructor: State before creating Step1:', this.state);
         this.step1 = new Step1(this, this.utils, this.config, this.state);
-        this.step2 = new Step2(this.utils);
-        this.step3 = new Step3(this.utils);
-        this.step4 = new Step4(this.utils);
-        this.step5 = new Step5(this.utils);
-        this.step6 = new Step6(this.utils);
-        this.step7 = new Step7(this.utils);
-        this.step8 = new Step8(this.utils);
+        this.step2 = new Step2(this, this.utils, this.config, this.state);
+        this.step3 = new Step3(this, this.utils, this.config, this.state);
+        this.step4 = new Step4(this, this.utils, this.config, this.state);
+        this.step5 = new Step5(this, this.utils, this.config, this.state);
+        this.step6 = new Step6(this, this.utils, this.config, this.state);
+        this.step7 = new Step7(this, this.utils, this.config, this.state);
+        this.step8 = new Step8(this, this.utils, this.config, this.state);
 
         // Check for saved state and load
         this.loadSavedState();
@@ -171,6 +171,9 @@ class CardUtils {
             case 'get_sports':
                 url = '/api/sports';
                 break;
+            case 'get_manufacturers':
+                url = '/api/manufacturers';
+                break;
             default:
                 throw new Error(`Unknown API segment: ${apiSegment}`);
         }
@@ -296,10 +299,13 @@ class Step1 {
 
 
         // Set up years dropdown
-        this.setupYearDropdown();
+        this.setupYearForNewSetModal();
 
         // Fetch sports
-        this.fetchSportsForDropdown();
+        this.fetchSportsForNewSetModal();
+
+        // Fetch manufacturers
+        this.fetchManufacturersForNewSetModal();
 
         // Close modal
         cancelAddSetButton.addEventListener('click', () => {
@@ -313,7 +319,7 @@ class Step1 {
         });
     }
 
-    setupYearDropdown() {
+    setupYearForNewSetModal() {
         const yearSelect = document.getElementById(this.config.ELEMENT_IDS.STEP_1.YEAR_SELECT);
         const currentYear = new Date().getFullYear();
         for (let year = currentYear; year >= 1900; year--) {
@@ -324,7 +330,7 @@ class Step1 {
         }
     }
 
-    fetchSportsForDropdown() {
+    fetchSportsForNewSetModal() {
         const sportSelect = document.getElementById(this.config.ELEMENT_IDS.STEP_1.SPORT_SELECT);
         this.utils.makeApiCall('', 'get_sports')
             .then(results => {
@@ -338,6 +344,30 @@ class Step1 {
                         option.value = sport.sport_id;  // Use sport_id as the value
                         option.textContent = sport.sport_name;
                         sportSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('No sports found in API response');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching sports:', error);
+            });
+    }
+
+    fetchManufacturersForNewSetModal() {
+        const manufacturerSelect = document.getElementById(this.config.ELEMENT_IDS.STEP_1.MANUFACTURER_SELECT);
+        this.utils.makeApiCall('', 'get_manufacturers')
+            .then(results => {
+                if (results && results.length > 0) {
+                    // Sort sports alphabetically by name
+                    results.sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Add each sport to the dropdown
+                    results.forEach(manufacturer => {
+                        const option = document.createElement('option');
+                        option.value = manufacturer.id;  // Use sport_id as the value
+                        option.textContent = manufacturer.name;
+                        manufacturerSelect.appendChild(option);
                     });
                 } else {
                     console.error('No sports found in API response');
@@ -680,7 +710,7 @@ class Step1 {
  * Step 2: Card Details
  */
 class Step2 {
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -698,7 +728,7 @@ class Step2 {
 
 // Similar classes for Steps 3-8
 class Step3 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -715,7 +745,7 @@ class Step3 { /* ... */
 }
 
 class Step4 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -732,7 +762,7 @@ class Step4 { /* ... */
 }
 
 class Step5 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -749,7 +779,7 @@ class Step5 { /* ... */
 }
 
 class Step6 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -766,7 +796,7 @@ class Step6 { /* ... */
 }
 
 class Step7 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 
@@ -783,7 +813,7 @@ class Step7 { /* ... */
 }
 
 class Step8 { /* ... */
-    constructor() {
+    constructor(addCardInstance, utils, config, state) {
         // Step-specific state
     }
 

@@ -11,6 +11,17 @@
                        class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                        placeholder="2025 Topps Series 1 Baseball" required>
             </div>
+
+            <div class="mb-4">
+                <label for="newSetManufacturer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Manufacturer</label>
+                <select id="newSetManufacturer" name="newSetManufacturer"
+                        class="w-full mt-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        required>
+                    <option value="" disabled selected>Select Manufacturer</option>
+                    <!-- Manufacturers will be populated from API -->
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label for="newSetYear" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year</label>
                 <select id="newSetYear" name="newSetYear"
