@@ -9,7 +9,23 @@ class AddCard {
     constructor() {
         // Log initialization of the AddCard class
         logger.info('Initializing AddCard component');
-        // Shared CardUtils init
+
+        // Configuration
+        this.config = {
+            // Add any configuration options here
+            API_DEBOUNCE_DELAY: 300, MAX_STEPS: 8, YEAR_RANGE: {
+                start: 1900, end: new Date().getFullYear()
+            }, ELEMENT_IDS: {
+                PREV_BUTTON: 'btnPrev', NEXT_BUTTON: 'btnNext', STEP_PREFIX: 'addCardStep'
+            }
+        }
+
+        // State management
+        this.state = {
+            currentStep: 1, selectedSet: null, selectedCard: null, formData: {},
+        }
+
+        // Init utilities
         this.utils = new CardUtils();
 
         this.stepperCurrentStep = 1;
@@ -24,9 +40,10 @@ class AddCard {
         this.step7 = new Step7(this.utils);
         this.step8 = new Step8(this.utils);
 
-        // Initialize shared utilities
-        this.utils = new CardUtils();
+        // Check for saved state and load
+        this.loadSavedState();
 
+        // Initialize the application
         this.init();
     }
 
@@ -56,26 +73,52 @@ class AddCard {
         this.step1.init();
     }
 
-    stepperChangeStep(step) {
+    /**
+
+     * Updates the stepper to reflect the current step by toggling classes and visibility
+     * for step indicators and content, as well as updating navigation buttons.
+     *
+     * @param {number} step The current step to set as active.
+     * @param {number} [maxSteps=8] The total number of steps in the stepper. Defaults to 8 if not provided.
+     * @return {void} This method does not return a value.
+     */
+    stepperChangeStep(step, maxSteps = 8) {
         // Implementation of step change logic
         this.stepperCurrentStep = step;
 
-        // Update UI for step change
-        // ...
+        // Process all steps in a single loop
+        [...Array(maxSteps)].forEach((_, i) => {
+            const idx = i + 1;
+            const isActive = idx === step;
 
-        // Disable/enable navigation buttons
+            // Update step indicator
+            const item = document.getElementById(`stepperListItem${idx}`);
+            if (item) {
+                // Toggle text classes
+                ['text-blue-600', 'dark:text-blue-500'].forEach(cls => item.classList.toggle(cls, isActive));
+
+                // Toggle indicator border classes
+                const dot = item.querySelector('span');
+                if (dot) {
+                    ['border-blue-600', 'dark:border-blue-500'].forEach(cls => dot.classList.toggle(cls, isActive));
+                    ['border-gray-500', 'dark:border-gray-400'].forEach(cls => dot.classList.toggle(cls, !isActive));
+                }
+            }
+
+            // Toggle content visibility
+            document.getElementById(`addCardStep${idx}`)?.classList.toggle('hidden', !isActive);
+        });
+
+        // Update navigation buttons
         document.getElementById('btnPrev').disabled = step === 1;
-
-        // Hide all step divs
-        for (let i = 1; i <= 8; i++) {
-            document.getElementById(`addCardStep${i}`).classList.add('hidden');
-        }
-
-        // Show current step
-        document.getElementById(`addCardStep${step}`).classList.remove('hidden');
+        document.getElementById('btnNext').disabled = step === maxSteps;
 
         // Initialize the newly active step if needed
         this[`step${step}`].activate();
+    }
+
+    loadSavedState() {
+
     }
 }
 
@@ -97,6 +140,9 @@ class CardUtils {
      * @return {Promise<Array|null>} A promise that resolves to an array of results or null if none found
      */
     async makeApiCall(searchText, apiSegment) {
+
+        logger.info(`Making API call with searchText: ${searchText}, apiSegment: ${apiSegment}`);
+
         const encodedSearchText = encodeURIComponent(searchText);
         let url;
         switch (apiSegment) {
@@ -125,6 +171,8 @@ class CardUtils {
         try {
             const response = await fetch(url);
             const data = await response.json();
+
+            logger.info(`API response for searchText: ${searchText}, apiSegment: ${apiSegment}:`, data);
 
             if (data.results && data.results.length > 0) {
                 return data.results;
@@ -276,14 +324,45 @@ class Step1 {
         table.parentNode.insertBefore(filterContainer, table);
 
         // Set up event listeners for filters and sorting
-        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort.bind(this));
-        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort.bind(this));
+        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort);
+        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort);
         nameHeader.addEventListener('click', this.toggleSortDirection);
     }
 
     updateSetResultsTable(results) {
-        // Implementation...
-        // ...
+        // Get the table body and clear existing rows
+        const tableBody = document.getElementById('setResultsTable');
+        tableBody.innerHTML = '';
+
+        // If still loading, show loading state
+        if (this.isLoading) {
+            this.showLoadingState();
+            return;
+        }
+
+        // If no results, show a styled empty message
+        if (results.length === 0) {
+            const row = tableBody.insertRow();
+            row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+            const cell = row.insertCell(0);
+            cell.colSpan = 4;
+            cell.className = "px-6 py-8 text-center";
+
+            cell.innerHTML = `
+           <div class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+               <svg class="w-12 h-12 mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+               </svg>
+               <p class="text-lg font-medium">No matching sets found</p>
+               <p class="text-sm">Try a different search term or adjust your filters</p>
+           </div>
+       `;
+        } else {
+            // Add the filtered sets to the table with alternating row colors
+            results.forEach((set, index) => {
+                this.addSetTableItem(set.setName, set.setYear, set.setSport, set.setID, index);
+            });
+        }
     }
 
     /**
@@ -406,6 +485,110 @@ class Step1 {
             buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
             buttonCell.appendChild(buttonPlaceholder);
         }
+    }
+
+    addSetTableItem(setName, setYear, setSport, setID, index) {
+        // Get the table body
+        const tableBody = document.getElementById('setResultsTable');
+
+        // Insert new item row
+        if (index === 0) {
+            this.setTableNewItem(tableBody);
+            index++;
+        } else {
+            index++;
+        }
+        // Create a new row with alternating background colors
+        const row = tableBody.insertRow();
+        const isEven = index % 2 === 0;
+        row.className = isEven ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150" : "bg-gray-50 border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150";
+        row.dataset.setID = setID;
+
+        // Create cells with proper styling
+        const nameCell = row.insertCell(0);
+        nameCell.className = "px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
+        nameCell.textContent = setName;
+
+        const yearCell = row.insertCell(1);
+        yearCell.className = "px-4 py-3";
+        yearCell.textContent = setYear;
+
+        const sportCell = row.insertCell(2);
+        sportCell.className = "px-4 py-3";
+        // Create badge for sport category
+        const sportBadge = document.createElement('span');
+        sportBadge.className = "bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300";
+        sportBadge.textContent = setSport;
+        sportCell.appendChild(sportBadge);
+
+        // Add the Select button cell
+        const selectCell = row.insertCell(3);
+        selectCell.className = "px-4 py-3 text-right";
+
+        // Create the Select button with improved styling
+        const selectButton = document.createElement('button');
+        selectButton.type = "button";
+        selectButton.className = "px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-200 flex items-center gap-1";
+
+        // Add icon and text to button
+        selectButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Select</span>
+    `;
+
+        // Add click event to select button
+        selectButton.addEventListener('click', function () {
+            // Add visual feedback when selected
+            row.classList.add('bg-blue-100', 'dark:bg-blue-900');
+
+            // Fill the set input with the selected set name
+            document.querySelectorAll('input[name="set"]').forEach(input => {
+                input.value = setName;
+            });
+
+            // Advance to step 2
+            setTimeout(() => {
+                this.stepperChangeStep(2);
+            }, 200); // Small delay for visual feedback
+        });
+
+        selectCell.appendChild(selectButton);
+    }
+
+    setTableNewItem(tableBody) {
+        // Create the "Add New" row with distinct styling
+        const row = tableBody.insertRow(0);
+        row.className = "bg-green-50 border-b border-green-200 dark:bg-gray-700 dark:border-gray-600 hover:bg-green-100 dark: hover:bg - gray - 600 transition - colors duration - 150";
+
+        // Create the content cell that spans all columns
+        const cell = row.insertCell(0);
+        cell.colSpan = 4;
+        cell.className = "px-4 py-3";
+
+        // Add the content with add button
+        cell.innerHTML = `
+        <div class="flex justify-between items-center">
+            <div>
+                <span class="font-medium text-gray-900 dark:text-white">Can't find your set?</span>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Add it to our database</p>
+            </div>
+            <button type="button" id="btnAddNewSet" 
+                    class="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 transition-all duration-200 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add New Set</span>
+            </button>
+        </div>
+    `;
+
+        // Add event listener for the add button
+        document.getElementById('btnAddNewSet').addEventListener('click', function () {
+            // Open Modal
+            document.getElementById('addNewSetModal').classList.remove('hidden');
+        });
     }
 }
 
