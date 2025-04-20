@@ -28,12 +28,12 @@ class AddCard {
         }
 
         // Init utilities
-        this.utils = new CardUtils();
+        this.utils = new CardUtils(this.state);
 
         this.stepperCurrentStep = 1;
 
         // Initialize each step
-        this.step1 = new Step1(this.utils, this.config, this.state);
+        this.step1 = new Step1(this, this.utils, this.config, this.state);
         this.step2 = new Step2(this.utils);
         this.step3 = new Step3(this.utils);
         this.step4 = new Step4(this.utils);
@@ -128,8 +128,9 @@ class AddCard {
  * Utility functions shared across steps
  */
 class CardUtils {
-    constructor() {
+    constructor(state) {
         // Shared states
+        this.state = state;
     }
 
     /**
@@ -152,10 +153,10 @@ class CardUtils {
                 url = `/api/sets?setName=${encodedSearchText}`;
                 break;
             case 'card_num':
-                url = `/api/cards?cardNum=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
+                url = `/api/cards?cardNum=${encodedSearchText}&setID=${encodeURIComponent(this.state.selectedSet.id)}`;
                 break;
             case 'insert_name':
-                url = `/api/inserts?insertName=${encodedSearchText}&setID=${encodeURIComponent(setId)}`;
+                url = `/api/inserts?insertName=${encodedSearchText}&setID=${encodeURIComponent(this.state.selectedSet.id)}`;
                 break;
             case 'parallel_name':
                 url = `/api/parallel_name/${encodedSearchText}`;
@@ -193,11 +194,11 @@ class CardUtils {
  * Step 1: Set Selection
  */
 class Step1 {
-    constructor(utils, config, state) {
+    constructor(addCardInstance, utils, config, state) {
+        this.addCardInstance = addCardInstance;
         this.allSearchResults = [];
         this.isLoading = false;
         this.currentSortDirection = 'asc'; // Track current sort direction
-        this.isLoading = false;
         this.utils = utils;
         this.config = config;
         this.state = state;
@@ -325,7 +326,7 @@ class Step1 {
                     // Sort sports alphabetically by name
                     results.sort((a, b) => a.sport_name.localeCompare(b.sport_name));
 
-                    // Add each sport to the dropdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                    // Add each sport to the dropdown
                     results.forEach(sport => {
                         const option = document.createElement('option');
                         option.value = sport.sport_id;  // Use sport_id as the value
@@ -601,9 +602,12 @@ class Step1 {
                 input.value = setName;
             });
 
+            // Set selected set in state
+            this.state.selectedSet = setID;
+
             // Advance to step 2
             setTimeout(() => {
-                this.stepperChangeStep(2);
+                this.addCardInstance.stepperChangeStep(2);
             }, 200); // Small delay for visual feedback
         });
 
