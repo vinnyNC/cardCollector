@@ -246,16 +246,20 @@ class Step1 {
         if (setSearchInput) {
             // Add debounce to prevent excessive searches while typing
             let searchTimeout;
-            setSearchInput.addEventListener('input', function () {
+            // Use arrow function for the event listener to capture the correct 'this'
+            setSearchInput.addEventListener('input', () => { // Changed to arrow function
                 clearTimeout(searchTimeout);
 
                 // Show loading state immediately
+                // 'this' now correctly refers to the Step1 instance
                 this.isLoading = true;
                 this.showLoadingState();
 
                 searchTimeout = setTimeout(async () => {
-                    const searchTerm = this.value.trim().toLowerCase();
+                    // Access input value directly from the element variable
+                    const searchTerm = setSearchInput.value.trim().toLowerCase(); // Changed from this.value
                     try {
+                        // 'this' is correctly inherited by the arrow function
                         const results = await this.utils.makeApiCall(searchTerm, 'set_name');
 
                         // Store original results for filtering
@@ -263,14 +267,16 @@ class Step1 {
 
                         // Apply any active filters and sorting
                         this.isLoading = false;
-                        this.applyFiltersAndSort();
+                        this.applyFiltersAndSort(); // Should now work correctly
                     } catch (error) {
                         console.error('Search failed:', error);
-                        allSearchResults = [];
-                        isLoading = false;
-                        this.updateSetResultsTable([]);
+                        // Ensure class properties are updated correctly using 'this'
+                        this.allSearchResults = []; // Added 'this.'
+                        this.isLoading = false;     // Added 'this.'
+                        this.updateSetResultsTable([]); // Should now work correctly
                     }
-                }, 300);
+                    // Use the configured debounce delay for consistency
+                }, this.config.API_DEBOUNCE_DELAY || 300); // Use config or default to 300
             });
         }
     }
@@ -450,6 +456,9 @@ class Step1 {
 
         // Update table with filtered and sorted results
         this.updateSetResultsTable(filteredResults);
+
+        // Update filter options
+        this.updateFilterOptions();
     }
 
 
@@ -604,7 +613,7 @@ class Step1 {
     setTableNewItem(tableBody) {
         // Create the "Add New" row with distinct styling
         const row = tableBody.insertRow(0);
-        row.className = "bg-green-50 border-b border-green-200 dark:bg-gray-700 dark:border-gray-600 hover:bg-green-100 dark: hover:bg - gray - 600 transition - colors duration - 150";
+        row.className = "bg-green-50 border-b border-green-200 dark:bg-gray-700 dark:border-gray-600";
 
         // Create the content cell that spans all columns
         const cell = row.insertCell(0);
