@@ -16,7 +16,9 @@ class AddCard {
             API_DEBOUNCE_DELAY: 300, MAX_STEPS: 8, YEAR_RANGE: {
                 start: 1900, end: new Date().getFullYear()
             }, ELEMENT_IDS: {
-                PREV_BUTTON: 'btnPrev', NEXT_BUTTON: 'btnNext', STEP_PREFIX: 'addCardStep'
+                PREV_BUTTON: 'btnPrev', NEXT_BUTTON: 'btnNext', STEP_PREFIX: 'addCardStep', STEP_1: {
+                    SPORT_SELECT: 'newSetSport', YEAR_SELECT: 'newSetYear'
+                }
             }
         }
 
@@ -31,7 +33,7 @@ class AddCard {
         this.stepperCurrentStep = 1;
 
         // Initialize each step
-        this.step1 = new Step1(this.utils);
+        this.step1 = new Step1(this.utils, this.config, this.state);
         this.step2 = new Step2(this.utils);
         this.step3 = new Step3(this.utils);
         this.step4 = new Step4(this.utils);
@@ -191,12 +193,14 @@ class CardUtils {
  * Step 1: Set Selection
  */
 class Step1 {
-    constructor(utils) {
+    constructor(utils, config, state) {
         this.allSearchResults = [];
         this.isLoading = false;
         this.currentSortDirection = 'asc'; // Track current sort direction
         this.isLoading = false;
         this.utils = utils;
+        this.config = config;
+        this.state = state;
     }
 
     init() {
@@ -240,11 +244,33 @@ class Step1 {
     setupSearchInput() {
         const setSearchInput = document.getElementById('setName');
         if (setSearchInput) {
-            // Add debounce logic
+            // Add debounce to prevent excessive searches while typing
             let searchTimeout;
-            setSearchInput.addEventListener('input', () => {
-                // Implementation...
-                // ...
+            setSearchInput.addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+
+                // Show loading state immediately
+                this.isLoading = true;
+                this.showLoadingState();
+
+                searchTimeout = setTimeout(async () => {
+                    const searchTerm = this.value.trim().toLowerCase();
+                    try {
+                        const results = await this.utils.makeApiCall(searchTerm, 'set_name');
+
+                        // Store original results for filtering
+                        this.allSearchResults = [...results];
+
+                        // Apply any active filters and sorting
+                        this.isLoading = false;
+                        this.applyFiltersAndSort();
+                    } catch (error) {
+                        console.error('Search failed:', error);
+                        allSearchResults = [];
+                        isLoading = false;
+                        this.updateSetResultsTable([]);
+                    }
+                }, 300);
             });
         }
     }
@@ -252,17 +278,15 @@ class Step1 {
     setupAddSetModal() {
         // Getting elements
         const addSetNewModal = document.getElementById('addNewSetModal');
-        const addNewSetButton = document.getElementById('btnAddNewSet');
         const cancelAddSetButton = document.getElementById('cancelAddSet');
         const submitAddSet = document.getElementById('submitAddSet');
-        const yearSelect = document.getElementById('newSetYear');
-        const sportSelect = document.getElementById('newSetSport');
+
 
         // Set up years dropdown
-        this.setupYearDropdown(yearSelect);
+        this.setupYearDropdown();
 
         // Fetch sports
-        this.fetchSportsForDropdown(sportSelect);
+        this.fetchSportsForDropdown();
 
         // Close modal
         cancelAddSetButton.addEventListener('click', () => {
@@ -276,7 +300,8 @@ class Step1 {
         });
     }
 
-    setupYearDropdown(yearSelect) {
+    setupYearDropdown() {
+        const yearSelect = document.getElementById(this.config.ELEMENT_IDS.STEP_1.YEAR_SELECT);
         const currentYear = new Date().getFullYear();
         for (let year = currentYear; year >= 1900; year--) {
             const option = document.createElement('option');
@@ -286,9 +311,28 @@ class Step1 {
         }
     }
 
-    fetchSportsForDropdown(sportSelect) {
-        // Implementation...
-        // ...
+    fetchSportsForDropdown() {
+        const sportSelect = document.getElementById(this.config.ELEMENT_IDS.STEP_1.SPORT_SELECT);
+        this.utils.makeApiCall('', 'get_sports')
+            .then(results => {
+                if (results && results.length > 0) {
+                    // Sort sports alphabetically by name
+                    results.sort((a, b) => a.sport_name.localeCompare(b.sport_name));
+
+                    // Add each sport to the dropdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                    results.forEach(sport => {
+                        const option = document.createElement('option');
+                        option.value = sport.sport_id;  // Use sport_id as the value
+                        option.textContent = sport.sport_name;
+                        sportSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('No sports found in API response');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching sports:', error);
+            });
     }
 
     addFilterSortControls() {
@@ -324,9 +368,9 @@ class Step1 {
         table.parentNode.insertBefore(filterContainer, table);
 
         // Set up event listeners for filters and sorting
-        document.getElementById('yearFilter').addEventListener('change', this.applyFiltersAndSort);
-        document.getElementById('sportFilter').addEventListener('change', this.applyFiltersAndSort);
-        nameHeader.addEventListener('click', this.toggleSortDirection);
+        document.getElementById('yearFilter').addEventListener('change', () => this.applyFiltersAndSort());
+        document.getElementById('sportFilter').addEventListener('change', () => this.applyFiltersAndSort());
+        nameHeader.addEventListener('click', () => this.toggleSortDirection());
     }
 
     updateSetResultsTable(results) {
