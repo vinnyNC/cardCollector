@@ -617,7 +617,7 @@ const logger = new DebugManager({
     enabled: true,
     level: 'info',
     persistLogs: true,
-    sentryEnabled: true, // Set to true when ready to integrate with Sentry
+    sentryEnabled: false, // Set to true when ready to integrate with Sentry
     sentryDSN: 'https://dfc61382bbb4358a8fc26b798799df02@o4509165419626496.ingest.us.sentry.io/4509165421854720', // Add your Sentry DSN when ready
     environment: 'development',
     context: {

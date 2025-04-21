@@ -144,7 +144,6 @@ def set_search_name(request):
     return JsonResponse({'results': results})
 
 
-
 def search_cards_in_set(request):
     # Get search parameters
     search_text = request.GET.get('q')
@@ -153,6 +152,20 @@ def search_cards_in_set(request):
     # Validate inputs
     if not set_id:
         return JsonResponse({'error': 'Set ID is required'}, status=400)
+
+    if set_id.isnumeric() and search_text is None:
+        try:
+            cards = Card.objects.filter(
+                set_id=set_id,
+                is_deleted=False
+            ).order_by('card_number').values(
+                'card_number', 'parallel__name', 'insert__name'
+            )
+            return JsonResponse({'results': list(cards)}, safe=False)
+        except Exception as e:
+            # If error, return empty results instead of failing
+            print(f"Query error: {e}")
+            return JsonResponse({'results': []})
 
     if not search_text or len(search_text) < 1:
         return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)

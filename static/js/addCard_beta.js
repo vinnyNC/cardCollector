@@ -711,19 +711,314 @@ class Step1 {
  */
 class Step2 {
     constructor(addCardInstance, utils, config, state) {
+        this.addCardInstance = addCardInstance;
+        this.utils = utils;
+        this.config = config;
+        this.state = state;
+
         // Step-specific state
+        this.cardSearchResults = [];
+        this.isLoading = false;
+        this.selectedCard = null;
+
+        logger.info("Step2 initialized with state:", this.state);
     }
 
     init() {
-        // Initialize any listeners or default state for this step
+        // Set up card search functionality
+        this.setupCardSearch();
+
+        // Set up manual card entry toggle
+        this.setupManualEntryToggle();
+
+        // Initialize the card results table
+        this.initCardResultsTable();
     }
 
     activate() {
-        // Code to run when this step becomes active
+        // Display the selected set information
+        if (this.state.selectedSet) {
+            const setInfoElement = document.getElementById('selectedSetInfo');
+            if (setInfoElement) {
+                setInfoElement.textContent =
+                    `${this.state.selectedSet.name} (${this.state.selectedSet.year} ${this.state.selectedSet.sport})`;
+            }
+
+            // Clear previous search results when step becomes active
+            const cardResultsTable = document.getElementById('cardResultsTable');
+            if (cardResultsTable) {
+                cardResultsTable.innerHTML = '';
+            }
+
+            // Reset search input
+            const cardSearchInput = document.getElementById('cardNumber');
+            if (cardSearchInput) {
+                cardSearchInput.value = '';
+            }
+
+            // Load all cards for the selected set
+            this.loadAllCardsForSet();
+        } else {
+            logger.error("No set selected when activating Step 2");
+        }
     }
 
-    // Step-specific methods
-    // ...
+    loadAllCardsForSet() {
+    // Show loading state
+    this.isLoading = true;
+    this.showLoadingState();
+
+    // Fetch all cards for the selected set
+    this.utils.makeApiCall('', 'card_num')
+        .then(results => {
+            this.cardSearchResults = [...results];
+            this.isLoading = false;
+            this.updateCardResultsTable(this.cardSearchResults);
+
+            // Log the number of cards found
+            logger.info(`Loaded ${results.length} cards for set: ${this.state.selectedSet.name}`);
+        })
+        .catch(error => {
+            logger.error('Failed to load cards for set:', error);
+            this.cardSearchResults = [];
+            this.isLoading = false;
+            this.updateCardResultsTable([]);
+        });
+}
+
+    setupCardSearch() {
+        const cardSearchInput = document.getElementById('cardNumber');
+        if (cardSearchInput) {
+            // Add debounce to prevent excessive searches while typing
+            let searchTimeout;
+
+            cardSearchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+
+                // Show loading state immediately
+                this.isLoading = true;
+                this.showLoadingState();
+
+                searchTimeout = setTimeout(async () => {
+                    const searchTerm = cardSearchInput.value.trim();
+                    if (!searchTerm) {
+                        this.isLoading = false;
+                        this.updateCardResultsTable([]);
+                        return;
+                    }
+
+                    try {
+                        // Only search if we have a selected set
+                        if (this.state.selectedSet) {
+                            const results = await this.utils.makeApiCall(
+                                searchTerm,
+                                'card_num'
+                            );
+
+                            this.cardSearchResults = [...results];
+                            this.isLoading = false;
+                            this.updateCardResultsTable(this.cardSearchResults);
+                        } else {
+                            logger.error("Cannot search for cards: No set selected");
+                            this.isLoading = false;
+                            this.updateCardResultsTable([]);
+                        }
+                    } catch (error) {
+                        logger.error('Card search failed:', error);
+                        this.cardSearchResults = [];
+                        this.isLoading = false;
+                        this.updateCardResultsTable([]);
+                    }
+                }, this.config.API_DEBOUNCE_DELAY || 300);
+            });
+        }
+    }
+
+    setupManualEntryToggle() {
+        const manualEntryToggle = document.getElementById('manualEntryToggle');
+        const cardSearchContainer = document.getElementById('cardSearchContainer');
+        const manualEntryContainer = document.getElementById('manualEntryContainer');
+
+        if (manualEntryToggle && cardSearchContainer && manualEntryContainer) {
+            manualEntryToggle.addEventListener('change', () => {
+                const isManualEntry = manualEntryToggle.checked;
+
+                cardSearchContainer.classList.toggle('hidden', isManualEntry);
+                manualEntryContainer.classList.toggle('hidden', !isManualEntry);
+
+                // Log the mode change
+                logger.info(`Card entry mode changed to: ${isManualEntry ? 'Manual Entry' : 'Search'}`);
+            });
+        }
+    }
+
+    initCardResultsTable() {
+        // Initial empty state for the card results table
+        const cardResultsTable = document.getElementById('cardResultsTable');
+        if (cardResultsTable) {
+            cardResultsTable.innerHTML = `
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td colspan="4" class="px-6 py-8 text-center">
+                        <div class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                            <svg class="w-12 h-12 mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Search for a card number</p>
+                            <p class="text-sm">Enter a card number to find matching cards</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    showLoadingState() {
+        const tableBody = document.getElementById('cardResultsTable');
+        if (tableBody) {
+            tableBody.innerHTML = '';
+
+            // Create loading rows
+            for (let i = 0; i < 3; i++) {
+                const row = tableBody.insertRow();
+                row.className = "animate-pulse bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+
+                // Card number placeholder
+                const numberCell = row.insertCell(0);
+                numberCell.className = "px-3 py-4";
+                const numberPlaceholder = document.createElement('div');
+                numberPlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16";
+                numberCell.appendChild(numberPlaceholder);
+
+                // Player name placeholder
+                const nameCell = row.insertCell(1);
+                nameCell.className = "px-3 py-4";
+                const namePlaceholder = document.createElement('div');
+                namePlaceholder.className = "h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4";
+                nameCell.appendChild(namePlaceholder);
+
+                // Button placeholder
+                const buttonCell = row.insertCell(2);
+                buttonCell.className = "px-3 py-4";
+                const buttonPlaceholder = document.createElement('div');
+                buttonPlaceholder.className = "h-8 bg-gray-200 rounded-lg dark:bg-gray-700 w-20 ml-auto";
+                buttonCell.appendChild(buttonPlaceholder);
+            }
+        }
+    }
+
+    updateCardResultsTable(results) {
+        const tableBody = document.getElementById('cardResultsTable');
+        if (!tableBody) return;
+
+        tableBody.innerHTML = '';
+
+        // If still loading, show loading state
+        if (this.isLoading) {
+            this.showLoadingState();
+            return;
+        }
+
+        // If no results, show a styled empty message
+        if (results.length === 0) {
+            const row = tableBody.insertRow();
+            row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+            const cell = row.insertCell(0);
+            cell.colSpan = 4;
+            cell.className = "px-6 py-8 text-center";
+
+            cell.innerHTML = `
+                <div class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                    <svg class="w-12 h-12 mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <p class="text-lg font-medium">No matching cards found</p>
+                    <p class="text-sm">Try a different card number or add a new card</p>
+                    <button id="btnAddNewCard" class="mt-4 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        Add New Card
+                    </button>
+                </div>
+            `;
+
+            // Add event listener for the "Add New Card" button
+            document.getElementById('btnAddNewCard')?.addEventListener('click', () => {
+                const manualEntryToggle = document.getElementById('manualEntryToggle');
+                if (manualEntryToggle) {
+                    manualEntryToggle.checked = true;
+                    // Trigger the change event to show manual entry form
+                    manualEntryToggle.dispatchEvent(new Event('change'));
+                }
+            });
+        } else {
+            // Add the card results to the table
+            results.forEach((card, index) => {
+                this.addCardTableRow(card, index);
+            });
+        }
+    }
+
+    addCardTableRow(card, index) {
+        const tableBody = document.getElementById('cardResultsTable');
+        if (!tableBody) return;
+
+        // Create a new row with alternating background colors
+        const row = tableBody.insertRow();
+        const isEven = index % 2 === 0;
+        row.className = isEven
+            ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150"
+            : "bg-gray-50 border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150";
+        row.dataset.cardId = card.cardId;
+
+        // Card number cell
+        const numberCell = row.insertCell(0);
+        numberCell.className = "px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
+        numberCell.textContent = card.cardNumber;
+
+        // Player name cell
+        const nameCell = row.insertCell(1);
+        nameCell.className = "px-4 py-3";
+        nameCell.textContent = card.playerName;
+
+        // Select button cell
+        const selectCell = row.insertCell(2);
+        selectCell.className = "px-4 py-3 text-right";
+
+        // Create the Select button
+        const selectButton = document.createElement('button');
+        selectButton.type = "button";
+        selectButton.className = "px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-200 flex items-center gap-1";
+
+        // Add icon and text to button
+        selectButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Select</span>
+        `;
+
+        // Add click event to select button
+        selectButton.addEventListener('click', () => {
+            // Add visual feedback
+            tableBody.querySelectorAll('tr').forEach(r => {
+                r.classList.remove('bg-blue-100', 'dark:bg-blue-900');
+            });
+            row.classList.add('bg-blue-100', 'dark:bg-blue-900');
+
+            // Store the selected card in state
+            this.state.selectedCard = card;
+            logger.info('Selected card:', card);
+
+            // Populate form fields with card data
+            document.getElementById('cardNumberManual')?.setAttribute('value', card.cardNumber);
+            document.getElementById('playerName')?.setAttribute('value', card.playerName);
+
+            // Advance to step 3 after a short delay
+            setTimeout(() => {
+                this.addCardInstance.stepperChangeStep(3);
+            }, 200);
+        });
+
+        selectCell.appendChild(selectButton);
+    }
 }
 
 // Similar classes for Steps 3-8
