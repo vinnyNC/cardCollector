@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.db.models import Q, Prefetch, OuterRef, Subquery
+from django.db.models import Q, Prefetch, OuterRef, Subquery, F, Value, CharField
+from django.db.models.functions import Concat
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from WebApp.models import *
-from WebApp.models import CardImage  # ensure CardImage is imported
+from WebApp.models import CardImage, CardPlayer  # ensure CardImage and CardPlayer are imported
 
 
 # Default Views
@@ -150,78 +151,92 @@ def search_cards_in_set(request):
     search_text = request.GET.get('q')
     set_id = request.GET.get('setID')
 
-    # Validate inputs
     if not set_id:
         return JsonResponse({'error': 'Set ID is required'}, status=400)
 
+    # This block executes when loading ALL cards for a set (search_text is None)
     if set_id.isnumeric() and search_text is None:
         try:
+            # Subquery for the front image
             front_image_subquery = CardImage.objects.filter(
                 card=OuterRef('pk'),
                 is_front=True,
                 is_deleted=False
             ).values('image_url')[:1]
+
+            # Subquery for player names (get first player associated with the card)
+            player_name_subquery = CardPlayer.objects.filter(
+                card=OuterRef('pk')
+            ).annotate(
+                full_name=Concat(
+                    F('player__first_name'), Value(' '), F('player__last_name'),
+                    output_field=CharField()
+                )
+            ).values('full_name')[:1]
+
+            # Main query for Cards
             cards = Card.objects.filter(
                 set_id=set_id,
                 is_deleted=False
             ).annotate(
-                front_image=Subquery(front_image_subquery)
+                front_image=Subquery(front_image_subquery),
+                player_name=Subquery(player_name_subquery)
             ).order_by('card_number').values(
-                'card_number', 'parallel__name', 'insert__name', 'id', 'front_image'
+                'card_number', 'parallel__name', 'insert__name', 'id', 'front_image', 'player_name'
             )
             return JsonResponse({'results': list(cards)}, safe=False)
         except Exception as e:
             print(f"Query error: {e}")
             return JsonResponse({'results': []})
+
+    # This block executes when searching within a set (search_text is provided)
     try:
-        cards_query = Card.objects.filter(
-            set_id=set_id,
-            is_deleted=False
+        cards_query = Card.objects.filter(set_id=set_id, is_deleted=False)
+
+        if not search_text or len(search_text) < 1:
+            return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
+
+        cards_query = cards_query.filter(
+            Q(card_number__icontains=search_text) |
+            Q(players__first_name__icontains=search_text) |
+            Q(players__last_name__icontains=search_text)
+        ).distinct()
+
+        cards_query = cards_query.select_related(
+            'parallel',
+            'insert'
+        ).prefetch_related(
+            Prefetch('players', queryset=Player.objects.filter(is_deleted=False))
         )
+
+        results = []
+        for card in cards_query:
+            player_names = ", ".join([f"{player.first_name} {player.last_name}"
+                                      for player in card.players.all()])
+
+            card_type = "Base"
+            if card.is_serial_numbered:
+                card_type = f"Numbered /{card.serial_limit}" if card.serial_limit else "Numbered"
+
+            parallel_insert = ""
+            if card.parallel:
+                parallel_insert = card.parallel.name
+            elif card.insert:
+                parallel_insert = card.insert.name
+
+            results.append({
+                'card_number': card.card_number,
+                'player_name': player_names,
+                'type': card_type,
+                'parallel_insert': parallel_insert,
+                'card_id': card.id
+            })
+
+        return JsonResponse({'results': results})
     except Exception as e:
+        # Potentially the same error could happen here too
         print(f"Query error: {e}")
         return JsonResponse({'results': []})
-
-    if not search_text or len(search_text) < 1:
-        return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
-
-    cards_query = cards_query.filter(
-        Q(card_number__icontains=search_text) |
-        Q(players__first_name__icontains=search_text) |
-        Q(players__last_name__icontains=search_text)
-    ).distinct()
-
-    cards_query = cards_query.select_related(
-        'parallel',
-        'insert'
-    ).prefetch_related(
-        Prefetch('players', queryset=Player.objects.filter(is_deleted=False))
-    )
-
-    results = []
-    for card in cards_query:
-        player_names = ", ".join([f"{player.first_name} {player.last_name}"
-                                  for player in card.players.all()])
-
-        card_type = "Base"
-        if card.is_serial_numbered:
-            card_type = f"Numbered /{card.serial_limit}" if card.serial_limit else "Numbered"
-
-        parallel_insert = ""
-        if card.parallel:
-            parallel_insert = card.parallel.name
-        elif card.insert:
-            parallel_insert = card.insert.name
-
-        results.append({
-            'card_number': card.card_number,
-            'player_name': player_names,
-            'type': card_type,
-            'parallel_insert': parallel_insert,
-            'card_id': card.id
-        })
-
-    return JsonResponse({'results': results})
 
 
 def get_sports(request):

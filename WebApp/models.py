@@ -491,8 +491,10 @@ class SetChecklist(BaseModel):
 
 # Add Custom Managers for common queries
 class CardManager(models.Manager):
+    use_for_related_fields = True  # Added to enable filtering in related queries
+
     def get_queryset(self):
-        return super().get_queryset()  # Ensures BaseModel fields (including is_deleted) are available
+        return super().get_queryset()
 
     def get_by_player(self, player_id):
         return self.filter(players__id=player_id, is_deleted=False)
@@ -505,4 +507,4 @@ class CardManager(models.Manager):
 
 
 # Add the manager to the Card model
-Card.objects = CardManager()
+objects = CardManager()
