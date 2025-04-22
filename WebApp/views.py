@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.db.models import Q, Prefetch
+from django.db.models import Q, Prefetch, OuterRef, Subquery
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from WebApp.models import *
+from WebApp.models import CardImage  # ensure CardImage is imported
 
 
 # Default Views
@@ -155,42 +156,41 @@ def search_cards_in_set(request):
 
     if set_id.isnumeric() and search_text is None:
         try:
+            front_image_subquery = CardImage.objects.filter(
+                card=OuterRef('pk'),
+                is_front=True,
+                is_deleted=False
+            ).values('image_url')[:1]
             cards = Card.objects.filter(
                 set_id=set_id,
                 is_deleted=False
+            ).annotate(
+                front_image=Subquery(front_image_subquery)
             ).order_by('card_number').values(
-                'card_number', 'parallel__name', 'insert__name'
+                'card_number', 'parallel__name', 'insert__name', 'id', 'front_image'
             )
             return JsonResponse({'results': list(cards)}, safe=False)
         except Exception as e:
-            # If error, return empty results instead of failing
             print(f"Query error: {e}")
             return JsonResponse({'results': []})
-
-    if not search_text or len(search_text) < 1:
-        return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
-
-    # Build the base query to get cards in the specified set
-    # Instead of filtering directly
     try:
         cards_query = Card.objects.filter(
             set_id=set_id,
             is_deleted=False
         )
-        # Continue with the rest of your view function
     except Exception as e:
-        # If error, return empty results instead of failing
         print(f"Query error: {e}")
         return JsonResponse({'results': []})
 
-    # Add search filters (card number OR player name)
+    if not search_text or len(search_text) < 1:
+        return JsonResponse({'error': 'Search term must be at least 1 character long'}, status=400)
+
     cards_query = cards_query.filter(
         Q(card_number__icontains=search_text) |
         Q(players__first_name__icontains=search_text) |
         Q(players__last_name__icontains=search_text)
     ).distinct()
 
-    # Optimize query with select_related and prefetch_related
     cards_query = cards_query.select_related(
         'parallel',
         'insert'
@@ -198,19 +198,15 @@ def search_cards_in_set(request):
         Prefetch('players', queryset=Player.objects.filter(is_deleted=False))
     )
 
-    # Format the results
     results = []
     for card in cards_query:
-        # Get player names for this card
         player_names = ", ".join([f"{player.first_name} {player.last_name}"
                                   for player in card.players.all()])
 
-        # Determine card type (could be customized further)
         card_type = "Base"
         if card.is_serial_numbered:
             card_type = f"Numbered /{card.serial_limit}" if card.serial_limit else "Numbered"
 
-        # Get parallel or insert name
         parallel_insert = ""
         if card.parallel:
             parallel_insert = card.parallel.name
@@ -229,10 +225,8 @@ def search_cards_in_set(request):
 
 
 def get_sports(request):
-    # Use Django ORM to retrieve all active sports
     sports = Sport.objects.filter(is_deleted=False).order_by('name')
 
-    # Format the results into a list of dictionaries
     results = [
         {
             'sport_id': sport.id,
@@ -241,7 +235,6 @@ def get_sports(request):
         for sport in sports
     ]
 
-    # Return JSON response with all sports
     return JsonResponse({'results': results})
 
 
