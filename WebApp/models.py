@@ -491,27 +491,17 @@ class SetChecklist(BaseModel):
 
 # Add Custom Managers for common queries
 class CardManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()  # Ensures BaseModel fields (including is_deleted) are available
+
     def get_by_player(self, player_id):
-        """Get all cards featuring a specific player"""
-        return self.filter(
-            players__id=player_id,
-            is_deleted=False
-        )
+        return self.filter(players__id=player_id, is_deleted=False)
 
     def get_by_set(self, set_id):
-        """Get all cards in a specific set"""
-        return self.filter(
-            set_id=set_id,
-            is_deleted=False
-        ).order_by('card_number')
+        return self.filter(set_id=set_id, is_deleted=False).order_by('card_number')
 
     def find_by_card_number(self, set_id, card_number):
-        """Find a card by its number within a set"""
-        return self.filter(
-            set_id=set_id,
-            card_number=card_number,
-            is_deleted=False
-        )
+        return self.filter(set_id=set_id, card_number=card_number, is_deleted=False)
 
 
 # Add the manager to the Card model
