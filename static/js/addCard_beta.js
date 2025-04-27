@@ -1255,12 +1255,12 @@ class Step2 {
 
         // Card number cell
         const numberCell = row.insertCell(0);
-        numberCell.className = "px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
+        numberCell.className = "px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
         numberCell.textContent = card.card_number || 'N/A';
 
         // Thumbnail cell (new)
         const thumbnailCell = row.insertCell(1);
-        thumbnailCell.className = "px-4 py-3";
+        thumbnailCell.className = "px-6 py-3";
         if (card.front_image) {
             const img = document.createElement('img');
             img.src = card.front_image;
@@ -1274,22 +1274,22 @@ class Step2 {
         // Shift remaining cells accordingly:
         // Player name cell
         const nameCell = row.insertCell(2);
-        nameCell.className = "px-4 py-3";
+        nameCell.className = "px-6 py-3";
         nameCell.textContent = card.player_name || 'N/A';
 
         // Type cell
         const typeCell = row.insertCell(3);
-        typeCell.className = "px-4 py-3";
+        typeCell.className = "px-6 py-3";
         typeCell.textContent = card.type || 'Base';
 
         // Parallel/Insert cell
         const piCell = row.insertCell(4);
-        piCell.className = "px-4 py-3";
+        piCell.className = "px-6 py-3";
         piCell.textContent = card.parallel_insert || '';
 
         // Select button cell
         const selectCell = row.insertCell(5);
-        selectCell.className = "px-4 py-3 text-right";
+        selectCell.className = "px-6 py-3 text-right";
         const selectButton = document.createElement('button');
         selectButton.type = "button";
         selectButton.className = "px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-200 flex items-center gap-1";
