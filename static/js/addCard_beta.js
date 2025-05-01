@@ -1300,7 +1300,7 @@ class Step2 {
             <span>Select</span>`;
         selectButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            logger.groupCollapsed(`--- Step 2: Card Selected ---`);
+            logger.group(`--- Step 2: Card Selected ---`);
             logger.info('Card selected:', card);
 
             // Update visual selection highlight

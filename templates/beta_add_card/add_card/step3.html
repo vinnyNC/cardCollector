@@ -1,0 +1,107 @@
+<!-- Players and/or Teams for card-->
+<div class="space-y-4">
+    <h2 class="text-2xl font-bold dark:text-white">Players and Teams</h2>
+    
+    <!-- Player Search -->
+    <div class="py-3">
+        <label for="playerSearch" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Search for Player
+        </label>
+        <div class="flex">
+            <input type="text" id="playerSearch" name="playerSearch"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                   placeholder="Enter player name (e.g. Smith, John or John Smith)">
+            <button type="button" id="searchPlayerBtn"
+                    class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Team Search -->
+    <div class="py-3">
+        <label for="teamSearch" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Search for Team
+        </label>
+        <div class="flex">
+            <input type="text" id="teamSearch" name="teamSearch"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                   placeholder="Enter team name">
+            <button type="button" id="searchTeamBtn"
+                    class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="mt-4">
+        <h3 class="text-lg font-semibold dark:text-white mb-2">Search Results</h3>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table id="searchResultsTable"
+                   class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">Type</th>
+                    <th scope="col" class="px-6 py-3">Sport</th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Add</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="searchResultsBody">
+                <!-- Results will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Selected Players and Teams -->
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold dark:text-white mb-2">Selected Players and Teams</h3>
+        
+        <!-- Selected Players -->
+        <div class="mb-4">
+            <h4 class="text-md font-medium dark:text-white mb-2">Players</h4>
+            <div id="selectedPlayersContainer" class="space-y-2">
+                <!-- No players selected message -->
+                <p id="noPlayersMessage" class="text-sm text-gray-500 dark:text-gray-400">No players selected</p>
+                <!-- Selected players will be added here dynamically -->
+            </div>
+        </div>
+        
+        <!-- Selected Teams -->
+        <div>
+            <h4 class="text-md font-medium dark:text-white mb-2">Teams</h4>
+            <div id="selectedTeamsContainer" class="space-y-2">
+                <!-- No teams selected message -->
+                <p id="noTeamsMessage" class="text-sm text-gray-500 dark:text-gray-400">No teams selected</p>
+                <!-- Selected teams will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Player-Team Association -->
+    <div class="mt-6" id="playerTeamAssociationContainer" style="display: none;">
+        <h3 class="text-lg font-semibold dark:text-white mb-2">Player-Team Association</h3>
+        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                Associate selected players with teams (optional)
+            </p>
+            <div id="playerTeamAssociations" class="space-y-3">
+                <!-- Player-team associations will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Rookie Card Checkbox -->
+    <div class="mt-4">
+        <div class="flex items-center">
+            <input id="rookieCardCheckbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="rookieCardCheckbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-white">
+                This is a rookie card
+            </label>
+        </div>
+    </div>
+</div>
