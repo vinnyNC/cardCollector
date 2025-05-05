@@ -41,7 +41,7 @@ class AddCard {
                     MANUAL_ENTRY_CONTAINER: 'manualEntryContainer',
                     CARD_NUMBER_MANUAL: 'cardNumberManual',
                     PLAYER_NAME_MANUAL: 'playerName' // Changed ID from 'playerName' to avoid potential conflicts
-                }
+                }, STEP_3: {}, STEP_4: {}, STEP_5: {}, STEP_6: {}, STEP_7: {}, STEP_8: {}
                 // Add IDs for other steps as needed
             }
         };
@@ -56,7 +56,7 @@ class AddCard {
                 year: '', sport: ''
             }, setSortDirection: 'asc', // Store sort direction for Step 1
             allCardsForSet: [], // Store all cards fetched for the selected set in Step 2
-            cardSearchTerm: '' // Store current search term for Step 2
+            cardSearchTerm: '', // Store current search term for Step 2
         };
 
         // Init utilities
