@@ -379,88 +379,107 @@ class DebugManager {
      * @private
      */
     _initSentry() {
-        // This is a placeholder for actual Sentry initialization
-        // In a real implementation, you would import Sentry and initialize it here
         this.info('Sentry integration is ready to be enabled', {
             dsn: this._maskSensitiveData(this.options.sentryDSN),
             environment: this.options.environment
         });
 
-        Sentry.init({
-            dsn: this.options.sentryDSN,
-            // Tracing
-            tracesSampleRate: 1.0, // Capture 100% of the transactions
-            // Session Replay
-            replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-            replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-            environment: this.options.environment
-        });
+        if (typeof window.Sentry === 'undefined') {
+            this.warn('Sentry SDK (window.Sentry) is not loaded. Sentry features will be disabled.');
+            this.options.sentryEnabled = false; // Disable Sentry if SDK is not found
+            return;
+        }
+
+        try {
+            window.Sentry.init({
+                dsn: this.options.sentryDSN,
+                tracesSampleRate: 1.0,
+                replaysSessionSampleRate: 1.0,
+                replaysOnErrorSampleRate: 1.0,
+                environment: this.options.environment,
+                release: `${this.options.context.appName || 'unknown-app'}@${this.options.context.version || 'unknown-version'}`,
+                // If you use Sentry integrations like Replay, initialize them here:
+                // integrations: [
+                //   window.Sentry.replayIntegration(),
+                // ],
+            });
+
+            if (this.options.context) {
+                // Use configureScope to set context, as Sentry.setContext might not be available directly
+                // If window.Sentry.configureScope is also not a function, this will throw an error
+                // which will be caught by the catch block below.
+                window.Sentry.configureScope(scope => {
+                    scope.setContext("app_context", this.options.context);
+                });
+            }
+            this.info('Sentry SDK initialized successfully.');
+
+        } catch (initError) {
+            this.error('Failed to initialize Sentry SDK or set initial context. Sentry features will be disabled.', {
+                error: initError.message,
+                stack: initError.stack // Log stack for better debugging
+            });
+            this.options.sentryEnabled = false; // Disable Sentry on initialization error
+        }
     }
 
-    /**
-     * Report an error to Sentry
-     * @param {string} message - Error message
-     * @param {Object} data - Error data
-     * @private
-     */
     _reportToSentry(message, data) {
-        if (!this.options.sentryEnabled) return;
+        if (!this.options.sentryEnabled) return; // This check is important
 
-        // Placeholder for actual Sentry reporting
-        this.debug('Would report to Sentry:', {message, data});
+        // Ensure window.Sentry is still available (though options.sentryEnabled should cover this)
+        if (typeof window.Sentry === 'undefined') {
+            this.warn('Sentry SDK not available for reporting message.');
+            return;
+        }
 
-        // Example of how an error would be reported to Sentry:
-        Sentry.captureMessage(message, {
+        this.debug('Reporting to Sentry:', {message, data});
+        window.Sentry.captureMessage(message, {
             level: 'error',
-            extra: data
+            extra: {...data, ...this.options.context} // Include global context
         });
     }
 
-    /**
-     * Report an exception to Sentry
-     * @param {Error} error - The error object
-     * @param {Object} context - Additional context
-     * @private
-     */
     _reportExceptionToSentry(error, context) {
-        if (!this.options.sentryEnabled) return;
+        if (!this.options.sentryEnabled) return; // This check is important
 
-        // Placeholder for actual Sentry exception reporting
-        this.debug('Would report exception to Sentry:', {error, context});
+        if (typeof window.Sentry === 'undefined') {
+            this.warn('Sentry SDK not available for reporting exception.');
+            return;
+        }
 
-        // Example of how an exception would be reported to Sentry:
-        // Sentry.captureException(error, {
-        //     extra: context,
-        //     tags: {
-        //         module: context.module || 'unknown'
-        //     }
-        // });
+        this.debug('Reporting exception to Sentry:', {error, context});
+        window.Sentry.captureException(error, {
+            extra: { ...context, ...this.options.context }, // Merge global and local context
+            tags: {
+                module: context.module || 'unknown'
+            }
+        });
     }
 
-    /**
-     * Log performance data to Sentry
-     * @param {string} name - Performance mark name
-     * @param {number} duration - Duration in milliseconds
-     * @param {Object} data - Additional performance data
-     * @private
-     */
     _logPerformanceToSentry(name, duration, data) {
-        // Placeholder for actual Sentry performance reporting
-        this.debug('Would log performance to Sentry:', {name, duration, data});
+        if (!this.options.sentryEnabled) return; // This check is important
 
-        // Example of how performance would be logged to Sentry:
-        const transaction = Sentry.startTransaction({
-            name: `performance-${name}`,
-            op: 'measure'
+        if (typeof window.Sentry === 'undefined') {
+            this.warn('Sentry SDK not available for logging performance.');
+            return;
+        }
+
+        this.debug('Logging performance to Sentry:', {name, duration, data});
+
+        const transaction = window.Sentry.startTransaction({
+            name: `performance.${name}`, // Use dot notation for better grouping in Sentry
+            op: 'measure',
+            description: `Performance measurement for ${name}`
         });
 
-        Sentry.configureScope(scope => {
-            scope.setSpan(transaction);
-        });
-
-        transaction.setData('duration', duration);
-        transaction.setData('context', data);
-        transaction.finish();
+        if (transaction) {
+            transaction.setData('duration_ms', duration);
+            transaction.setData('context', {...data, ...this.options.context}); // Include global context
+            transaction.setTag('performance_mark', name);
+            transaction.finish();
+        } else {
+            this.warn('Failed to start Sentry transaction for performance mark.', { name });
+        }
     }
 
     /**
@@ -616,7 +635,7 @@ class DebugManager {
 const logger = new DebugManager({
     enabled: true,
     level: 'info',
-    persistLogs: true,
+    persistLogs: false,
     sentryEnabled: false, // Set to true when ready to integrate with Sentry
     sentryDSN: 'https://dfc61382bbb4358a8fc26b798799df02@o4509165419626496.ingest.us.sentry.io/4509165421854720', // Add your Sentry DSN when ready
     environment: 'development',

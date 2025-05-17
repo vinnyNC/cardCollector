@@ -3,7 +3,7 @@
     "tailwindcss": "^3.4.17"
   },
   "dependencies": {
-    "@sentry/browser": "^9.13.0",
+    "@sentry/browser": "^9.19.0",
     "@sentry/cli": "^2.43.0",
     "@sentry/tracing": "^7.120.3",
     "flowbite": "^2.4.1"
