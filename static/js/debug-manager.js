@@ -393,8 +393,8 @@ class DebugManager {
         try {
             window.Sentry.init({
                 dsn: this.options.sentryDSN,
-                tracesSampleRate: 1.0,
-                replaysSessionSampleRate: 1.0,
+                tracesSampleRate: 0.5,
+                replaysSessionSampleRate: 0.1,
                 replaysOnErrorSampleRate: 1.0,
                 environment: this.options.environment,
                 release: `${this.options.context.appName || 'unknown-app'}@${this.options.context.version || 'unknown-version'}`,
@@ -635,7 +635,7 @@ class DebugManager {
 const logger = new DebugManager({
     enabled: true,
     level: 'info',
-    persistLogs: false,
+    persistLogs: true,
     sentryEnabled: false, // Set to true when ready to integrate with Sentry
     sentryDSN: 'https://dfc61382bbb4358a8fc26b798799df02@o4509165419626496.ingest.us.sentry.io/4509165421854720', // Add your Sentry DSN when ready
     environment: 'development',
