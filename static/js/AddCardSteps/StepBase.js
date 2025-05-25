@@ -5,7 +5,8 @@ export class StepBase {
         this.addCardInstance = addCardInstance;
         this.utils = utils;
         // Attempt to get step-specific config, fallback to global if needed
-        this.config = config.ELEMENT_IDS[`STEP_${stepNumber}`] || {};
+        logger.debug(`Step${stepNumber} config:`, config);
+        this.config = config;
         this.globalConfig = config;
         this.state = state;
         this.stepNumber = stepNumber;
