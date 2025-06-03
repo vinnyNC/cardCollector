@@ -12,7 +12,7 @@
  * - Group logging
  * - Stack trace analysis
  */
-import * as Sentry from "@sentry/browser";
+import * as Sentry from '@sentry/browser';
 
 class DebugManager {
     /**
