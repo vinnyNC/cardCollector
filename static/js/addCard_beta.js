@@ -22,9 +22,6 @@ class AddCard {
         // Log initialization of the AddCard class
         logger.info('Initializing AddCard component');
 
-        // Set logger to debug mode (consider making this configurable)
-        logger.setLevel('debug');
-
         // Configuration
         this.config = {
             API_DEBOUNCE_DELAY: 300,

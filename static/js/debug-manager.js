@@ -12,6 +12,7 @@
  * - Group logging
  * - Stack trace analysis
  */
+import * as Sentry from "@sentry/browser";
 
 class DebugManager {
     /**
@@ -28,7 +29,7 @@ class DebugManager {
     constructor(options = {}) {
         this.options = {
             enabled: options.enabled !== undefined ? options.enabled : true,
-            level: options.level || 'debug',
+            level: options.level || 'info',
             persistLogs: options.persistLogs || false,
             sentryEnabled: options.sentryEnabled || false,
             sentryDSN: options.sentryDSN || '',
@@ -81,7 +82,7 @@ class DebugManager {
 
         // Log initialization
         this.info('DebugManager initialized', {
-            level: this.options.level,
+            options: this.options,
             environment: this.options.environment
         });
     }
@@ -387,6 +388,7 @@ class DebugManager {
         });
 
         Sentry.init({
+            sendDefaultPii: true,
             dsn: this.options.sentryDSN,
             // Tracing
             tracesSampleRate: 1.0, // Capture 100% of the transactions
