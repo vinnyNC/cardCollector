@@ -1,0 +1,339 @@
+<!-- Grading Information -->
+<div class="space-y-6 text-gray-900 dark:text-white">
+    <h2 class="text-3xl font-semibold tracking-tight">Card Condition</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400">
+        Specify the condition of your card. If your card has been professionally graded, check the "Graded" box and provide the grading details.
+    </p>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center mb-4">
+            <input type="checkbox" id="graded" name="graded"
+                   class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                   onclick="toggleGradingFields(this)">
+            <label for="graded"
+                   class="ml-3 text-lg font-medium text-gray-900 dark:text-white">Professionally Graded</label>
+        </div>
+        
+        <!-- Grading Input Fields -->
+        <div id="gradingFields" class="hidden space-y-6 mt-4">
+            <div>
+                <!-- Grading Company -->
+                <label for="gradingCompany"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
+                    Company</label>
+                <select id="gradingCompany" name="gradingCompany"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <option value="">Select Grading Company</option>
+                    <option value="PSA">PSA</option>
+                    <option value="BGS">BGS</option>
+                    <option value="SGC">SGC</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <!-- Graded Value -->
+                <label for="gradedValue"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Graded
+                    Value</label>
+                <select id="gradedValue" name="gradedValue"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <option value="">Select Grade</option>
+
+                    <!-- PSA Style -->
+                    <optgroup label="PSA Style">
+                        <option value="10">PSA 10 - Gem Mint</option>
+                        <option value="9">PSA 9 - Mint</option>
+                        <option value="8.5">PSA 8.5 - NM-MT+</option>
+                        <option value="8">PSA 8 - NM-MT</option>
+                        <option value="7">PSA 7 - Near Mint</option>
+                        <option value="6">PSA 6 - Excellent-Near Mint</option>
+                        <option value="5">PSA 5 - Excellent</option>
+                        <option value="4">PSA 4 - Very Good-Excellent</option>
+                        <option value="3">PSA 3 - Very Good</option>
+                        <option value="2">PSA 2 - Good</option>
+                        <option value="1">PSA 1 - Poor</option>
+                    </optgroup>
+
+                    <!-- BGS/SGC Style -->
+                    <optgroup label="BGS/SGC Style">
+                        <option value="10_pristine">10 Pristine</option>
+                        <option value="9.5">9.5 Gem Mint</option>
+                        <option value="9">9 Mint</option>
+                        <option value="8.5">8.5 Near Mint-Mint+</option>
+                        <option value="8">8 Near Mint-Mint</option>
+                        <option value="7.5">7.5 Near Mint+</option>
+                        <option value="7">7 Near Mint</option>
+                        <option value="6">6 Excellent-Near Mint</option>
+                        <option value="5">5 Excellent</option>
+                        <option value="4">4 Very Good-Excellent</option>
+                        <option value="3">3 Very Good</option>
+                        <option value="2">2 Good</option>
+                        <option value="1">1 Poor</option>
+                    </optgroup>
+
+                    <!-- Others -->
+                    <optgroup label="Other">
+                        <option value="altered">Altered</option>
+                        <option value="authentic">Authentic</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <!-- Sub Grades Section -->
+            <div class="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="cardSubGrades" name="cardSubGrades"
+                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                           onclick="toggleField('cardSubGradesDetailContainer', this)">
+                    <label for="cardSubGrades"
+                           class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Sub Grades</label>
+                </div>
+                
+                <!-- Sub Grades Details Container -->
+                <div id="cardSubGradesDetailContainer" class="hidden space-y-4 ml-6">
+                    <!-- Centering Sub Grade -->
+                    <div>
+                        <label for="cardSubGradesCentering"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Centering
+                        </label>
+                        <select id="cardSubGradesCentering" name="cardSubGradesCentering"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Grade</option>
+                            <option value="10_pristine">10 Pristine</option>
+                            <option value="9.5">9.5 Gem Mint</option>
+                            <option value="9">9 Mint</option>
+                            <option value="8.5">8.5 Near Mint-Mint+</option>
+                            <option value="8">8 Near Mint-Mint</option>
+                            <option value="7.5">7.5 Near Mint+</option>
+                            <option value="7">7 Near Mint</option>
+                            <option value="6">6 Excellent-Near Mint</option>
+                            <option value="5">5 Excellent</option>
+                            <option value="4">4 Very Good-Excellent</option>
+                            <option value="3">3 Very Good</option>
+                            <option value="2">2 Good</option>
+                            <option value="1">1 Poor</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Corners Sub Grade -->
+                    <div>
+                        <label for="cardSubGradesCorners"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Corners
+                        </label>
+                        <select id="cardSubGradesCorners" name="cardSubGradesCorners"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Grade</option>
+                            <option value="10_pristine">10 Pristine</option>
+                            <option value="9.5">9.5 Gem Mint</option>
+                            <option value="9">9 Mint</option>
+                            <option value="8.5">8.5 Near Mint-Mint+</option>
+                            <option value="8">8 Near Mint-Mint</option>
+                            <option value="7.5">7.5 Near Mint+</option>
+                            <option value="7">7 Near Mint</option>
+                            <option value="6">6 Excellent-Near Mint</option>
+                            <option value="5">5 Excellent</option>
+                            <option value="4">4 Very Good-Excellent</option>
+                            <option value="3">3 Very Good</option>
+                            <option value="2">2 Good</option>
+                            <option value="1">1 Poor</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Edges Sub Grade -->
+                    <div>
+                        <label for="cardSubGradesEdges"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Edges
+                        </label>
+                        <select id="cardSubGradesEdges" name="cardSubGradesEdges"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Grade</option>
+                            <option value="10_pristine">10 Pristine</option>
+                            <option value="9.5">9.5 Gem Mint</option>
+                            <option value="9">9 Mint</option>
+                            <option value="8.5">8.5 Near Mint-Mint+</option>
+                            <option value="8">8 Near Mint-Mint</option>
+                            <option value="7.5">7.5 Near Mint+</option>
+                            <option value="7">7 Near Mint</option>
+                            <option value="6">6 Excellent-Near Mint</option>
+                            <option value="5">5 Excellent</option>
+                            <option value="4">4 Very Good-Excellent</option>
+                            <option value="3">3 Very Good</option>
+                            <option value="2">2 Good</option>
+                            <option value="1">1 Poor</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Surface Sub Grade -->
+                    <div>
+                        <label for="cardSubGradesSurface"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Surface
+                        </label>
+                        <select id="cardSubGradesSurface" name="cardSubGradesSurface"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Grade</option>
+                            <option value="10_pristine">10 Pristine</option>
+                            <option value="9.5">9.5 Gem Mint</option>
+                            <option value="9">9 Mint</option>
+                            <option value="8.5">8.5 Near Mint-Mint+</option>
+                            <option value="8">8 Near Mint-Mint</option>
+                            <option value="7.5">7.5 Near Mint+</option>
+                            <option value="7">7 Near Mint</option>
+                            <option value="6">6 Excellent-Near Mint</option>
+                            <option value="5">5 Excellent</option>
+                            <option value="4">4 Very Good-Excellent</option>
+                            <option value="3">3 Very Good</option>
+                            <option value="2">2 Good</option>
+                            <option value="1">1 Poor</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grading Certificate -->
+            <div>
+                <label for="gradingCert"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grading
+                    Certificate #</label>
+                <input type="text" id="gradingCert" name="gradingCert"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                       placeholder="e.g., 12345678">
+            </div>
+        </div>
+        
+        <!-- Raw Card Condition (shown when not graded) -->
+        <div id="rawConditionFields" class="space-y-4 mt-4">
+            <label for="rawCondition" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Raw Card Condition
+            </label>
+            <select id="rawCondition" name="rawCondition"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <option value="">Select Condition</option>
+                <option value="gem_mint">Gem Mint</option>
+                <option value="mint">Mint</option>
+                <option value="near_mint">Near Mint</option>
+                <option value="excellent">Excellent</option>
+                <option value="very_good">Very Good</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="poor">Poor</option>
+            </select>
+            
+            <div class="mt-4">
+                <label for="conditionNotes" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Condition Notes
+                </label>
+                <textarea id="conditionNotes" name="conditionNotes" rows="3"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                          placeholder="Describe any specific condition details (e.g., slight corner wear, surface scratches)"></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card Attributes Section -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mt-6">
+        <h3 class="text-xl font-semibold mb-4">Card Attributes</h3>
+        
+        <!-- Autograph -->
+        <div class="flex items-center mb-4">
+            <input type="checkbox" id="attribute_autograph" name="attribute_autograph"
+                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+            <label for="attribute_autograph"
+                   class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Autograph</label>
+        </div>
+        
+        <!-- Parallel -->
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="parallel" name="parallel"
+                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                       onclick="toggleField('parallelDetailContainer', this)">
+                <label for="parallel"
+                       class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Parallel</label>
+            </div>
+            <div id="parallelDetailContainer" class="hidden ml-6">
+                <label for="parallelDetail"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Parallel
+                    Details</label>
+                <input type="text" id="parallelDetail" name="parallelDetail"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                       placeholder="e.g., Refractor">
+            </div>
+        </div>
+        
+        <!-- Insert -->
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="insert" name="insert"
+                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                       onclick="toggleField('insertDetailContainer', this)">
+                <label for="insert"
+                       class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Insert</label>
+            </div>
+            <div id="insertDetailContainer" class="hidden ml-6">
+                <label for="insertDetail"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Insert
+                    Details</label>
+                <input type="text" id="insertDetail" name="insertDetail"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                       placeholder="e.g., Rookie Debut">
+            </div>
+        </div>
+        
+        <!-- Serial Number -->
+        <div class="space-y-2">
+            <div class="flex items-center">
+                <input type="checkbox" id="cardSerialNum" name="cardSerialNum"
+                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                       onclick="toggleField('cardSerialNumDetailContainer', this)">
+                <label for="cardSerialNum"
+                       class="ml-2 text-sm font-medium text-gray-900 dark:text-white">Serial Numbered</label>
+            </div>
+            <div id="cardSerialNumDetailContainer" class="hidden ml-6 grid gap-4 md:grid-cols-2">
+                <div>
+                    <label for="cardSerial"
+                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial #</label>
+                    <input type="text" id="cardSerial" name="cardSerial"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                           placeholder="e.g., 32">
+                </div>
+                <div>
+                    <label for="cardSerialMax"
+                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Out of</label>
+                    <input type="text" id="cardSerialMax" name="cardSerialMax"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                           placeholder="e.g., 50">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle grading fields visibility
+    function toggleGradingFields(checkbox) {
+        const gradingFields = document.getElementById('gradingFields');
+        const rawConditionFields = document.getElementById('rawConditionFields');
+        
+        if (checkbox.checked) {
+            gradingFields.classList.remove('hidden');
+            rawConditionFields.classList.add('hidden');
+        } else {
+            gradingFields.classList.add('hidden');
+            rawConditionFields.classList.remove('hidden');
+        }
+    }
+    
+    // Toggle field visibility
+    function toggleField(containerId, checkbox) {
+        const container = document.getElementById(containerId);
+        if (checkbox.checked) {
+            container.classList.remove('hidden');
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+</script>
