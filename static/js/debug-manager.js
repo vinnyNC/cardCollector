@@ -1,3 +1,4 @@
+
 /**
  * DebugManager - Advanced debugging utility with Sentry integration capabilities
  *
@@ -253,7 +254,7 @@ class DebugManager {
             window.performance.measure(name, `${name}-start`, `${name}-end`);
         }
 
-        // If Sentry is enabled, add performance data
+        // If Sentry is enabled, add performance data (only for slow operations)
         if (this.options.sentryEnabled && duration > 500) {
             this._logPerformanceToSentry(name, duration, combinedData);
         }
@@ -381,21 +382,41 @@ class DebugManager {
      * @private
      */
     _initSentry() {
-        this.info('Sentry integration is ready to be enabled', {
-            dsn: this._maskSensitiveData(this.options.sentryDSN),
-            environment: this.options.environment
-        });
+        try {
+            Sentry.init({
+                dsn: this.options.sentryDSN,
+                environment: this.options.environment,
+                // Tracing
+                tracesSampleRate: this.options.environment === 'development' ? 1.0 : 0.1,
+                // Session Replay
+                replaysSessionSampleRate: this.options.environment === 'development' ? 1.0 : 0.1,
+                replaysOnErrorSampleRate: 1.0,
+                // Additional options
+                sendDefaultPii: false,
+                beforeSend(event) {
+                    // Filter out noisy errors in development
+                    if (event.exception) {
+                        const error = event.exception.values?.[0];
+                        if (error?.type === 'ChunkLoadError' ||
+                            error?.value?.includes('Loading chunk') ||
+                            error?.value?.includes('NetworkError')) {
+                            return null; // Don't send these errors
+                        }
+                    }
+                    return event;
+                }
+            });
 
-        Sentry.init({
-            sendDefaultPii: true,
-            dsn: this.options.sentryDSN,
-            // Tracing
-            tracesSampleRate: 1.0, // Capture 100% of the transactions
-            // Session Replay
-            replaysSessionSampleRate: 1.0, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-            replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-            environment: this.options.environment
-        });
+            this.info('Sentry initialized successfully', {
+                environment: this.options.environment,
+                dsn: this._maskSensitiveData(this.options.sentryDSN)
+            });
+        } catch (error) {
+            this.warn('Failed to initialize Sentry', {
+                error: error.message,
+                dsn: this._maskSensitiveData(this.options.sentryDSN)
+            });
+        }
     }
 
     /**
@@ -407,14 +428,23 @@ class DebugManager {
     _reportToSentry(message, data) {
         if (!this.options.sentryEnabled) return;
 
-        // Placeholder for actual Sentry reporting
-        this.debug('Would report to Sentry:', {message, data});
+        try {
+            Sentry.captureMessage(message, {
+                level: 'error',
+                extra: data,
+                tags: {
+                    component: data.module || 'unknown',
+                    operation: data.operation || 'unknown'
+                }
+            });
 
-        // Example of how an error would be reported to Sentry:
-        Sentry.captureMessage(message, {
-            level: 'error',
-            extra: data
-        });
+            this.debug('Error reported to Sentry', {message, data});
+        } catch (error) {
+            this.warn('Failed to report error to Sentry', {
+                originalMessage: message,
+                sentryError: error.message
+            });
+        }
     }
 
     /**
@@ -426,42 +456,61 @@ class DebugManager {
     _reportExceptionToSentry(error, context) {
         if (!this.options.sentryEnabled) return;
 
-        // Placeholder for actual Sentry exception reporting
-        this.debug('Would report exception to Sentry:', {error, context});
+        try {
+            Sentry.captureException(error, {
+                extra: context,
+                tags: {
+                    component: context.module || 'unknown',
+                    operation: context.operation || 'unknown'
+                }
+            });
 
-        // Example of how an exception would be reported to Sentry:
-        // Sentry.captureException(error, {
-        //     extra: context,
-        //     tags: {
-        //         module: context.module || 'unknown'
-        //     }
-        // });
+            this.debug('Exception reported to Sentry', {error: error.message, context});
+        } catch (sentryError) {
+            this.warn('Failed to report exception to Sentry', {
+                originalError: error.message,
+                sentryError: sentryError.message
+            });
+        }
     }
 
     /**
-     * Log performance data to Sentry
+     * Log performance data to Sentry (updated for Sentry v9)
      * @param {string} name - Performance mark name
      * @param {number} duration - Duration in milliseconds
      * @param {Object} data - Additional performance data
      * @private
      */
     _logPerformanceToSentry(name, duration, data) {
-        // Placeholder for actual Sentry performance reporting
-        this.debug('Would log performance to Sentry:', {name, duration, data});
+        if (!this.options.sentryEnabled) return;
 
-        // Example of how performance would be logged to Sentry:
-        const transaction = Sentry.startTransaction({
-            name: `performance-${name}`,
-            op: 'measure'
-        });
+        try {
+            // In Sentry v9, use startSpan instead of startTransaction
+            Sentry.startSpan({
+                name: `performance-${name}`,
+                op: 'measure',
+                attributes: {
+                    duration,
+                    ...data
+                }
+            }, (span) => {
+                // Set additional data on the span
+                span.setAttributes({
+                    'custom.operation': name,
+                    'custom.duration_ms': duration,
+                    'custom.component': data.module || 'unknown'
+                });
 
-        Sentry.configureScope(scope => {
-            scope.setSpan(transaction);
-        });
-
-        transaction.setData('duration', duration);
-        transaction.setData('context', data);
-        transaction.finish();
+                // The span will automatically finish when this function returns
+                this.debug('Performance data logged to Sentry', {name, duration, data});
+            });
+        } catch (error) {
+            this.warn('Failed to log performance to Sentry', {
+                performanceName: name,
+                duration,
+                sentryError: error.message
+            });
+        }
     }
 
     /**
@@ -542,10 +591,12 @@ class DebugManager {
      */
     _saveLogs() {
         try {
-            // localStorage.setItem('debug_logs', JSON.stringify(this.logs.slice(-100)));
+            // Only save the last 100 logs to avoid localStorage quota issues
+            const logsToSave = this.logs.slice(-100);
+            localStorage.setItem('debug_logs', JSON.stringify(logsToSave));
         } catch (e) {
             // Handle localStorage errors (e.g., quota exceeded)
-            // console.warn('Failed to save logs to localStorage', e);
+            console.warn('Failed to save logs to localStorage', e);
         }
     }
 
@@ -618,9 +669,9 @@ const logger = new DebugManager({
     enabled: true,
     level: 'info',
     persistLogs: true,
-    sentryEnabled: true, // Set to true when ready to integrate with Sentry
-    sentryDSN: 'https://dfc61382bbb4358a8fc26b798799df02@o4509165419626496.ingest.us.sentry.io/4509165421854720', // Add your Sentry DSN when ready
-    environment: 'development',
+    sentryEnabled: true,
+    sentryDSN: 'https://dfc61382bbb4358a8fc26b798799df02@o4509165419626496.ingest.us.sentry.io/4509165421854720',
+    environment: window.location.hostname === 'localhost' ? 'development' : 'production',
     context: {
         appName: 'CardCollector',
         version: '1.0.0'

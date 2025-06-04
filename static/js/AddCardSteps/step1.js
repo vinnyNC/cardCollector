@@ -72,26 +72,152 @@ export class Step1 {
         }
     }
 
-    async performSearch() {
-        const setSearchInput = document.getElementById(this.config.SET_SEARCH_INPUT);
-        const searchTerm = setSearchInput ? setSearchInput.value.trim() : '';
-        logger.info(`Step1: Performing search for term: "${searchTerm}"`);
 
-        this.isLoading = true; // Ensure loading state is active during API call
+async performSearch() {
+    const setSearchInput = document.getElementById(this.config.SET_SEARCH_INPUT);
+    const searchTerm = setSearchInput ? setSearchInput.value.trim() : '';
 
-        try {
-            const results = await this.utils.makeApiCall('set_name', {setName: searchTerm});
-            this.state.allSets = [...results]; // Update shared state with search results
-            logger.info(`Step1: Search returned ${results.length} sets.`, results);
-        } catch (error) {
-            logger.error('Step1: Search failed:', error);
-            this.state.allSets = []; // Clear sets on error
-        } finally {
-            this.isLoading = false;
-            this.applyFiltersAndSort(); // Update table with new results
-            this.updateFilterOptions(); // Update filters based on search results
+    // Enhanced logging with performance tracking and contextual data
+    logger.group('Step1: Set Search Operation');
+    logger.info('Initiating search operation', {
+        searchTerm,
+        searchTermLength: searchTerm.length,
+        hasSearchInput: !!setSearchInput,
+        currentSetCount: this.state.allSets.length,
+        userAgent: navigator.userAgent.substring(0, 50) + '...'
+    });
+
+    // Start performance measurement
+    logger.startPerformanceMark('setSearch', {
+        operation: 'api_call',
+        endpoint: 'set_name',
+        searchTerm: searchTerm.substring(0, 20) + (searchTerm.length > 20 ? '...' : ''),
+        module: 'Step1'
+    });
+
+    this.isLoading = true;
+
+    try {
+        logger.debug('Making API call to set_name endpoint', {
+            payload: { setName: searchTerm },
+            loadingState: this.isLoading,
+            timestamp: new Date().toISOString()
+        });
+
+        const results = await this.utils.makeApiCall('set_name', {setName: searchTerm});
+
+        // End performance measurement with success data
+        const duration = logger.endPerformanceMark('setSearch', {
+            success: true,
+            resultCount: results.length,
+            resultsSize: JSON.stringify(results).length,
+            cacheHit: false // You could implement cache detection here
+        });
+
+        // Update shared state with search results
+        this.state.allSets = [...results];
+
+        logger.info('Search completed successfully', {
+            searchTerm,
+            resultCount: results.length,
+            duration: duration ? `${duration.toFixed(2)}ms` : 'unknown',
+            averageResultSize: results.length > 0 ? (JSON.stringify(results).length / results.length).toFixed(0) + ' chars' : 'N/A',
+            stateUpdated: true,
+            memoryUsage: performance.memory ? {
+                used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + 'MB',
+                total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024) + 'MB'
+            } : 'unavailable'
+        });
+
+        // Log detailed results in debug mode only
+        if (results.length > 0) {
+            logger.debug('Search results sample', {
+                firstResult: results[0],
+                lastResult: results[results.length - 1],
+                uniqueYears: [...new Set(results.map(r => r.year))].sort(),
+                uniqueSports: [...new Set(results.map(r => r.sport))].filter(Boolean),
+                hasImages: results.filter(r => r.image_url).length
+            });
         }
+
+        // Log if search returned empty results
+        if (results.length === 0) {
+            logger.warn('Search returned no results', {
+                searchTerm,
+                searchTermLength: searchTerm.length,
+                possibleIssues: [
+                    searchTerm.length < 3 ? 'Search term too short' : null,
+                    /[^a-zA-Z0-9\s]/.test(searchTerm) ? 'Special characters in search' : null,
+                    searchTerm.length > 50 ? 'Search term too long' : null
+                ].filter(Boolean),
+                suggestions: 'Try a different search term or check spelling'
+            });
+        }
+
+    } catch (error) {
+        // End performance measurement with error data
+        logger.endPerformanceMark('setSearch', {
+            success: false,
+            errorType: error.constructor.name,
+            errorMessage: error.message,
+            statusCode: error.status || 'unknown'
+        });
+
+        // Enhanced error logging with context
+        logger.exception(error, {
+            operation: 'setSearch',
+            searchTerm: searchTerm.substring(0, 20) + (searchTerm.length > 20 ? '...' : ''),
+            apiEndpoint: 'set_name',
+            retryAttempt: 0, // You could implement retry logic
+            networkStatus: navigator.onLine ? 'online' : 'offline',
+            currentState: {
+                previousSetCount: this.state.allSets.length,
+                isLoading: this.isLoading
+            }
+        }, true); // Report to Sentry
+
+        // Clear sets on error
+        this.state.allSets = [];
+
+        logger.warn('Search state cleared due to error', {
+            clearedSetCount: 0,
+            errorRecovery: 'automatic'
+        });
+
+    } finally {
+        // Performance tracking for cleanup operations
+        logger.startPerformanceMark('searchCleanup', {
+            operation: 'ui_update',
+            module: 'Step1'
+        });
+
+        this.isLoading = false;
+
+        logger.debug('Starting post-search operations', {
+            loadingState: this.isLoading,
+            operations: ['applyFiltersAndSort', 'updateFilterOptions']
+        });
+
+        // Apply filters and update UI
+        this.applyFiltersAndSort();
+        this.updateFilterOptions();
+
+        logger.endPerformanceMark('searchCleanup', {
+            uiUpdated: true,
+            filtersApplied: true
+        });
+
+        logger.info('Search operation completed', {
+            finalState: {
+                setCount: this.state.allSets.length,
+                isLoading: this.isLoading,
+                hasResults: this.state.allSets.length > 0
+            }
+        });
     }
+
+    logger.groupEnd();
+}
 
 
     setupAddSetModal() {
