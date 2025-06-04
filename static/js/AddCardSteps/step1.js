@@ -47,7 +47,7 @@ export class Step1 {
         try {
             const results = await this.utils.makeApiCall('set_name'); // No search term for default
             this.state.allSets = [...results]; // Update shared state
-            logger.info(`Step1: Loaded ${results.length} default sets.`);
+            logger.info(`Step1: Loaded ${results.length} default sets.`, results);
         } catch (error) {
             logger.error('Step1: Error fetching default sets:', error);
             this.state.allSets = []; // Clear sets on error
@@ -82,7 +82,7 @@ export class Step1 {
         try {
             const results = await this.utils.makeApiCall('set_name', {setName: searchTerm});
             this.state.allSets = [...results]; // Update shared state with search results
-            logger.info(`Step1: Search returned ${results.length} sets.`);
+            logger.info(`Step1: Search returned ${results.length} sets.`, results);
         } catch (error) {
             logger.error('Step1: Search failed:', error);
             this.state.allSets = []; // Clear sets on error

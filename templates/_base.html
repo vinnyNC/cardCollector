@@ -4,7 +4,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html class ="dark" lang="en">
+<html class="dark" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -18,21 +18,21 @@
     <title>{{ siteName }} - {{ pageTitle }}</title>
 
     {% compress css %}
-    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+        <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
 
 </head>
 
 <body class="bg-gray-900">
 
-    <!-- Add this -->
-    <div class="antialiased bg-gray-50 dark:bg-gray-900">
+<!-- Add this -->
+<div class="antialiased bg-gray-50 dark:bg-gray-900">
     <!-- Navbar -->
     {% include "nav/header.html" %}
 
     <!-- Sidebar -->
     {% include "nav/sidebar.html" %}
-    
+
     <!-- Main content -->
     <main class="p-4 md:ml-64 h-auto pt-20">
         <div class="container mx-auto px-4 py-8">
@@ -70,9 +70,9 @@
             </form>
         </div>
     </main>
-  </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 </body>
 
 </html>

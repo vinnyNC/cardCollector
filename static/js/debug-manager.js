@@ -12,6 +12,7 @@
  * - Group logging
  * - Stack trace analysis
  */
+
 import * as Sentry from '@sentry/browser';
 
 class DebugManager {
@@ -380,8 +381,6 @@ class DebugManager {
      * @private
      */
     _initSentry() {
-        // This is a placeholder for actual Sentry initialization
-        // In a real implementation, you would import Sentry and initialize it here
         this.info('Sentry integration is ready to be enabled', {
             dsn: this._maskSensitiveData(this.options.sentryDSN),
             environment: this.options.environment
