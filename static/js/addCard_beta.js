@@ -24,7 +24,6 @@ class AddCard {
 
         // Configuration
         this.config = {
-            SKIP_STATE_SAVE: true, // Flag to skip state saving for debugging
             API_DEBOUNCE_DELAY: 300,
             MAX_STEPS: 8,
             YEAR_RANGE: {
@@ -290,11 +289,7 @@ class AddCard {
                 currentStep: this.state.currentStep,
                 selectedSet: this.state.selectedSet, // Add other relevant state parts here
             };
-            if (!this.config.SKIP_STATE_SAVE) {
-                localStorage.setItem('addCardState', JSON.stringify(stateToSave));
-            } else {
-                this.clearSavedState()
-            }
+            localStorage.setItem('addCardState', JSON.stringify(stateToSave));
         } catch (error) {
             logger.error('Failed to save state:', error);
         }
