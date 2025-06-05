@@ -12,12 +12,11 @@
                placeholder="Enter card number, player name (e.g. Smith, John or John Smith)" required>
     </div>
 
-    <!-- Filter & Sort Options -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <!-- Filter Dropdown -->
+    <!-- Advanced Filter & Sort Options -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Card Type Filter -->
         <div class="w-full">
-            <label for="cardFilterSelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter By
-                Type</label>
+            <label for="cardFilterSelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card Type</label>
             <div class="relative">
                 <select id="cardFilterSelect"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pl-4 pr-10 appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
@@ -25,6 +24,33 @@
                     <option value="base">Base Cards</option>
                     <option value="parallel">Parallels</option>
                     <option value="insert">Inserts</option>
+                    <option value="rookie">Rookie Cards</option>
+                    <option value="autograph">Autographed Cards</option>
+                    <option value="memorabilia">Memorabilia Cards</option>
+                    <option value="serial">Serial Numbered</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Features Filter -->
+        <div class="w-full">
+            <label for="cardFeaturesSelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Card Features</label>
+            <div class="relative">
+                <select id="cardFeaturesSelect"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pl-4 pr-10 appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    <option value="">All Features</option>
+                    <option value="multi_player">Multi-Player Cards</option>
+                    <option value="team_card">Team Cards</option>
+                    <option value="variation">Card Variations</option>
+                    <option value="refractor">Refractors</option>
+                    <option value="short_print">Short Prints</option>
+                    <option value="numbered">Numbered Cards</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -46,6 +72,9 @@
                     <option value="number_desc">Card # (Descending)</option>
                     <option value="name_asc">Player Name (A-Z)</option>
                     <option value="name_desc">Player Name (Z-A)</option>
+                    <option value="type_asc">Card Type (A-Z)</option>
+                    <option value="rarity_desc">Rarity (Highest-Lowest)</option>
+                    <option value="recent_add">Recently Added</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -63,13 +92,35 @@
                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">Card #</th>
-                <th scope="col" class="px-6 py-3">Thumbnail</th>  <!-- Added column -->
-                <th scope="col" class="px-6 py-3">Player Name</th>
-                <th scope="col" class="px-6 py-3">Type</th>
-                <th scope="col" class="px-6 py-3">Parallel/Insert</th>
-                <th scope="col" class="px-6 py-3">
-                    <span class="sr-only">Select</span>
+                <th scope="col" class="px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="card_number">
+                    <div class="flex items-center">
+                        Card #
+                        <svg class="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 9a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 018 9zm0 5.25a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"/>
+                        </svg>
+                    </div>
+                </th>
+                <th scope="col" class="px-4 py-3">Thumbnail</th>
+                <th scope="col" class="px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" data-sort="player_name">
+                    <div class="flex items-center">
+                        Player Name
+                        <svg class="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 9a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 018 9zm0 5.25a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"/>
+                        </svg>
+                    </div>
+                </th>
+                <th scope="col" class="px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 hidden md:table-cell" data-sort="type">
+                    <div class="flex items-center">
+                        Type
+                        <svg class="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 9a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 018 9zm0 5.25a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"/>
+                        </svg>
+                    </div>
+                </th>
+                <th scope="col" class="px-4 py-3 hidden md:table-cell">Parallel/Insert</th>
+                <th scope="col" class="px-4 py-3 hidden lg:table-cell">Features</th>
+                <th scope="col" class="px-4 py-3">
+                    <span class="sr-only">Actions</span>
                 </th>
             </tr>
             </thead>
@@ -78,4 +129,7 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Include the image modal -->
+    {% include 'beta_add_card/add_card/modals/step2/imageModal.html' %}
 </div>

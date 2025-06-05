@@ -1,0 +1,118 @@
+<!-- Card Image Modal -->
+<div id="cardImageModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full h-screen flex items-center justify-center bg-black bg-opacity-75">
+    <div class="relative w-full max-w-7xl h-[85vh] mx-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 h-full flex flex-col">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 id="modalCardTitle" class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Card #<span id="modalCardNumber"></span> - <span id="modalPlayerName"></span>
+                </h3>
+                <button type="button" id="closeCardModal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4 overflow-y-auto flex-grow">
+                <div class="flex flex-col items-center justify-center h-full overflow-y-auto">
+                    <!-- Card image container with perspective for 3D flip effect -->
+                    <div id="cardImageContainer" class="relative w-full max-w-5xl mx-auto perspective-1000 h-full">
+                        <div id="cardImageFlipBox" class="relative w-full h-full transition-transform duration-700 transform-style-3d">
+                            <!-- Front image -->
+                            <div id="cardFrontImageWrapper" class="absolute w-full h-full backface-hidden">
+                                <img id="cardFrontImage" src="" alt="Card Front" class="w-auto h-auto max-h-[40vh] sm:max-h-[50vh] md:max-h-[60vh] max-w-full object-contain rounded-lg shadow-lg mx-auto">
+                            </div>
+                            <!-- Back image -->
+                            <div id="cardBackImageWrapper" class="absolute w-full h-full backface-hidden rotate-y-180 p-4">
+                                <img id="cardBackImage" src="" alt="Card Back" class="w-auto h-auto max-h-[40vh] sm:max-h-[50vh] md:max-h-[60vh] max-w-full object-contain rounded-lg shadow-lg mx-auto">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card details section with improved layout -->
+                    <div class="mt-6 w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <!-- Left column - Basic Info -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b pb-2">Card Information</h3>
+
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Card Number</p>
+                                        <p id="modalDetailCardNumber" class="text-base font-medium text-gray-900 dark:text-white"></p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Player Name</p>
+                                        <p id="modalDetailPlayerName" class="text-base font-medium text-gray-900 dark:text-white"></p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Card Type</p>
+                                        <p id="modalCardType" class="text-base font-medium text-gray-900 dark:text-white"></p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Parallel/Insert</p>
+                                        <p id="modalCardParallelInsert" class="text-base font-medium text-gray-900 dark:text-white"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right column - Features -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b pb-2">Card Features</h3>
+
+                                <div id="modalCardFeatures" class="flex flex-wrap gap-2 mb-4">
+                                    <!-- Features badges will be added here by JavaScript -->
+                                </div>
+
+                                <div id="modalCardAttributes" class="mt-4">
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Attributes</p>
+                                    <div id="modalAttributesList" class="flex flex-wrap gap-2">
+                                        <!-- Attributes will be added here by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 mt-auto">
+                <button id="flipCardButton" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Flip Card
+                </button>
+                <button type="button" id="closeCardModalBtn" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS for card flip animation -->
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    .transform-style-3d {
+        transform-style: preserve-3d;
+    }
+
+    .backface-hidden {
+        backface-visibility: hidden;
+    }
+
+    .rotate-y-180 {
+        transform: rotateY(180deg);
+    }
+
+    .flipped {
+        transform: rotateY(180deg);
+    }
+</style>

@@ -11,6 +11,7 @@ export class Step2 {
         // Step-specific state/properties
         this.isLoading = false;
         this.isManualEntry = false; // Track manual entry mode
+        this.isCardFlipped = false; // Track card flip state in modal
         // Debounced search function specific to this step
         this.searchDebounce = this.utils.debounce(this.performCardSearch.bind(this), this.globalConfig.API_DEBOUNCE_DELAY);
 
@@ -24,7 +25,78 @@ export class Step2 {
         this.setupCardSearchInput();
         this.setupManualEntryToggle();
         this.setupManualEntryForm(); // Setup listeners for manual form if needed
+        this.setupCardImageModal(); // Setup modal event listeners
+        this.setupTableSorting(); // Setup table column sorting
         logger.info("Step2: Initialization complete.");
+    }
+
+    // Setup the card image modal and its event listeners
+    setupCardImageModal() {
+        // Get modal elements
+        const modal = document.getElementById('cardImageModal');
+        const flipButton = document.getElementById('flipCardButton');
+        const closeModalBtn = document.getElementById('closeCardModalBtn');
+        const closeModalX = document.getElementById('closeCardModal');
+
+        if (!modal || !flipButton) {
+            logger.error("Step2: Card image modal elements not found");
+            return;
+        }
+
+        // Setup flip button
+        flipButton.addEventListener('click', () => {
+            this.flipCardInModal();
+        });
+
+        // Setup close buttons
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
+                this.closeCardImageModal();
+            });
+        }
+
+        if (closeModalX) {
+            closeModalX.addEventListener('click', () => {
+                this.closeCardImageModal();
+            });
+        }
+
+        // Close modal when clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closeCardImageModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                this.closeCardImageModal();
+            }
+        });
+
+        logger.debug("Step2: Card image modal event listeners setup complete");
+    }
+
+    // Setup table column sorting
+    setupTableSorting() {
+        const table = document.getElementById('cardSearchResultTable');
+        if (!table) {
+            logger.error("Step2: Card search result table not found");
+            return;
+        }
+
+        // Get all sortable column headers
+        const sortableHeaders = table.querySelectorAll('th[data-sort]');
+
+        sortableHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const sortKey = header.getAttribute('data-sort');
+                this.sortCardResults(sortKey);
+            });
+        });
+
+        logger.debug("Step2: Table sorting event listeners setup complete");
     }
 
     // Called every time Step 2 becomes the active step
@@ -106,6 +178,11 @@ export class Step2 {
     // --- Event Handlers & Setup ---
     setupCardSearchInput() {
         const cardSearchInput = document.getElementById(this.config.CARD_SEARCH_INPUT);
+        const cardFilterSelect = document.getElementById('cardFilterSelect');
+        const cardFeaturesSelect = document.getElementById('cardFeaturesSelect');
+        const cardSortSelect = document.getElementById('cardSortSelect');
+
+        // Setup search input
         if (cardSearchInput) {
             cardSearchInput.addEventListener('input', () => {
                 this.state.cardSearchTerm = cardSearchInput.value.trim();
@@ -119,6 +196,35 @@ export class Step2 {
             logger.debug("Step2: Card search input listener attached.");
         } else {
             logger.error("Step2 Init Error: Card search input not found.");
+        }
+
+        // Setup filter dropdowns
+        if (cardFilterSelect) {
+            cardFilterSelect.addEventListener('change', () => {
+                if (!this.isManualEntry) {
+                    this.applyCardFilter();
+                }
+            });
+            logger.debug("Step2: Card filter select listener attached.");
+        }
+
+        if (cardFeaturesSelect) {
+            cardFeaturesSelect.addEventListener('change', () => {
+                if (!this.isManualEntry) {
+                    this.applyCardFilter();
+                }
+            });
+            logger.debug("Step2: Card features select listener attached.");
+        }
+
+        // Setup sort dropdown
+        if (cardSortSelect) {
+            cardSortSelect.addEventListener('change', () => {
+                if (!this.isManualEntry && this.state.allCardsForSet.length > 0) {
+                    this.applyCardFilter();
+                }
+            });
+            logger.debug("Step2: Card sort select listener attached.");
         }
     }
 
@@ -198,18 +304,141 @@ export class Step2 {
         const searchTermLower = this.state.cardSearchTerm.toLowerCase();
         let filteredResults = this.state.allCardsForSet;
 
+        // Apply search term filter if present
         if (searchTermLower) {
-            filteredResults = this.state.allCardsForSet.filter(card => {
-                const numberMatch = String(card.cardNumber || '').toLowerCase().includes(searchTermLower);
-                const nameMatch = String(card.playerName || '').toLowerCase().includes(searchTermLower);
-                // Add other fields to search if needed (e.g., attributes)
-                // const attributeMatch = card.attributes && card.attributes.some(attr => attr.toLowerCase().includes(searchTermLower));
-                return numberMatch || nameMatch; // || attributeMatch;
+            filteredResults = filteredResults.filter(card => {
+                const numberMatch = String(card.card_number || '').toLowerCase().includes(searchTermLower);
+                const nameMatch = String(card.player_name || '').toLowerCase().includes(searchTermLower);
+                const typeMatch = String(card.type || '').toLowerCase().includes(searchTermLower);
+                const parallelMatch = String(card.parallel_insert || '').toLowerCase().includes(searchTermLower);
+
+                // Search in features/attributes if available
+                let attributeMatch = false;
+                if (card.attributes && Array.isArray(card.attributes)) {
+                    attributeMatch = card.attributes.some(attr => 
+                        String(attr).toLowerCase().includes(searchTermLower)
+                    );
+                }
+
+                return numberMatch || nameMatch || typeMatch || parallelMatch || attributeMatch;
             });
         }
-        // If search term is empty, filteredResults remains allCardsForSet
 
-        logger.debug(`Step2: ${filteredResults.length} cards after filtering.`);
+        // Apply card type filter
+        const cardTypeFilter = document.getElementById('cardFilterSelect');
+        if (cardTypeFilter && cardTypeFilter.value) {
+            const filterValue = cardTypeFilter.value.toLowerCase();
+
+            filteredResults = filteredResults.filter(card => {
+                const cardType = String(card.type || '').toLowerCase();
+
+                switch (filterValue) {
+                    case 'base':
+                        return cardType === 'base' || cardType === '';
+                    case 'parallel':
+                        return cardType.includes('parallel');
+                    case 'insert':
+                        return cardType.includes('insert');
+                    case 'rookie':
+                        return card.is_rookie === true || cardType.includes('rookie');
+                    case 'autograph':
+                        return card.is_autographed === true || cardType.includes('auto');
+                    case 'memorabilia':
+                        return card.is_memorabilia === true || cardType.includes('mem') || cardType.includes('relic');
+                    case 'serial':
+                        return card.is_numbered === true || cardType.includes('serial') || cardType.includes('numbered');
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Apply card features filter
+        const cardFeaturesFilter = document.getElementById('cardFeaturesSelect');
+        if (cardFeaturesFilter && cardFeaturesFilter.value) {
+            const featureValue = cardFeaturesFilter.value.toLowerCase();
+
+            filteredResults = filteredResults.filter(card => {
+                switch (featureValue) {
+                    case 'multi_player':
+                        return card.is_multi_player === true || 
+                               (card.player_name && card.player_name.includes('&'));
+                    case 'team_card':
+                        return card.is_team_card === true || 
+                               (card.card_type && card.card_type.toLowerCase().includes('team'));
+                    case 'variation':
+                        return card.is_variation === true;
+                    case 'refractor':
+                        return (card.parallel_insert && 
+                                card.parallel_insert.toLowerCase().includes('refractor'));
+                    case 'short_print':
+                        return card.is_short_print === true || 
+                               (card.parallel_insert && 
+                                card.parallel_insert.toLowerCase().includes('sp'));
+                    case 'numbered':
+                        return card.is_numbered === true || 
+                               (card.parallel_insert && 
+                                /\/\d+/.test(card.parallel_insert)); // matches patterns like /99, /250, etc.
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Apply sort if available
+        const sortSelect = document.getElementById('cardSortSelect');
+        if (sortSelect && sortSelect.value) {
+            const [sortKey, direction] = sortSelect.value.split('_');
+
+            // Sort the filtered results
+            filteredResults.sort((a, b) => {
+                let valueA, valueB;
+
+                switch (sortKey) {
+                    case 'number':
+                        valueA = a.card_number || '';
+                        valueB = b.card_number || '';
+                        // Handle numeric sorting for card numbers
+                        const numA = parseInt(valueA.replace(/\D/g, '')) || 0;
+                        const numB = parseInt(valueB.replace(/\D/g, '')) || 0;
+                        return direction === 'asc' ? numA - numB : numB - numA;
+
+                    case 'name':
+                        valueA = a.player_name || '';
+                        valueB = b.player_name || '';
+                        break;
+
+                    case 'type':
+                        valueA = a.type || '';
+                        valueB = b.type || '';
+                        break;
+
+                    case 'rarity':
+                        // Higher rarity for numbered, auto, mem cards
+                        valueA = (a.is_numbered ? 3 : 0) + (a.is_autographed ? 2 : 0) + (a.is_memorabilia ? 1 : 0);
+                        valueB = (b.is_numbered ? 3 : 0) + (b.is_autographed ? 2 : 0) + (b.is_memorabilia ? 1 : 0);
+                        return direction === 'desc' ? valueB - valueA : valueA - valueB;
+
+                    case 'recent':
+                        // If there's a date_added field, use it
+                        valueA = a.date_added ? new Date(a.date_added).getTime() : 0;
+                        valueB = b.date_added ? new Date(b.date_added).getTime() : 0;
+                        return valueB - valueA; // Always newest first
+
+                    default:
+                        return 0;
+                }
+
+                // String comparison for non-numeric fields
+                if (direction === 'asc') {
+                    return valueA.localeCompare(valueB);
+                } else {
+                    return valueB.localeCompare(valueA);
+                }
+            });
+        }
+
+        logger.debug(`Step2: ${filteredResults.length} cards after filtering and sorting.`);
         this.updateCardResultsTable(filteredResults);
     }
 
@@ -301,41 +530,92 @@ export class Step2 {
 
         // Card number cell
         const numberCell = row.insertCell(0);
-        numberCell.className = "px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
+        numberCell.className = "px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white";
         numberCell.textContent = card.card_number || 'N/A';
 
-        // Thumbnail cell (new)
+        // Thumbnail cell
         const thumbnailCell = row.insertCell(1);
-        thumbnailCell.className = "px-6 py-3";
+        thumbnailCell.className = "px-4 py-3";
         if (card.front_image) {
             const img = document.createElement('img');
             img.src = card.front_image;
             img.alt = "Card Thumbnail";
-            img.className = "h-10 w-auto object-cover rounded"; // adjust sizing as needed
+            img.className = "h-12 w-auto object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"; 
+            img.dataset.cardId = card.cardId || card.id;
+
+            // Add click event to open modal
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.openCardImageModal(card);
+            });
+
             thumbnailCell.appendChild(img);
         } else {
             thumbnailCell.textContent = 'No Image';
         }
 
-        // Shift remaining cells accordingly:
         // Player name cell
         const nameCell = row.insertCell(2);
-        nameCell.className = "px-6 py-3";
+        nameCell.className = "px-4 py-3";
         nameCell.textContent = card.player_name || 'N/A';
 
-        // Type cell
+        // Type cell - hidden on mobile
         const typeCell = row.insertCell(3);
-        typeCell.className = "px-6 py-3";
+        typeCell.className = "px-4 py-3 hidden md:table-cell";
         typeCell.textContent = card.type || 'Base';
 
-        // Parallel/Insert cell
+        // Parallel/Insert cell - hidden on mobile
         const piCell = row.insertCell(4);
-        piCell.className = "px-6 py-3";
+        piCell.className = "px-4 py-3 hidden md:table-cell";
         piCell.textContent = card.parallel_insert || '';
 
-        // Select button cell
-        const selectCell = row.insertCell(5);
-        selectCell.className = "px-6 py-3 text-right";
+        // Features cell - hidden on mobile and tablet
+        const featuresCell = row.insertCell(5);
+        featuresCell.className = "px-4 py-3 hidden lg:table-cell";
+
+        // Combine features into badges
+        const features = [];
+        if (card.is_rookie) features.push('Rookie');
+        if (card.is_autographed) features.push('Auto');
+        if (card.is_memorabilia) features.push('Mem');
+        if (card.is_numbered) features.push(`#'d ${card.numbered_to}`);
+        if (card.is_variation) features.push('Var');
+
+        if (features.length > 0) {
+            const featureContainer = document.createElement('div');
+            featureContainer.className = "flex flex-wrap gap-1";
+
+            features.forEach(feature => {
+                const badge = document.createElement('span');
+                badge.className = "px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+                badge.textContent = feature;
+                featureContainer.appendChild(badge);
+            });
+
+            featuresCell.appendChild(featureContainer);
+        }
+
+        // Actions cell with view and select buttons
+        const actionsCell = row.insertCell(6);
+        actionsCell.className = "px-4 py-3 flex items-center justify-end gap-2";
+
+        // View button
+        const viewButton = document.createElement('button');
+        viewButton.type = "button";
+        viewButton.className = "p-1.5 text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-all duration-200";
+        viewButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>`;
+        viewButton.title = "View Card";
+
+        viewButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.openCardImageModal(card);
+        });
+
+        // Select button
         const selectButton = document.createElement('button');
         selectButton.type = "button";
         selectButton.className = "px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-200 flex items-center gap-1";
@@ -343,7 +623,8 @@ export class Step2 {
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            <span>Select</span>`;
+            <span class="hidden sm:inline">Select</span>`;
+
         selectButton.addEventListener('click', (e) => {
             e.stopPropagation();
             logger.group(`--- Step 2: Card Selected ---`);
@@ -371,7 +652,8 @@ export class Step2 {
             }, 150);
         });
 
-        selectCell.appendChild(selectButton);
+        actionsCell.appendChild(viewButton);
+        actionsCell.appendChild(selectButton);
     }
 
     clearCardSelectionHighlight() {
@@ -389,6 +671,284 @@ export class Step2 {
         if (playerNameInput) playerNameInput.value = card.playerName || '';
         // Populate other manual fields if they exist
         logger.debug("Step2: Populated manual form fields with selected card data.");
+    }
+
+    // Open the card image modal with the selected card
+    openCardImageModal(card) {
+        logger.info("Step2: Opening card image modal for card:", card);
+
+        // Get modal elements
+        const modal = document.getElementById('cardImageModal');
+        const cardNumber = document.getElementById('modalCardNumber');
+        const playerName = document.getElementById('modalPlayerName');
+        const detailCardNumber = document.getElementById('modalDetailCardNumber');
+        const detailPlayerName = document.getElementById('modalDetailPlayerName');
+        const cardType = document.getElementById('modalCardType');
+        const cardParallelInsert = document.getElementById('modalCardParallelInsert');
+        const cardFeatures = document.getElementById('modalCardFeatures');
+        const attributesList = document.getElementById('modalAttributesList');
+        const frontImage = document.getElementById('cardFrontImage');
+        const backImage = document.getElementById('cardBackImage');
+        const flipBox = document.getElementById('cardImageFlipBox');
+
+        if (!modal || !frontImage || !backImage || !flipBox) {
+            logger.error("Step2: Modal elements not found");
+            return;
+        }
+
+        // Reset flip state
+        this.isCardFlipped = false;
+        flipBox.classList.remove('flipped');
+
+        // Populate modal header with card data
+        if (cardNumber) cardNumber.textContent = card.card_number || 'N/A';
+        if (playerName) playerName.textContent = card.player_name || 'N/A';
+
+        // Populate detailed card information
+        if (detailCardNumber) detailCardNumber.textContent = card.card_number || 'N/A';
+        if (detailPlayerName) detailPlayerName.textContent = card.player_name || 'N/A';
+        if (cardType) cardType.textContent = card.type || 'Base Card';
+
+        // Handle parallel/insert info
+        if (cardParallelInsert) {
+            cardParallelInsert.textContent = card.parallel_insert || 'None';
+        }
+
+        // Create and display feature badges
+        if (cardFeatures) {
+            // Clear existing features
+            cardFeatures.innerHTML = '';
+
+            // Create badges for each feature
+            const addFeatureBadge = (text, color = 'blue') => {
+                const badge = document.createElement('span');
+                badge.className = `px-2.5 py-1.5 text-sm font-medium rounded-full bg-${color}-100 text-${color}-800 dark:bg-${color}-900 dark:text-${color}-300`;
+                badge.textContent = text;
+                cardFeatures.appendChild(badge);
+            };
+
+            // Add badges for different features with appropriate colors
+            if (card.is_rookie) addFeatureBadge('Rookie Card', 'green');
+            if (card.is_autographed) addFeatureBadge('Autographed', 'purple');
+            if (card.is_memorabilia) addFeatureBadge('Memorabilia', 'indigo');
+            if (card.is_numbered && card.numbered_to) addFeatureBadge(`Numbered to ${card.numbered_to}`, 'red');
+            if (card.is_variation) addFeatureBadge('Variation', 'yellow');
+            if (card.is_short_print) addFeatureBadge('Short Print', 'orange');
+            if (card.is_multi_player) addFeatureBadge('Multi-Player', 'blue');
+            if (card.is_team_card) addFeatureBadge('Team Card', 'blue');
+
+            // If no features, show a message
+            if (cardFeatures.children.length === 0) {
+                const noFeatures = document.createElement('p');
+                noFeatures.className = 'text-sm text-gray-500 dark:text-gray-400';
+                noFeatures.textContent = 'No special features';
+                cardFeatures.appendChild(noFeatures);
+            }
+        }
+
+        // Display card attributes if available
+        if (attributesList) {
+            // Clear existing attributes
+            attributesList.innerHTML = '';
+
+            if (card.attributes && Array.isArray(card.attributes) && card.attributes.length > 0) {
+                // Create a badge for each attribute
+                card.attributes.forEach(attr => {
+                    const badge = document.createElement('span');
+                    badge.className = 'px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+                    badge.textContent = attr;
+                    attributesList.appendChild(badge);
+                });
+            } else {
+                // If no attributes, hide the attributes section
+                const attributesSection = document.getElementById('modalCardAttributes');
+                if (attributesSection) {
+                    attributesSection.classList.add('hidden');
+                }
+            }
+        }
+
+        // Set images
+        if (frontImage) {
+            frontImage.src = card.front_image || '';
+            frontImage.alt = `${card.player_name || 'Card'} Front`;
+        }
+
+        if (backImage) {
+            backImage.src = card.back_image || '';
+            backImage.alt = `${card.player_name || 'Card'} Back`;
+
+            // If no back image, disable flip button
+            const flipButton = document.getElementById('flipCardButton');
+            if (flipButton) {
+                if (!card.back_image) {
+                    flipButton.disabled = true;
+                    flipButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    flipButton.title = "No back image available";
+                } else {
+                    flipButton.disabled = false;
+                    flipButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    flipButton.title = "Flip card to see back";
+                }
+            }
+        }
+
+        // Show modal
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        logger.debug("Step2: Card image modal opened");
+    }
+
+    // Close the card image modal
+    closeCardImageModal() {
+        const modal = document.getElementById('cardImageModal');
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        logger.debug("Step2: Card image modal closed");
+    }
+
+    // Flip the card in the modal
+    flipCardInModal() {
+        const flipBox = document.getElementById('cardImageFlipBox');
+        if (!flipBox) return;
+
+        this.isCardFlipped = !this.isCardFlipped;
+
+        if (this.isCardFlipped) {
+            flipBox.classList.add('flipped');
+        } else {
+            flipBox.classList.remove('flipped');
+        }
+
+        // Update flip button text
+        const flipButton = document.getElementById('flipCardButton');
+        if (flipButton) {
+            flipButton.textContent = this.isCardFlipped ? 'Show Front' : 'Flip Card';
+        }
+
+        logger.debug(`Step2: Card flipped to ${this.isCardFlipped ? 'back' : 'front'}`);
+    }
+
+    // Sort card results based on the selected column
+    sortCardResults(sortKey) {
+        logger.info(`Step2: Sorting card results by ${sortKey}`);
+
+        if (!this.state.allCardsForSet || this.state.allCardsForSet.length === 0) {
+            logger.debug("Step2: No cards to sort");
+            return;
+        }
+
+        // Clone the array to avoid modifying the original
+        const sortedCards = [...this.state.allCardsForSet];
+
+        // Determine sort direction (toggle if clicking the same column)
+        const currentSort = this.state.currentSort || { key: null, direction: 'asc' };
+        let direction = 'asc';
+
+        if (currentSort.key === sortKey) {
+            // Toggle direction if same column
+            direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        }
+
+        // Update current sort state
+        this.state.currentSort = { key: sortKey, direction };
+
+        // Sort based on key and direction
+        sortedCards.sort((a, b) => {
+            let valueA, valueB;
+
+            // Extract values based on sort key
+            switch (sortKey) {
+                case 'card_number':
+                    valueA = a.card_number || '';
+                    valueB = b.card_number || '';
+                    // Handle numeric sorting for card numbers
+                    const numA = parseInt(valueA.replace(/\D/g, '')) || 0;
+                    const numB = parseInt(valueB.replace(/\D/g, '')) || 0;
+                    return direction === 'asc' ? numA - numB : numB - numA;
+
+                case 'player_name':
+                    valueA = a.player_name || '';
+                    valueB = b.player_name || '';
+                    break;
+
+                case 'type':
+                    valueA = a.type || '';
+                    valueB = b.type || '';
+                    break;
+
+                default:
+                    return 0;
+            }
+
+            // String comparison for non-numeric fields
+            if (direction === 'asc') {
+                return valueA.localeCompare(valueB);
+            } else {
+                return valueB.localeCompare(valueA);
+            }
+        });
+
+        // Update the table with sorted results
+        this.updateCardResultsTable(sortedCards);
+
+        // Update sort indicators in the table headers
+        this.updateSortIndicators(sortKey, direction);
+
+        logger.debug(`Step2: Cards sorted by ${sortKey} in ${direction} order`);
+    }
+
+    // Update sort indicators in table headers
+    updateSortIndicators(sortKey, direction) {
+        const table = document.getElementById('cardSearchResultTable');
+        if (!table) return;
+
+        // Get all sortable headers
+        const headers = table.querySelectorAll('th[data-sort]');
+
+        headers.forEach(header => {
+            const headerKey = header.getAttribute('data-sort');
+            const iconContainer = header.querySelector('div');
+
+            if (!iconContainer) return;
+
+            // Remove existing sort icons
+            const existingIcon = iconContainer.querySelector('svg');
+            if (existingIcon) {
+                existingIcon.remove();
+            }
+
+            // Add appropriate icon based on sort state
+            if (headerKey === sortKey) {
+                const icon = document.createElement('svg');
+                icon.className = 'w-3 h-3 ml-1';
+                icon.setAttribute('aria-hidden', 'true');
+                icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                icon.setAttribute('fill', 'currentColor');
+                icon.setAttribute('viewBox', '0 0 24 24');
+
+                if (direction === 'asc') {
+                    icon.innerHTML = '<path d="M11.47 7.72a.75.75 0 011.06 0l3.75 3.75a.75.75 0 01-1.06 1.06L12 9.31 8.78 12.53a.75.75 0 01-1.06-1.06l3.75-3.75z"/>';
+                } else {
+                    icon.innerHTML = '<path d="M12.53 16.28a.75.75 0 01-1.06 0l-3.75-3.75a.75.75 0 111.06-1.06L12 14.69l3.22-3.22a.75.75 0 111.06 1.06l-3.75 3.75z"/>';
+                }
+
+                iconContainer.appendChild(icon);
+            } else {
+                // Add default icon for unsorted columns
+                const defaultIcon = document.createElement('svg');
+                defaultIcon.className = 'w-3 h-3 ml-1';
+                defaultIcon.setAttribute('aria-hidden', 'true');
+                defaultIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                defaultIcon.setAttribute('fill', 'currentColor');
+                defaultIcon.setAttribute('viewBox', '0 0 24 24');
+                defaultIcon.innerHTML = '<path d="M8 9a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 018 9zm0 5.25a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"/>';
+
+                iconContainer.appendChild(defaultIcon);
+            }
+        });
     }
 
     clearManualEntryForm() {
