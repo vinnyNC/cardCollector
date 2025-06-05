@@ -283,16 +283,22 @@ class AddCard {
     }
 
     saveState() {
-        logger.debug('Saving current state to localStorage.');
-        try {
-            // Only save serializable parts of the state
-            const stateToSave = {
-                currentStep: this.state.currentStep,
-                selectedSet: this.state.selectedSet, // Add other relevant state parts here
-            };
-            localStorage.setItem('addCardState', JSON.stringify(stateToSave));
-        } catch (error) {
-            logger.error('Failed to save state:', error);
+        if (!this.config.SKIP_STATE_SAVE) {
+            logger.debug('Saving current state to localStorage.');
+            try {
+                // Only save serializable parts of the state
+                const stateToSave = {
+                    currentStep: this.state.currentStep,
+                    selectedSet: this.state.selectedSet, // Add other relevant state parts here
+                    state: this.state
+                };
+                logger.debug('State to save:', stateToSave);
+                localStorage.setItem('addCardState', JSON.stringify(stateToSave));
+            } catch (error) {
+                logger.error('Failed to save state:', error);
+            }
+        } else {
+            logger.debug('State saving is skipped due to configuration.');
         }
     }
 
