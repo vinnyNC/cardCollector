@@ -24,6 +24,7 @@ class AddCard {
 
         // Configuration
         this.config = {
+            SKIP_STATE_SAVE: true, // Flag to skip state saving for debugging
             API_DEBOUNCE_DELAY: 300,
             MAX_STEPS: 8,
             YEAR_RANGE: {

@@ -675,8 +675,7 @@ const logger = new DebugManager({
     context: {
         appName: 'CardCollector',
         version: '1.0.0'
-    },
-    maxLogEntries: 5,
+    }
 });
 
 // Export logger for use in other modules
