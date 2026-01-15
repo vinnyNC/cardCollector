@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.1.17"
   },
   "dependencies": {
     "@sentry/browser": "^9.25.1",
